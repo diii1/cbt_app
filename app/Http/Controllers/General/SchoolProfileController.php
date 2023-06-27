@@ -9,6 +9,7 @@ use App\Services\General\SchoolProfileService;
 use App\Types\Entities\SchoolProfileEntity;
 use Exception;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class SchoolProfileController extends Controller
 {
@@ -68,9 +69,8 @@ class SchoolProfileController extends Controller
             $output = new ConsoleOutput();
             $output->writeln($inserted->getMessage());
 
-            return back()->with('error', 'Gagal menambahkan profil sekolah.')->withInput();
+            return redirect()->back()->with('error', 'Gagal menambahkan profil sekolah.')->withInput();
         }
-
         return redirect()->route('login')->with('success', 'Berhasil menambahkan profil sekolah.');
     }
 

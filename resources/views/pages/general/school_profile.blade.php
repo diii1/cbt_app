@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>CBT App</title>
+        <title>CBT App &mdash; Profil Sekolah</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
             integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
             crossorigin="anonymous" />
@@ -19,6 +19,8 @@
         <link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-override.min.css') }}">
         <link rel="stylesheet" id="theme-color" href="{{ asset('assets/css/dark.min.css') }}">
+
+        @include('sweetalert::alert')
     </head>
     <body>
         <div class="container-fluid">
@@ -92,7 +94,7 @@
                                         </div>
                                         <div class="col-md-12 mt-2">
                                             <div class="mb-3">
-                                                <input type="submit" class="btn btn-primary w-100" value="Tammbahkan Informasi Sekolah">
+                                                <input type="submit" class="btn btn-primary w-100" value="Tambahkan Informasi Sekolah">
                                             </div>
                                         </div>
                                     </div>
