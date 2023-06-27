@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\SchoolProfile;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -17,7 +18,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        return view('auth.login');
+        $profile = SchoolProfile::first();
+        if($profile)
+        {
+            return view('auth.login', compact('profile'));
+        } else {
+            return redirect()->route('school_profile.create');
+        }
     }
 
     /**

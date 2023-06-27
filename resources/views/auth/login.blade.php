@@ -1,56 +1,70 @@
-<x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
+<!DOCTYPE html>
+<html lang="en">
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>App CBT &mdash; {{ $profile->name ?? '' }}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+            integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+            crossorigin="anonymous" />
+        <link rel="icon" type="image/png" href="{{ isset($profile->logo) ? asset('storage/' . $profile->logo) : asset('assets/images/logo-removebg.png') }}" />
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+        <!-- <link rel="stylesheet" href="../vendor/themify-icons/themify-icons.css"> -->
+        <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-override.css') }}">
+    </head>
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
+    <body style="background-color: lightgray">
+        <section class="container h-100">
+            <div class="row justify-content-sm-center h-100 align-items-center">
+                <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-7 col-sm-8">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-4">
+                            <h1 class="fs-4 text-center fw-bold mb-4">Masuk Aplikasi CBT</h1>
+                            <div class="row justify-content-center mb-3">
+                                <img src="{{ isset($profile->logo) ? asset('storage/' . $profile->logo) : asset('assets/images/logo.png') }}" alt="logo" style="width:200px">
+                            </div>
+                            <h3 class="fs-5 text-center fw-bold mb-4">{{ $profile->name }}</h3>
+                            <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate="" autocomplete="off">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="mb-2 text-muted" for="email" :value="__('Email')">Alamat E-Mail</label>
+                                    <div class="input-group input-group-join mb-3">
+                                        <input id="email" type="email" placeholder="Masukkan Alamat Email" class="form-control" name="email" :value="old('email')" required autofocus>
+                                        <span class="input-group-text rounded-end">&nbsp<i class="fa fa-envelope"></i>&nbsp</span>
+                                        <div class="invalid-feedback">
+                                            Format email salah.
+                                        </div>
+                                    </div>
+                                </div>
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+                                <div class="mb-3">
+                                    <label class="text-muted" for="password" :value="__('Password')">Kata Sandi</label>
+                                    <div class="input-group input-group-join mb-3">
+                                        <input type="password" class="form-control" name="password" placeholder="Masukkan Kata Sandi" required>
+                                        <span class="input-group-text rounded-end password cursor-pointer">&nbsp<i class="fa fa-eye"></i>&nbsp</span>
+                                        <div class="invalid-feedback">
+                                            Kata sandi tidak boleh kosong.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row justify-content-center mt-5">
+                                    <button class="btn btn-primary icon-left" type="submit" style="width:40%"><b>Masuk &nbsp;<i class="fa fa-lock"></i></b></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4 text-muted">
+                        Copyright &copy; {{ date('Y') }} &mdash; {{ $profile->name }}
+                    </div>
+                </div>
             </div>
-
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
-            </div>
-
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-auth-card>
-</x-guest-layout>
+        </section>
+        <script src="{{ asset('assets/js/login.js') }}"></script>
+    </body>
+</html>
