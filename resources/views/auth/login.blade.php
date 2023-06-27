@@ -11,7 +11,7 @@
             crossorigin="anonymous" />
         <link rel="icon" type="image/png" href="{{ isset($profile->logo) ? asset('storage/' . $profile->logo) : asset('assets/images/logo-removebg.png') }}" />
 
-        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}">
 
         <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
         <!-- <link rel="stylesheet" href="../vendor/themify-icons/themify-icons.css"> -->

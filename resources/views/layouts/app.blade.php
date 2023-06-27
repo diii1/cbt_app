@@ -31,15 +31,15 @@
     <div id="app">
         <div class="shadow-header"></div>
 
-        @include('layout.header')
+        @include('layouts.header')
 
-        @include('layout.navigation')
+        @include('layouts.navigation')
 
         @yield('content')
 
-        @include('layout.settings')
+        @include('layouts.settings')
 
-        @include('layout.footer')
+        @include('layouts.footer')
 
         <div class="overlay action-toggle">
         </div>
@@ -47,6 +47,9 @@
     <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
     <script src="{{ asset('vendor/perfect-scrollbar/dist/perfect-scrollbar.min.js') }}"></script>
+
+    {{-- sweetalert --}}
+    @include('sweetalert::alert')
 
     <!-- js for this page only -->
     @stack('js')
