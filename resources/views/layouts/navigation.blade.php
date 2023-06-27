@@ -1,92 +1,86 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
-                    </a>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-            </div>
-
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                            <div>{{ Auth::user()->name }}</div>
-
-                            <div class="ml-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+<nav class="main-sidebar ps-menu">
+    <div class="sidebar-toggle action-toggle">
+        <a href="#">
+            <i class="fas fa-bars"></i>
+        </a>
+    </div>
+    <div class="sidebar-opener action-toggle">
+        <a href="#">
+            <i class="ti-angle-right"></i>
+        </a>
+    </div>
+    <div class="sidebar-header">
+        <div class="text">CBT &mdash; MFH</div>
+        <div class="close-sidebar action-toggle">
+            <i class="ti-close"></i>
         </div>
     </div>
+    <div class="sidebar-content">
+        <ul>
+            <li class="{{ request()->segment(1) == 'dashboard' ? 'active' : '' }}">
+                <a href="{{ route('dashboard') }}" class="link">
+                    <i class="ti-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            @can('read user')
+                <li class="{{ request()->segment(1) == 'manage-users' ? 'active' : '' }}">
+                    {{-- <a href="{{ route('manage-users.index') }}" class="link"> --}}
+                    <a href="#" class="link">
+                        <i class="ti-id-badge"></i>
+                        <span>Data Pengguna</span>
+                    </a>
+                </li>
+            @endcan
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
+            @can('read master')
+                <li class="{{ request()->segment(1) == 'master' ? 'active open' : '' }}">
+                    <a href="#" class="main-menu has-dropdown">
+                        <i class="ti-server"></i>
+                        <span>Data Master</span>
+                    </a>
+                    <ul class="sub-menu {{ request()->segment(1) == 'master' ? 'expand' : '' }}">
+                        {{-- @can('read subject')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'subjects' ? 'active' : '' }}"><a href="{{ route('subjects.index')}}" class="link"><span>Mata Pelajaran</span></a></li>@endcan
+                        @can('read teacher')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'teachers' ? 'active' : '' }}"><a href="{{ route('teachers.index')}}" class="link"><span>Guru</span></a></li>@endcan
+                        @can('read class')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'classes' ? 'active' : '' }}"><a href="{{ route('classes.index')}}" class="link"><span>Kelas</span></a></li>@endcan
+                        @can('read student')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'students' ? 'active' : '' }}"><a href="{{ route('students.index')}}" class="link"><span>Siswa</span></a></li>@endcan --}}
+                        @can('read subject')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'subjects' ? 'active' : '' }}"><a href="#" class="link"><span>Mata Pelajaran</span></a></li>@endcan
+                        @can('read teacher')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'teachers' ? 'active' : '' }}"><a href="#" class="link"><span>Guru</span></a></li>@endcan
+                        @can('read class')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'classes' ? 'active' : '' }}"><a href="#" class="link"><span>Kelas</span></a></li>@endcan
+                        @can('read student')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'students' ? 'active' : '' }}"><a href="#" class="link"><span>Siswa</span></a></li>@endcan
+                    </ul>
+                </li>
+            @endcan
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
+            @can('read exam')
+                <li class="{{ request()->segment(1) == 'exams' || request()->segment(1) == 'exam' ? 'active open' : '' }}">
+                    <a href="#" class="main-menu has-dropdown">
+                        <i class="ti-book"></i>
+                        <span>Data Ujian</span>
+                    </a>
+                    <ul class="sub-menu {{ request()->segment(1) == 'exams' || request()->segment(1) == 'exam' ? 'expand' : '' }}">
+                        {{-- @can('read exam_session')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="{{ route('sessions.index')}}" class="link"><span>Sesi Ujian</span></a></li>@endcan
+                        @can('read exams')<li class="{{ request()->segment(1) == 'exams' ? 'active' : '' }}"><a href="{{ route('exams.index')}}" class="link"><span>Daftar Ujian</span></a></li>@endcan
+                        @can('read participant')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'participants' ? 'active' : '' }}"><a href="{{ route('participants.index')}}" class="link"><span>Peserta Ujian</span></a></li>@endcan --}}
+                        @can('read exam_session')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="#" class="link"><span>Sesi Ujian</span></a></li>@endcan
+                        @can('read exams')<li class="{{ request()->segment(1) == 'exams' ? 'active' : '' }}"><a href="#" class="link"><span>Daftar Ujian</span></a></li>@endcan
+                        @can('read participant')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'participants' ? 'active' : '' }}"><a href="#" class="link"><span>Peserta Ujian</span></a></li>@endcan
+                    </ul>
+                </li>
+            @endcan
 
-            <div class="mt-3 space-y-1">
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
+            @can('read question')
+                <li class="{{ request()->segment(1) == 'questions' ? 'active' : '' }}">
+                    {{-- <a href="{{ route('questions.index') }}" class="link">
+                        <i class="ti-clipboard"></i>
+                        <span>Bank Soal</span>
+                    </a> --}}
+                    <a href="#" class="link">
+                        <i class="ti-clipboard"></i>
+                        <span>Bank Soal</span>
+                    </a>
+                </li>
+            @endcan
+        </ul>
     </div>
 </nav>

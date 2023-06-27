@@ -1,36 +1,64 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="en">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{-- for http to https --}}
+    {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>App CBT &mdash; MTs Faqih Hasyim</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+        integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+        crossorigin="anonymous" />
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/logo-removebg.png') }}" />
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/themify-icons/themify-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/perfect-scrollbar/css/perfect-scrollbar.css') }}">
 
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <!-- CSS for this page only -->
+    @stack('css')
+    <!-- End CSS  -->
 
-        <!-- Scripts -->
-        <script src="{{ asset('js/app.js') }}" defer></script>
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
+    <link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-override.min.css') }}">
+    <link rel="stylesheet" id="theme-color" href="{{ asset('assets/css/dark.min.css') }}">
+</head>
 
-            <!-- Page Heading -->
-            <header class="bg-white shadow">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
+<body>
+    <div id="app">
+        <div class="shadow-header"></div>
 
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+        @include('layouts.header')
+
+        @include('layouts.navigation')
+
+        @yield('content')
+
+        @include('layouts.settings')
+
+        @include('layouts.footer')
+
+        <div class="overlay action-toggle">
         </div>
-    </body>
+    </div>
+    <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
+    <script src="{{ asset('vendor/perfect-scrollbar/dist/perfect-scrollbar.min.js') }}"></script>
+
+    {{-- sweetalert --}}
+    @include('sweetalert::alert')
+
+    <!-- js for this page only -->
+    @stack('js')
+    <!-- ======= -->
+
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+    <script>
+        Main.init()
+    </script>
+</body>
+
 </html>
