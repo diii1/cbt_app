@@ -121,6 +121,21 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('delete_admin');
+        $deleted = $this->service->deleteAdmin($id);
+        if($deleted instanceof Exception) {
+            $output = new ConsoleOutput();
+            $output->writeln($deleted->getMessage());
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat menghapus data administrator.'
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data administrator berhasil dihapus.'
+        ], 200);
     }
 }

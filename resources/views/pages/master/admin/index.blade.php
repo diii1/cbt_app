@@ -122,5 +122,47 @@
                 })
             })
         }
+
+        $('#admin-table').on('click', '.action', function(){
+            let data = $(this).data();
+            let id = data.id;
+            let type = data.type;
+
+            if(type == 'delete'){
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Data yang dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Tidak, batalkan!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            method: 'DELETE',
+                            url: '{{ route('admins.destroy', ':id') }}'.replace(':id', id),
+                            headers: {
+                                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(res) {
+                                window.LaravelDataTables["admin-table"].ajax.reload();
+                                Toast.fire({
+                                    icon: res.status,
+                                    title: res.message
+                                })
+                            },
+                            error: function(res) {
+                                Toast.fire({
+                                    icon: res.status,
+                                    title: res.message
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+        })
     </script>
 @endpush

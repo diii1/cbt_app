@@ -49,4 +49,32 @@ class AdminService
 
         return $isSaved;
     }
+
+    public function deleteAdmin(int $id): int | Exception
+    {
+        $isDeleted = DB::transaction(function () use ($id) {
+            $admin = Admin::find($id);
+
+            if (!$admin) {
+                throw new Exception('Admin not found');
+            }
+
+            $user = User::find($admin->user_id);
+
+            if (!$user) {
+                throw new Exception('User not found');
+            }
+
+            $admin->delete();
+            $user->delete();
+
+            return true;
+        });
+
+        if (!$isDeleted) {
+            throw new Exception('Failed to delete admin');
+        }
+
+        return $isDeleted;
+    }
 }
