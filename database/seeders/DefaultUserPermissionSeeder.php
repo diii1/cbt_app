@@ -30,16 +30,16 @@ class DefaultUserPermissionSeeder extends Seeder
         DB::beginTransaction();
         try {
             // school profile default
-            $schoolProfile = SchoolProfile::create([
-                'name' => 'MTs Faqih Hasyim',
-                'contact' => '03124511452',
-                'email' => 'mts.faqih@cbt.com',
-                'address' => 'Jl. Siwalan Panji No. 1',
-                'district' => 'Buduran',
-                'regency' => 'Sidoarjo',
-                'province' => 'Jawa Timur',
-                'acreditation' => 'A',
-            ]);
+            // $schoolProfile = SchoolProfile::create([
+            //     'name' => 'MTs Faqih Hasyim',
+            //     'contact' => '03124511452',
+            //     'email' => 'mts.faqih@cbt.com',
+            //     'address' => 'Jl. Siwalan Panji No. 1',
+            //     'district' => 'Buduran',
+            //     'regency' => 'Sidoarjo',
+            //     'province' => 'Jawa Timur',
+            //     'acreditation' => 'A',
+            // ]);
 
             // User default as admin user
             $admin = User::create(array_merge([
@@ -58,6 +58,16 @@ class DefaultUserPermissionSeeder extends Seeder
             $role_admin = Role::create(['name' => 'admin']);
             $role_teacher= Role::create(['name' => 'teacher']);
             $role_student = Role::create(['name' => 'student']);
+
+            // permission for general feature
+            $permission = Permission::create(['name' => 'dashboard']);
+            $permission = Permission::create(['name' => 'change_password']);
+
+            // give permission for general feature
+            $role_admin->givePermissionTo('dashboard');
+            // $role_teacher->givenPermissionTo('dashboard');
+            // $role_student->givenPermissionTo('dashboard');
+            $role_admin->givePermissionTo('change_password');
 
             // permission for list parent dropdown menu
             $permission = Permission::create(['name' => 'master']);

@@ -20,7 +20,6 @@
         <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-override.min.css') }}">
         <link rel="stylesheet" id="theme-color" href="{{ asset('assets/css/dark.min.css') }}">
 
-        @include('sweetalert::alert')
     </head>
     <body>
         <div class="container-fluid">

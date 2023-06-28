@@ -41,4 +41,86 @@
     <script src="{{ asset('vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/dist/js/select2.min.js') }}"></script>
     {{ $dataTable->scripts() }}
+
+    <script type="text/javascript">
+        const modal = new bootstrap.Modal($('#modalAction'))
+
+        $('.btn-add').on('click', function() {
+            $.ajax({
+                url: '{{ route('admins.create') }}',
+                type: 'GET',
+                success: function(res) {
+                    $('#modalAction').find('.modal-dialog').html(res);
+                    modal.show();
+                    store();
+
+                    const seePassword = document.querySelectorAll('.password')
+                    seePassword.forEach(function (pass) {
+                        pass.addEventListener('click', function () {
+                            if (this.children[0].classList.contains('fa-eye')) {
+                                this.children[0].classList.remove('fa-eye')
+                                this.children[0].classList.add('fa-eye-slash')
+                                this.parentElement.children[0].setAttribute('type', 'text')
+                                return false;
+                            }
+                            this.children[0].classList.add('fa-eye')
+                            this.children[0].classList.remove('fa-eye-slash')
+                            this.parentElement.children[0].setAttribute('type', 'password')
+                        })
+                    });
+
+                    const seePassword2 = document.querySelectorAll('.password2')
+                    seePassword2.forEach(function (pass) {
+                        pass.addEventListener('click', function () {
+                            if (this.children[0].classList.contains('fa-eye')) {
+                                this.children[0].classList.remove('fa-eye')
+                                this.children[0].classList.add('fa-eye-slash')
+                                this.parentElement.children[0].setAttribute('type', 'text')
+                                return false;
+                            }
+                            this.children[0].classList.add('fa-eye')
+                            this.children[0].classList.remove('fa-eye-slash')
+                            this.parentElement.children[0].setAttribute('type', 'password')
+                        })
+                    });
+                }
+            })
+        })
+
+        function store(){
+            $('#formAction').on('submit', function(e){
+                const _form = this;
+                const formData = new FormData(_form);
+                const url = this.getAttribute('action');
+
+                $.ajax({
+                    method: 'POST',
+                    url,
+                    headers: {
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(res) {
+                        window.LaravelDataTables["admin-table"].ajax.reload();
+                        modal.hide();
+                        Toast.fire({
+                            icon: res.status,
+                            title: res.message
+                        })
+                    },
+                    error: function(res) {
+                        let errors = res.responseJSON?.errors;
+                        $(_form).find('.text-danger.text-small').remove();
+                        if(errors) {
+                            for (const [key, value] of Object.entries(errors)) {
+                                $(`[name='${key}']`).parent().append(`<span class="text-danger text-small">*${value}</span>`);
+                            }
+                        }
+                    }
+                })
+            })
+        }
+    </script>
 @endpush
