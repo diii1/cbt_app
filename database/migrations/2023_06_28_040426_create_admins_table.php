@@ -13,17 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('school_profiles', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('contact');
-            $table->string('email');
+        Schema::create('admins', function (Blueprint $table) {
+            $table->unsignedBigInteger('user_id')->primary();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->unsigned()->index();
+            $table->string('nip', 20)->unique();
             $table->string('address')->nullable();
-            $table->string('district')->nullable();
-            $table->string('regency')->nullable();
-            $table->string('province')->nullable();
-            $table->string('acreditation');
-            $table->string('logo')->nullable();
+            $table->string('phone', 20)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -36,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('school_profiles');
+        Schema::dropIfExists('admins');
     }
 };
