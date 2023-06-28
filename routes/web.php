@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\General\SchoolProfileController;
+use App\Http\Controllers\Master\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-
+    Route::resource('master/admins', AdminController::class);
 });
 
 require __DIR__.'/auth.php';
