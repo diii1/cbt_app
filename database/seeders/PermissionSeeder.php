@@ -21,12 +21,22 @@ class PermissionSeeder extends Seeder
         // permission for master menu
         $permission = Permission::create(['name' => 'master']);
 
+        // permission for general change password user
+        $permission = Permission::create(['name' => 'change_password']);
+
         // permission for admin feature
         $permission = Permission::create(['name' => 'list_admin']);
         $permission = Permission::create(['name' => 'create_admin']);
         $permission = Permission::create(['name' => 'read_admin']);
         $permission = Permission::create(['name' => 'update_admin']);
         $permission = Permission::create(['name' => 'delete_admin']);
+
+        // permission for subject feature
+        $permission = Permission::create(['name' => 'list_subject']);
+        $permission = Permission::create(['name' => 'create_subject']);
+        $permission = Permission::create(['name' => 'read_subject']);
+        $permission = Permission::create(['name' => 'update_subject']);
+        $permission = Permission::create(['name' => 'delete_subject']);
 
         // permission for teacher feature
         $permission = Permission::create(['name' => 'list_teacher']);
@@ -42,7 +52,5 @@ class PermissionSeeder extends Seeder
         $permission = Permission::create(['name' => 'update_student']);
         $permission = Permission::create(['name' => 'delete_student']);
 
-        // permission for general change password user
-        $permission = Permission::create(['name' => 'change_password']);
     }
 }

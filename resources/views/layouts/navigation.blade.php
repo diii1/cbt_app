@@ -34,6 +34,7 @@
                     </a>
                     <ul class="sub-menu {{ request()->segment(1) == 'master' ? 'expand' : '' }}">
                         @can('list_admin')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'admins' ? 'active' : '' }}"><a href="{{ route('admins.index')}}" class="link"><span>Administrator</span></a></li>@endcan
+                        @can('list_subject')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'subjects' ? 'active' : '' }}"><a href="{{ route('subjects.index')}}" class="link"><span>Mata Pelajaran</span></a></li>@endcan
                     </ul>
                 </li>
             @endcan

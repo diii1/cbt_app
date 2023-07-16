@@ -50,6 +50,9 @@ class AdminSeeder extends Seeder
             // permission for prefix master menu
             $role->givePermissionTo('master');
 
+            // permission for general change_password user
+            $role->givePermissionTo('change_password');
+
             // permission for prefix master/admin menu
             $role->givePermissionTo('list_admin');
             $role->givePermissionTo('create_admin');
@@ -57,8 +60,19 @@ class AdminSeeder extends Seeder
             $role->givePermissionTo('update_admin');
             $role->givePermissionTo('delete_admin');
 
-            // permission for general change_password user
-            $role->givePermissionTo('change_password');
+            // permission for prefix master/subject menu
+            $role->givePermissionTo('list_subject');
+            $role->givePermissionTo('create_subject');
+            $role->givePermissionTo('read_subject');
+            $role->givePermissionTo('update_subject');
+            $role->givePermissionTo('delete_subject');
+
+            // permission for prefix master/teacher menu
+            $role->givePermissionTo('list_teacher');
+            $role->givePermissionTo('create_teacher');
+            $role->givePermissionTo('read_teacher');
+            $role->givePermissionTo('update_teacher');
+            $role->givePermissionTo('delete_teacher');
 
             DB::commit();
         } catch (\Throwable $th) {

@@ -5,6 +5,7 @@ use App\Http\Controllers\General\SchoolProfileController;
 use App\Http\Controllers\General\ChangePasswordController;
 use App\Http\Controllers\General\DashboardController;
 use App\Http\Controllers\Master\AdminController;
+use App\Http\Controllers\Master\SubjectController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+// route for school profile
 Route::resource('school_profile', SchoolProfileController::class);
 
 // Route::get('/dashboard', function () {
@@ -32,9 +34,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('api/user/change_password/{id}', [ChangePasswordController::class, 'edit'])->name('api.user.change_password.edit');
     Route::put('api/user/change_password/{id}', [ChangePasswordController::class, 'update'])->name('api.user.change_password.update');
 
+    // route for dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // route for master data
     Route::resource('master/admins', AdminController::class);
+    Route::resource('master/subjects', SubjectController::class);
 });
 
 require __DIR__.'/auth.php';
