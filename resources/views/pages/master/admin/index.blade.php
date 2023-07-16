@@ -43,7 +43,39 @@
     {{ $dataTable->scripts() }}
 
     <script type="text/javascript">
-        const modal = new bootstrap.Modal($('#modalAction'))
+        function seePassword(){
+            const seePassword = document.querySelectorAll('.password')
+            seePassword.forEach(function (pass) {
+                pass.addEventListener('click', function () {
+                    if (this.children[0].classList.contains('fa-eye')) {
+                        this.children[0].classList.remove('fa-eye')
+                        this.children[0].classList.add('fa-eye-slash')
+                        this.parentElement.children[0].setAttribute('type', 'text')
+                        return false;
+                    }
+                    this.children[0].classList.add('fa-eye')
+                    this.children[0].classList.remove('fa-eye-slash')
+                    this.parentElement.children[0].setAttribute('type', 'password')
+                })
+            });
+
+            const seePassword2 = document.querySelectorAll('.password2')
+            seePassword2.forEach(function (pass) {
+                pass.addEventListener('click', function () {
+                    if (this.children[0].classList.contains('fa-eye')) {
+                        this.children[0].classList.remove('fa-eye')
+                        this.children[0].classList.add('fa-eye-slash')
+                        this.parentElement.children[0].setAttribute('type', 'text')
+                        return false;
+                    }
+                    this.children[0].classList.add('fa-eye')
+                    this.children[0].classList.remove('fa-eye-slash')
+                    this.parentElement.children[0].setAttribute('type', 'password')
+                })
+            });
+        }
+
+        const modal = new bootstrap.Modal($('#modalAction'));
 
         $('.btn-add').on('click', function() {
             $.ajax({
@@ -53,36 +85,7 @@
                     $('#modalAction').find('.modal-dialog').html(res);
                     modal.show();
                     store();
-
-                    const seePassword = document.querySelectorAll('.password')
-                    seePassword.forEach(function (pass) {
-                        pass.addEventListener('click', function () {
-                            if (this.children[0].classList.contains('fa-eye')) {
-                                this.children[0].classList.remove('fa-eye')
-                                this.children[0].classList.add('fa-eye-slash')
-                                this.parentElement.children[0].setAttribute('type', 'text')
-                                return false;
-                            }
-                            this.children[0].classList.add('fa-eye')
-                            this.children[0].classList.remove('fa-eye-slash')
-                            this.parentElement.children[0].setAttribute('type', 'password')
-                        })
-                    });
-
-                    const seePassword2 = document.querySelectorAll('.password2')
-                    seePassword2.forEach(function (pass) {
-                        pass.addEventListener('click', function () {
-                            if (this.children[0].classList.contains('fa-eye')) {
-                                this.children[0].classList.remove('fa-eye')
-                                this.children[0].classList.add('fa-eye-slash')
-                                this.parentElement.children[0].setAttribute('type', 'text')
-                                return false;
-                            }
-                            this.children[0].classList.add('fa-eye')
-                            this.children[0].classList.remove('fa-eye-slash')
-                            this.parentElement.children[0].setAttribute('type', 'password')
-                        })
-                    });
+                    seePassword();
                 }
             })
         })
@@ -173,6 +176,30 @@
                         $('#modalAction').find('.modal-dialog').html(res);
                         modal.show();
                         store();
+                    }
+                })
+            }
+
+            if(type == 'change_password'){
+                $.ajax({
+                    url: `{{ route('api.user.change_password.edit', ':id') }}`.replace(':id', id),
+                    type: 'GET',
+                    success: function(res) {
+                        $('#modalAction').find('.modal-dialog').html(res);
+                        modal.show();
+                        store();
+                        seePassword();
+                    }
+                })
+            }
+
+            if(type == 'detail'){
+                $.ajax({
+                    url: `{{ route('admins.show', ':id') }}`.replace(':id', id),
+                    type: 'GET',
+                    success: function(res) {
+                        $('#modalAction').find('.modal-dialog').html(res);
+                        modal.show();
                     }
                 })
             }

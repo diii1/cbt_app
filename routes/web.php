@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\General\SchoolProfileController;
+use App\Http\Controllers\General\ChangePasswordController;
 use App\Http\Controllers\General\DashboardController;
 use App\Http\Controllers\Master\AdminController;
 
@@ -27,6 +28,10 @@ Route::resource('school_profile', SchoolProfileController::class);
 // })->middleware(['auth'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
+    // route for helper api
+    Route::get('api/user/change_password/{id}', [ChangePasswordController::class, 'edit'])->name('api.user.change_password.edit');
+    Route::put('api/user/change_password/{id}', [ChangePasswordController::class, 'update'])->name('api.user.change_password.update');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('master/admins', AdminController::class);

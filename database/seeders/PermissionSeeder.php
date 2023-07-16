@@ -41,5 +41,8 @@ class PermissionSeeder extends Seeder
         $permission = Permission::create(['name' => 'read_student']);
         $permission = Permission::create(['name' => 'update_student']);
         $permission = Permission::create(['name' => 'delete_student']);
+
+        // permission for general change password user
+        $permission = Permission::create(['name' => 'change_password']);
     }
 }

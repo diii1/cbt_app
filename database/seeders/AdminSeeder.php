@@ -57,6 +57,9 @@ class AdminSeeder extends Seeder
             $role->givePermissionTo('update_admin');
             $role->givePermissionTo('delete_admin');
 
+            // permission for general change_password user
+            $role->givePermissionTo('change_password');
+
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();

@@ -37,6 +37,9 @@ class AdminDataTable extends DataTable
                 if(Gate::allows('change_password')){
                     $action = '<button type="button" data-id='.$row->user_id.' data-type="change_password" class="btn btn-secondary btn-sm action"><i class="ti-lock"></i></button>';
                 }
+                if(Gate::allows('read_admin')){
+                    $action .= ' <button type="button" data-id='.$row->user_id.' data-type="detail" class="btn btn-primary btn-sm action"><i class="ti-eye"></i></button>';
+                }
                 if(Gate::allows('update_admin')){
                     $action .= ' <button type="button" data-id='.$row->user_id.' data-type="edit" class="btn btn-warning btn-sm action"><i class="ti-pencil"></i></button>';
                 }

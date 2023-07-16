@@ -80,7 +80,9 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        //
+        $data['title'] = 'Detail Data Administrator';
+        $admin = $this->service->getAdminByID($id);
+        return view('pages.master.admin.show', ['data' => $data, 'admin' => $admin]);
     }
 
     /**
@@ -112,7 +114,7 @@ class AdminController extends Controller
         $admin = new AdminEntity();
         $admin->updateRequest($request->all());
 
-        $updated = $this->service->updateAdmin($admin, $id);
+        $this->service->updateAdmin($admin, $id);
         return response()->json([
             'status' => 'success',
             'message' => 'Data administrator berhasil diperbarui.'
