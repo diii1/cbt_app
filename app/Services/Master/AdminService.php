@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Services\Service;
 use Illuminate\Support\Collection;
+use Carbon\Carbon;
 
 class AdminService extends Service
 {
@@ -27,33 +28,24 @@ class AdminService extends Service
     public function insertAdmin(AdminEntity $request): bool | Collection
     {
         try {
-            DB::transaction(function () use ($request) {
-                $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' => $request->password,
-                    'email_verified_at' => now(),
-                    'remember_token' => Str::random(10),
-                ]);
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $request->password,
+            ]);
+            $user->email_verified_at = now();
+            $user->remember_token = Str::random(10);
+            $user->assignRole('admin');
+            $user->save();
 
-                if (!$user) {
-                    throw new Exception('Failed to insert user');
-                }
+            $admin = DB::table('admins')->insert([
+                'user_id' => $user->id,
+                'nip' => $request->nip,
+                'address' => $request->address,
+                'phone' => $request->phone,
+            ]);
 
-                $user->assignRole('admin');
-
-                $admin = Admin::create([
-                    'user_id' => $user->id,
-                    'nip' => $request->nip,
-                    'address' => $request->address,
-                    'phone' => $request->phone,
-                ]);
-
-                if (!$admin) {
-                    throw new Exception('Failed to insert admin');
-                }
-            });
-            return true;
+            if($user && $admin) return true;
         } catch (\Throwable $th) {
             $this->writeLog("AdminService::insertAdmin", $th);
             return new Collection();
@@ -63,31 +55,26 @@ class AdminService extends Service
     public function updateAdmin(AdminEntity $request, int $id): bool | Collection
     {
         try {
-            DB::transaction(function () use ($request, $id) {
-                $admin = Admin::find($id);
+            $result = false;
+            $admin = DB::table('admins')->where('user_id', $id)->first();
 
-                if (!$admin) {
-                    throw new Exception('Admin not found');
-                }
-
-                $user = User::find($admin->user_id);
-
-                if (!$user) {
-                    throw new Exception('User not found');
-                }
-
-                $user->update([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                ]);
-
-                $admin->update([
+            $updateAdmin = DB::table('admins')
+                ->where('user_id', $id)
+                ->update([
                     'nip' => $request->nip,
                     'address' => $request->address,
                     'phone' => $request->phone,
                 ]);
-            });
-            return true;
+
+            $updateUser = DB::table('users')
+                ->where('id', $admin->user_id)
+                ->update([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                ]);
+
+            if($updateAdmin == 1 && $updateUser == 1) $result = true;
+            return $result;
         } catch (\Throwable $th) {
             $this->writeLog("AdminService::updateAdmin", $th);
             return new Collection();
@@ -97,24 +84,11 @@ class AdminService extends Service
     public function deleteAdmin(int $id): bool | Collection
     {
         try {
-            DB::transaction(function () use ($id) {
-                $admin = Admin::find($id);
+            $admin = Admin::find($id);
 
-                if (!$admin) {
-                    throw new Exception('Admin not found');
-                }
+            $user = User::find($admin->user_id);
 
-                $user = User::find($admin->user_id);
-
-                if (!$user) {
-                    throw new Exception('User not found');
-                }
-
-                $admin->delete();
-                $user->delete();
-
-            });
-            return true;
+            if($admin->delete() && $user->delete()) return true;
         } catch (\Throwable $th) {
             $this->writeLog("AdminService::getAdminByID", $th);
             return new Collection();

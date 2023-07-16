@@ -66,7 +66,6 @@ class SubjectController extends Controller
         $subject->formRequest($validated);
 
         $this->service->insertSubject($subject);
-
         return response()->json([
             'status' => 'success',
             'message' => 'Data mata pelajaran berhasil disimpan.'
@@ -118,7 +117,6 @@ class SubjectController extends Controller
         $subject->updateRequest($validated);
 
         $this->service->updateSubject($subject, $id);
-
         return response()->json([
             'status' => 'success',
             'message' => 'Data mata pelajaran berhasil diperbarui.'

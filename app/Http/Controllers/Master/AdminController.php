@@ -42,7 +42,6 @@ class AdminController extends Controller
     public function create()
     {
         $this->authorize('create_admin');
-
         $data['action'] = route('admins.store');
         $data['type'] = 'create';
         $data['title'] = 'Tambah Data Administrator';
@@ -64,8 +63,7 @@ class AdminController extends Controller
         $admin = new AdminEntity();
         $admin->formRequest($validated);
 
-        $inserted = $this->service->insertAdmin($admin);
-
+        $this->service->insertAdmin($admin);
         return response()->json([
             'status' => 'success',
             'message' => 'Data administrator berhasil disimpan.'
@@ -94,7 +92,6 @@ class AdminController extends Controller
     public function edit($id)
     {
         $this->authorize('update_admin');
-
         $data['action'] = route('admins.update', $id);
         $data['type'] = 'edit';
         $data['title'] = 'Edit Data Administrator';
@@ -130,7 +127,7 @@ class AdminController extends Controller
     public function destroy($id)
     {
         $this->authorize('delete_admin');
-        $deleted = $this->service->deleteAdmin($id);
+        $this->service->deleteAdmin($id);
 
         return response()->json([
             'status' => 'success',
