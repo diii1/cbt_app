@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Role;
 use App\Http\Requests\AdminRequest;
 use App\Services\Master\AdminService;
 use App\Types\Entities\AdminEntity;
+use App\Models\Admin;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class AdminController extends Controller
@@ -41,11 +42,11 @@ class AdminController extends Controller
     public function create()
     {
         $this->authorize('create_admin');
+
         $data['action'] = route('admins.store');
         $data['type'] = 'create';
         $data['title'] = 'Tambah Data Administrator';
-        $roles = Role::all()->pluck('name');
-        return view('pages.master.admin.form', ['data' => $data, 'roles' => $roles]);
+        return view('pages.master.admin.form', ['data' => $data, 'admin' => new Admin()]);
     }
 
     /**
@@ -57,21 +58,13 @@ class AdminController extends Controller
     public function store(AdminRequest $request)
     {
         $this->authorize('create_admin');
+
         $validated = $request->validated();
 
         $admin = new AdminEntity();
         $admin->formRequest($validated);
 
         $inserted = $this->service->insertAdmin($admin);
-        if($inserted instanceof Exception) {
-            $output = new ConsoleOutput();
-            $output->writeln($inserted->getMessage());
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan saat menyimpan data administrator.'
-            ], 500);
-        }
 
         return response()->json([
             'status' => 'success',
@@ -98,7 +91,13 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        //
+        $this->authorize('update_admin');
+
+        $data['action'] = route('admins.update', $id);
+        $data['type'] = 'edit';
+        $data['title'] = 'Edit Data Administrator';
+        $admin = $this->service->getAdminByID($id);
+        return view('pages.master.admin.form', ['data' => $data, 'admin' => $admin]);
     }
 
     /**
@@ -110,7 +109,14 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $admin = new AdminEntity();
+        $admin->updateRequest($request->all());
+
+        $updated = $this->service->updateAdmin($admin, $id);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data administrator berhasil diperbarui.'
+        ], 200);
     }
 
     /**
@@ -123,15 +129,6 @@ class AdminController extends Controller
     {
         $this->authorize('delete_admin');
         $deleted = $this->service->deleteAdmin($id);
-        if($deleted instanceof Exception) {
-            $output = new ConsoleOutput();
-            $output->writeln($deleted->getMessage());
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Terjadi kesalahan saat menghapus data administrator.'
-            ], 500);
-        }
 
         return response()->json([
             'status' => 'success',

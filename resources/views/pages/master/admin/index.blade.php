@@ -89,6 +89,8 @@
 
         function store(){
             $('#formAction').on('submit', function(e){
+                e.preventDefault();
+
                 const _form = this;
                 const formData = new FormData(_form);
                 const url = this.getAttribute('action');
@@ -127,7 +129,6 @@
             let data = $(this).data();
             let id = data.id;
             let type = data.type;
-
             if(type == 'delete'){
                 Swal.fire({
                     title: 'Apakah anda yakin?',
@@ -160,6 +161,18 @@
                                 })
                             }
                         })
+                    }
+                })
+            }
+
+            if(type == 'edit'){
+                $.ajax({
+                    url: `{{ route('admins.edit', ':id') }}`.replace(':id', id),
+                    type: 'GET',
+                    success: function(res) {
+                        $('#modalAction').find('.modal-dialog').html(res);
+                        modal.show();
+                        store();
                     }
                 })
             }

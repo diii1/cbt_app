@@ -1,7 +1,7 @@
 <div class="modal-content">
     <form id="formAction" action="{{ $data['action'] }}" method="post">
         @csrf
-        @if ($data['type'] == 'update')
+        @if ($data['type'] == 'edit')
             @method('put')
         @endif
         <div class="modal-header">
@@ -13,31 +13,31 @@
                 <div class="col-md-12">
                     <div class="mb-3">
                         <label for="adminName" class="form-label">Nama</label>
-                        <input type="text" placeholder="Tuliskan nama disini ..." value="" name="name" class="form-control" id="adminName">
+                        <input type="text" placeholder="Tuliskan nama disini ..." value="{{ $admin->user->name ?? '' }}" name="name" class="form-control" id="adminName">
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="mb-3">
                         <label for="adminEmail" class="form-label">Email Pengguna</label>
-                        <input type="email" placeholder="Tuliskan email disini ..." value="" name="email" class="form-control" id="adminEmail">
+                        <input type="email" placeholder="Tuliskan email disini ..." value="{{ $admin->user->email ?? '' }}" name="email" class="form-control" id="adminEmail">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="adminNIP" class="form-label">NIP</label>
-                        <input type="text" placeholder="Tuliskan NIP disini ..." value="" name="nip" class="form-control" id="adminNIP">
+                        <input type="text" placeholder="Tuliskan NIP disini ..." value="{{ $admin->nip ?? '' }}" name="nip" class="form-control" id="adminNIP">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="adminPhone" class="form-label">No. Handphone</label>
-                        <input type="text" placeholder="Tuliskan no handphone disini ..." value="" name="phone" class="form-control" id="adminPhone">
+                        <input type="text" placeholder="Tuliskan no handphone disini ..." value="{{ $admin->phone ?? '' }}" name="phone" class="form-control" id="adminPhone">
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="mb-3">
                         <label for="adminAddress" class="form-label">Alamat</label>
-                        <textarea class="form-control" id="adminAddress" name="address" rows="3" placeholder="Tuliskan alamat disini ..."></textarea>
+                        <textarea class="form-control" id="adminAddress" name="address" rows="3" placeholder="Tuliskan alamat disini ...">{{ $admin->address ?? '' }}</textarea>
                     </div>
                 </div>
                 @if ($data['type'] == 'create')

@@ -23,4 +23,16 @@ class AdminEntity extends UserEntity
         $this->address = $validatedRequest['address'];
         $this->phone = $validatedRequest['phone'];
     }
+
+    function updateRequest(array $validatedRequest)
+    {
+        // User
+        $this->name = $validatedRequest['name'];
+        $this->email = $validatedRequest['email'];
+
+        // Admin
+        $this->nip = $validatedRequest['nip'];
+        $this->address = $validatedRequest['address'];
+        $this->phone = $validatedRequest['phone'];
+    }
 }

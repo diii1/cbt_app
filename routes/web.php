@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\General\SchoolProfileController;
+use App\Http\Controllers\General\DashboardController;
 use App\Http\Controllers\Master\AdminController;
 
 /*
@@ -26,9 +27,7 @@ Route::resource('school_profile', SchoolProfileController::class);
 // })->middleware(['auth'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('master/admins', AdminController::class);
 });
