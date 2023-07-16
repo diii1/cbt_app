@@ -9,11 +9,13 @@
             <i class="ti-angle-right"></i>
         </a>
     </div>
+    <div class="d-flex justify-content-center mt-3">
+        <img src="{{ asset('assets/images/logo-removebg.png') }}" style="width:50px">
+    </div>
+    <div class="close-sidebar action-toggle pt-5">
+        <i class="ti-close"></i>
+    </div>
     <div class="sidebar-header">
-        <div class="text">CBT &mdash; MFH</div>
-        <div class="close-sidebar action-toggle">
-            <i class="ti-close"></i>
-        </div>
     </div>
     <div class="sidebar-content">
         <ul>

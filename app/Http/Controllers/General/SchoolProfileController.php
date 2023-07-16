@@ -27,7 +27,13 @@ class SchoolProfileController extends Controller
      */
     public function index()
     {
-        //
+        $profile = $this->service->getSchoolProfile();
+
+        if($profile) {
+            return redirect()->route('login');
+        }else{
+            return view('pages.general.school_profile');
+        }
     }
 
     /**
@@ -104,17 +110,6 @@ class SchoolProfileController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
     {
         //
     }
