@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Admin;
+use App\Models\Teacher;
 
 class User extends Authenticatable
 {
@@ -44,6 +46,11 @@ class User extends Authenticatable
     ];
 
     public function admin()
+    {
+        return $this->hasOne(Admin::class);
+    }
+
+    public function teacher()
     {
         return $this->hasOne(Admin::class);
     }

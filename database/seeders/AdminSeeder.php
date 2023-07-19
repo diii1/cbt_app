@@ -50,6 +50,9 @@ class AdminSeeder extends Seeder
             // permission for prefix master menu
             $role->givePermissionTo('master');
 
+            // permission for prefix pengguna menu
+            $role->givePermissionTo('pengguna');
+
             // permission for general change_password user
             $role->givePermissionTo('change_password');
 

@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\DB;
 
 class SubjectService extends Service
 {
+    public function getSubjects(): Collection
+    {
+        try {
+            return DB::table('subjects')->get();
+        } catch (\Throwable $th) {
+            $this->writeLog("SubjectService::getSubjects", $th);
+            return new Collection();
+        }
+    }
+
     public function getSubjectByID(int $id): Subject | Collection
     {
         try {

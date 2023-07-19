@@ -6,6 +6,7 @@ use App\Http\Controllers\General\ChangePasswordController;
 use App\Http\Controllers\General\DashboardController;
 use App\Http\Controllers\Master\AdminController;
 use App\Http\Controllers\Master\SubjectController;
+use App\Http\Controllers\Master\TeacherController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,8 +39,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // route for master data
-    Route::resource('master/admins', AdminController::class);
     Route::resource('master/subjects', SubjectController::class);
+    Route::resource('pengguna/admins', AdminController::class);
+    Route::resource('pengguna/teachers', TeacherController::class);
 });
 
 require __DIR__.'/auth.php';

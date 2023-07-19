@@ -20,6 +20,7 @@ class PermissionSeeder extends Seeder
 
         // permission for master menu
         $permission = Permission::create(['name' => 'master']);
+        $permission = Permission::create(['name' => 'pengguna']);
 
         // permission for general change password user
         $permission = Permission::create(['name' => 'change_password']);

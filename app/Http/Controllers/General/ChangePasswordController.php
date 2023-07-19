@@ -33,7 +33,7 @@ class ChangePasswordController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data password administrator berhasil diperbarui.'
+            'message' => 'Data password pengguna berhasil diperbarui.'
         ], 200);
     }
 }

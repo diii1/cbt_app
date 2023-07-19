@@ -33,8 +33,20 @@
                         <span>Data Master</span>
                     </a>
                     <ul class="sub-menu {{ request()->segment(1) == 'master' ? 'expand' : '' }}">
-                        @can('list_admin')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'admins' ? 'active' : '' }}"><a href="{{ route('admins.index')}}" class="link"><span>Administrator</span></a></li>@endcan
                         @can('list_subject')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'subjects' ? 'active' : '' }}"><a href="{{ route('subjects.index')}}" class="link"><span>Mata Pelajaran</span></a></li>@endcan
+                    </ul>
+                </li>
+            @endcan
+
+            @can('pengguna')
+                <li class="{{ request()->segment(1) == 'pengguna' ? 'active open' : '' }}">
+                    <a href="#" class="main-menu has-dropdown">
+                        <i class="ti-user"></i>
+                        <span>Data Pengguna</span>
+                    </a>
+                    <ul class="sub-menu {{ request()->segment(1) == 'pengguna' ? 'expand' : '' }}">
+                        @can('list_admin')<li class="{{ request()->segment(1) == 'pengguna' && request()->segment(2) == 'admins' ? 'active' : '' }}"><a href="{{ route('admins.index')}}" class="link"><span>Administrator</span></a></li>@endcan
+                        @can('list_teacher')<li class="{{ request()->segment(1) == 'pengguna' && request()->segment(2) == 'teachers' ? 'active' : '' }}"><a href="{{ route('teachers.index')}}" class="link"><span>Guru</span></a></li>@endcan
                     </ul>
                 </li>
             @endcan
