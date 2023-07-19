@@ -9,11 +9,13 @@
             <i class="ti-angle-right"></i>
         </a>
     </div>
+    <div class="d-flex justify-content-center mt-3">
+        <img src="{{ asset('assets/images/logo-removebg.png') }}" style="width:50px">
+    </div>
+    <div class="close-sidebar action-toggle pt-5">
+        <i class="ti-close"></i>
+    </div>
     <div class="sidebar-header">
-        <div class="text">CBT &mdash; MFH</div>
-        <div class="close-sidebar action-toggle">
-            <i class="ti-close"></i>
-        </div>
     </div>
     <div class="sidebar-content">
         <ul>
@@ -23,45 +25,43 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            @can('read user')
-                <li class="{{ request()->segment(1) == 'manage-users' ? 'active' : '' }}">
-                    {{-- <a href="{{ route('manage-users.index') }}" class="link"> --}}
-                    <a href="#" class="link">
-                        <i class="ti-id-badge"></i>
-                        <span>Data Pengguna</span>
-                    </a>
-                </li>
-            @endcan
 
-            @can('read master')
+            @can('master')
                 <li class="{{ request()->segment(1) == 'master' ? 'active open' : '' }}">
                     <a href="#" class="main-menu has-dropdown">
                         <i class="ti-server"></i>
                         <span>Data Master</span>
                     </a>
                     <ul class="sub-menu {{ request()->segment(1) == 'master' ? 'expand' : '' }}">
-                        {{-- @can('read subject')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'subjects' ? 'active' : '' }}"><a href="{{ route('subjects.index')}}" class="link"><span>Mata Pelajaran</span></a></li>@endcan
-                        @can('read teacher')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'teachers' ? 'active' : '' }}"><a href="{{ route('teachers.index')}}" class="link"><span>Guru</span></a></li>@endcan
-                        @can('read class')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'classes' ? 'active' : '' }}"><a href="{{ route('classes.index')}}" class="link"><span>Kelas</span></a></li>@endcan
-                        @can('read student')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'students' ? 'active' : '' }}"><a href="{{ route('students.index')}}" class="link"><span>Siswa</span></a></li>@endcan --}}
-                        @can('read subject')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'subjects' ? 'active' : '' }}"><a href="#" class="link"><span>Mata Pelajaran</span></a></li>@endcan
-                        @can('read teacher')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'teachers' ? 'active' : '' }}"><a href="#" class="link"><span>Guru</span></a></li>@endcan
-                        @can('read class')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'classes' ? 'active' : '' }}"><a href="#" class="link"><span>Kelas</span></a></li>@endcan
-                        @can('read student')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'students' ? 'active' : '' }}"><a href="#" class="link"><span>Siswa</span></a></li>@endcan
+                        @can('list_subject')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'subjects' ? 'active' : '' }}"><a href="{{ route('subjects.index')}}" class="link"><span>Mata Pelajaran</span></a></li>@endcan
+                        @can('list_class')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'classes' ? 'active' : '' }}"><a href="{{ route('classes.index')}}" class="link"><span>Kelas</span></a></li>@endcan
                     </ul>
                 </li>
             @endcan
 
-            @can('read exam')
+            @can('pengguna')
+                <li class="{{ request()->segment(1) == 'pengguna' ? 'active open' : '' }}">
+                    <a href="#" class="main-menu has-dropdown">
+                        <i class="ti-user"></i>
+                        <span>Data Pengguna</span>
+                    </a>
+                    <ul class="sub-menu {{ request()->segment(1) == 'pengguna' ? 'expand' : '' }}">
+                        @can('list_admin')<li class="{{ request()->segment(1) == 'pengguna' && request()->segment(2) == 'admins' ? 'active' : '' }}"><a href="{{ route('admins.index')}}" class="link"><span>Administrator</span></a></li>@endcan
+                        @can('list_teacher')<li class="{{ request()->segment(1) == 'pengguna' && request()->segment(2) == 'teachers' ? 'active' : '' }}"><a href="{{ route('teachers.index')}}" class="link"><span>Guru</span></a></li>@endcan
+                    </ul>
+                </li>
+            @endcan
+
+            {{-- @can('read exam')
                 <li class="{{ request()->segment(1) == 'exams' || request()->segment(1) == 'exam' ? 'active open' : '' }}">
                     <a href="#" class="main-menu has-dropdown">
                         <i class="ti-book"></i>
                         <span>Data Ujian</span>
                     </a>
                     <ul class="sub-menu {{ request()->segment(1) == 'exams' || request()->segment(1) == 'exam' ? 'expand' : '' }}">
-                        {{-- @can('read exam_session')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="{{ route('sessions.index')}}" class="link"><span>Sesi Ujian</span></a></li>@endcan
+                        @can('read exam_session')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="{{ route('sessions.index')}}" class="link"><span>Sesi Ujian</span></a></li>@endcan
                         @can('read exams')<li class="{{ request()->segment(1) == 'exams' ? 'active' : '' }}"><a href="{{ route('exams.index')}}" class="link"><span>Daftar Ujian</span></a></li>@endcan
-                        @can('read participant')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'participants' ? 'active' : '' }}"><a href="{{ route('participants.index')}}" class="link"><span>Peserta Ujian</span></a></li>@endcan --}}
+                        @can('read participant')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'participants' ? 'active' : '' }}"><a href="{{ route('participants.index')}}" class="link"><span>Peserta Ujian</span></a></li>@endcan
                         @can('read exam_session')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="#" class="link"><span>Sesi Ujian</span></a></li>@endcan
                         @can('read exams')<li class="{{ request()->segment(1) == 'exams' ? 'active' : '' }}"><a href="#" class="link"><span>Daftar Ujian</span></a></li>@endcan
                         @can('read participant')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'participants' ? 'active' : '' }}"><a href="#" class="link"><span>Peserta Ujian</span></a></li>@endcan
@@ -71,16 +71,16 @@
 
             @can('read question')
                 <li class="{{ request()->segment(1) == 'questions' ? 'active' : '' }}">
-                    {{-- <a href="{{ route('questions.index') }}" class="link">
+                    <a href="{{ route('questions.index') }}" class="link">
                         <i class="ti-clipboard"></i>
                         <span>Bank Soal</span>
-                    </a> --}}
+                    </a>
                     <a href="#" class="link">
                         <i class="ti-clipboard"></i>
                         <span>Bank Soal</span>
                     </a>
                 </li>
-            @endcan
+            @endcan --}}
         </ul>
     </div>
 </nav>

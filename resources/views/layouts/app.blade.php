@@ -8,7 +8,7 @@
     {{-- for http to https --}}
     {{-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>App CBT &mdash; MTs Faqih Hasyim</title>
+    <title>App CBT &mdash; {{ $data['nav_title'] }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
         integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
         crossorigin="anonymous" />
@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-override.min.css') }}">
     <link rel="stylesheet" id="theme-color" href="{{ asset('assets/css/dark.min.css') }}">
+
 </head>
 
 <body>
@@ -44,12 +45,25 @@
         <div class="overlay action-toggle">
         </div>
     </div>
+
     <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
     <script src="{{ asset('vendor/perfect-scrollbar/dist/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 
-    {{-- sweetalert --}}
-    @include('sweetalert::alert')
+    <script type="text/javascript">
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+    </script>
 
     <!-- js for this page only -->
     @stack('js')
