@@ -14,6 +14,7 @@ use App\Http\Controllers\General\DashboardController;
 // Master Route Controller
 use App\Http\Controllers\Master\AdminController;
 use App\Http\Controllers\Master\SubjectController;
+use App\Http\Controllers\Master\ClassesController;
 use App\Http\Controllers\Master\TeacherController;
 
 /*
@@ -54,6 +55,7 @@ Route::middleware(['auth'])->group(function () {
 
     // route for master data
     Route::resource('master/subjects', SubjectController::class);
+    Route::resource('master/classes', ClassesController::class);
     Route::resource('pengguna/admins', AdminController::class);
     Route::resource('pengguna/teachers', TeacherController::class);
     Route::get('/pengguna/teachers/upload', [TeacherController::class, 'upload'])->name('teachers.upload');

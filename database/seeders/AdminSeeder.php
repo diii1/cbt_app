@@ -79,6 +79,13 @@ class AdminSeeder extends Seeder
             $role->givePermissionTo('import_teacher');
             $role->givePermissionTo('export_teacher');
 
+            // permission for prefix master/class menu
+            $role->givePermissionTo('list_class');
+            $role->givePermissionTo('create_class');
+            $role->givePermissionTo('read_class');
+            $role->givePermissionTo('update_class');
+            $role->givePermissionTo('delete_class');
+
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();

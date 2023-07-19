@@ -34,6 +34,7 @@
                     </a>
                     <ul class="sub-menu {{ request()->segment(1) == 'master' ? 'expand' : '' }}">
                         @can('list_subject')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'subjects' ? 'active' : '' }}"><a href="{{ route('subjects.index')}}" class="link"><span>Mata Pelajaran</span></a></li>@endcan
+                        @can('list_class')<li class="{{ request()->segment(1) == 'master' && request()->segment(2) == 'classes' ? 'active' : '' }}"><a href="{{ route('classes.index')}}" class="link"><span>Kelas</span></a></li>@endcan
                     </ul>
                 </li>
             @endcan
@@ -51,16 +52,16 @@
                 </li>
             @endcan
 
-            @can('read exam')
+            {{-- @can('read exam')
                 <li class="{{ request()->segment(1) == 'exams' || request()->segment(1) == 'exam' ? 'active open' : '' }}">
                     <a href="#" class="main-menu has-dropdown">
                         <i class="ti-book"></i>
                         <span>Data Ujian</span>
                     </a>
                     <ul class="sub-menu {{ request()->segment(1) == 'exams' || request()->segment(1) == 'exam' ? 'expand' : '' }}">
-                        {{-- @can('read exam_session')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="{{ route('sessions.index')}}" class="link"><span>Sesi Ujian</span></a></li>@endcan
+                        @can('read exam_session')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="{{ route('sessions.index')}}" class="link"><span>Sesi Ujian</span></a></li>@endcan
                         @can('read exams')<li class="{{ request()->segment(1) == 'exams' ? 'active' : '' }}"><a href="{{ route('exams.index')}}" class="link"><span>Daftar Ujian</span></a></li>@endcan
-                        @can('read participant')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'participants' ? 'active' : '' }}"><a href="{{ route('participants.index')}}" class="link"><span>Peserta Ujian</span></a></li>@endcan --}}
+                        @can('read participant')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'participants' ? 'active' : '' }}"><a href="{{ route('participants.index')}}" class="link"><span>Peserta Ujian</span></a></li>@endcan
                         @can('read exam_session')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="#" class="link"><span>Sesi Ujian</span></a></li>@endcan
                         @can('read exams')<li class="{{ request()->segment(1) == 'exams' ? 'active' : '' }}"><a href="#" class="link"><span>Daftar Ujian</span></a></li>@endcan
                         @can('read participant')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'participants' ? 'active' : '' }}"><a href="#" class="link"><span>Peserta Ujian</span></a></li>@endcan
@@ -70,16 +71,16 @@
 
             @can('read question')
                 <li class="{{ request()->segment(1) == 'questions' ? 'active' : '' }}">
-                    {{-- <a href="{{ route('questions.index') }}" class="link">
+                    <a href="{{ route('questions.index') }}" class="link">
                         <i class="ti-clipboard"></i>
                         <span>Bank Soal</span>
-                    </a> --}}
+                    </a>
                     <a href="#" class="link">
                         <i class="ti-clipboard"></i>
                         <span>Bank Soal</span>
                     </a>
                 </li>
-            @endcan
+            @endcan --}}
         </ul>
     </div>
 </nav>

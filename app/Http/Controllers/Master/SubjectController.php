@@ -42,7 +42,6 @@ class SubjectController extends Controller
     public function create()
     {
         $this->authorize('create_subject');
-
         $data['action'] = route('subjects.store');
         $data['type'] = 'create';
         $data['title'] = 'Tambah Data Mata Pelajaran';

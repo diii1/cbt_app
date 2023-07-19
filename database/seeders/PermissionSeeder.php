@@ -48,6 +48,13 @@ class PermissionSeeder extends Seeder
         $permission = Permission::create(['name' => 'import_teacher']);
         $permission = Permission::create(['name' => 'export_teacher']);
 
+        // permission for subject feature
+        $permission = Permission::create(['name' => 'list_class']);
+        $permission = Permission::create(['name' => 'create_class']);
+        $permission = Permission::create(['name' => 'read_class']);
+        $permission = Permission::create(['name' => 'update_class']);
+        $permission = Permission::create(['name' => 'delete_class']);
+
         // permission for student feature
         $permission = Permission::create(['name' => 'list_student']);
         $permission = Permission::create(['name' => 'create_student']);
