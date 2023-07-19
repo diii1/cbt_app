@@ -20,7 +20,15 @@ class TeacherService extends Service
             return DB::table('teachers')
             ->join('users', 'teachers.user_id', '=', 'users.id')
             ->join('subjects', 'teachers.subject_id', '=', 'subjects.id')
-            ->select('teachers.*', 'users.name as user_name', 'subjects.name as subject_name')
+            ->select(
+                'teachers.user_id as id',
+                'users.name as name',
+                'users.email as email',
+                'subjects.name as subject',
+                'teachers.nip as nip',
+                'teachers.phone as phone',
+                'teachers.address as address'
+            )
             ->get();
         } catch (\Throwable $th) {
             $this->writeLog("TeacherService::getTeachers", $th);
@@ -28,11 +36,10 @@ class TeacherService extends Service
         }
     }
 
-    public function getTeacherByID(int $id): Teacher | Collection
+    public function getTeacherByID(int $id): Teacher
     {
         try {
-            $teacher = Teacher::where('user_id', $id)->with('user', 'subject')->first();
-            return $teacher;
+            return Teacher::where('user_id', $id)->with('user', 'subject')->first();
         } catch (\Throwable $th) {
             $this->writeLog("TeacherService::getTeacherByID", $th);
             return new Collection();

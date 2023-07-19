@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Teacher;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Subject extends Model
 {
@@ -24,7 +25,7 @@ class Subject extends Model
         'description',
     ];
 
-    public function teacher()
+    public function teacher(): HasMany
     {
         return $this->hasMany(Teacher::class);
     }

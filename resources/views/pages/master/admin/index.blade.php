@@ -16,9 +16,9 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-end">
-                                @if (auth()->user()->can('create_admin'))
-                                    <button type="button" class="btn mb-3 btn-primary btn-sm btn-add">{{ __($data['button_add']) }}</button>
-                                @endif
+                                @can('create_admin')
+                                    <button type="button" class="btn mb-3 btn-success btn-sm btn-add"><i class="ti ti-plus"></i> {{ __($data['button_add']) }}</button>
+                                @endcan
                             </div>
                             {{ $dataTable->table() }}
                         </div>

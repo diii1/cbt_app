@@ -76,6 +76,8 @@ class AdminSeeder extends Seeder
             $role->givePermissionTo('read_teacher');
             $role->givePermissionTo('update_teacher');
             $role->givePermissionTo('delete_teacher');
+            $role->givePermissionTo('import_teacher');
+            $role->givePermissionTo('export_teacher');
 
             DB::commit();
         } catch (\Throwable $th) {

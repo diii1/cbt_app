@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Admin;
 use App\Models\Teacher;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -45,13 +46,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function admin()
+    public function admin(): HasOne
     {
-        return $this->hasOne(Admin::class);
+        return $this->hasOne(Admin::class, 'user_id', 'id');
     }
 
-    public function teacher()
+    public function teacher(): HasOne
     {
-        return $this->hasOne(Admin::class);
+        return $this->hasOne(Admin::class, 'user_id', 'id');
     }
 }

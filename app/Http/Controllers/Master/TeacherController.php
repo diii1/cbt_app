@@ -80,7 +80,9 @@ class TeacherController extends Controller
      */
     public function show($id)
     {
-        //
+        $data['title'] = 'Detail Data Guru';
+        $teacher = $this->service->getTeacherByID((int)$id);
+        return view('pages.master.teacher.show', ['data' => $data, 'teacher' => $teacher]);
     }
 
     /**
@@ -96,7 +98,7 @@ class TeacherController extends Controller
         $data['type'] = 'edit';
         $data['title'] = 'Edit Data Guru';
         $data['subjects'] = $this->subjectService->getSubjects();
-        $teacher = $this->service->getTeacherByID($id);
+        $teacher = $this->service->getTeacherByID((int)$id);
         return view('pages.master.teacher.form', ['data' => $data, 'teacher' => $teacher]);
     }
 

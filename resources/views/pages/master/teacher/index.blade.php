@@ -16,8 +16,15 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-end">
+                                @can('import_teacher')
+                                    <a target="_blank" href="{{ route('api.teacher.template') }}" class="btn btn-sm mb-3 me-2 btn-secondary"><i class="ti ti-download"></i> &nbsp;{{ __(' Download Template') }}</a>
+                                    <button type="button" id="import" class="btn btn-sm mb-3 me-2 btn-primary"><i class="ti ti-upload"></i> &nbsp;{{ __(' Import Data') }}</button>
+                                @endcan
+                                @can('export_teacher')
+                                    <a target="_blank" href="{{ route('api.teacher.export') }}" class="btn btn-sm mb-3 me-2 btn-primary"><i class="ti ti-export"></i> &nbsp;{{ __(' Export Data') }}</a>
+                                @endcan
                                 @can('create_teacher')
-                                    <button type="button" class="btn mb-3 btn-primary btn-sm btn-add">{{ __($data['button_add']) }}</button>
+                                    <button type="button" class="btn mb-3 btn-success btn-sm btn-add"><i class="ti ti-plus"></i> &nbsp;{{ __($data['button_add']) }}</button>
                                 @endcan
                             </div>
                             {{ $dataTable->table() }}
@@ -86,6 +93,18 @@
                     modal.show();
                     store();
                     seePassword();
+                }
+            })
+        });
+
+        $('#import').on('click', function() {
+            $.ajax({
+                url: '{{ route('api.teacher.create') }}',
+                type: 'GET',
+                success: function(res) {
+                    $('#modalAction').find('.modal-dialog').html(res);
+                    modal.show();
+                    store();
                 }
             })
         })
