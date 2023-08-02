@@ -6,6 +6,8 @@ use Illuminate\Support\Str;
 use App\Types\FileMetadata;
 use Exception;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
+use Carbon\Carbon;
 
 class FileHelper
 {
@@ -13,8 +15,11 @@ class FileHelper
     {
         if (!$file) return new Exception("file not found", 400);
 
-        $fileID = (string) Str::uuid();
-        $filename = $fileID . '.' . $file->extension();
+        // $fileID = (string) Str::uuid();
+        $uuid = substr(Uuid::uuid4()->toString(), 0, 8);
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $fileID = $uuid . '-' . $currentDate;
+        $filename = $uuid . '-' . $currentDate . '.' . $file->extension();
 
         $metadata = new FileMetadata();
         $metadata->id = $fileID;

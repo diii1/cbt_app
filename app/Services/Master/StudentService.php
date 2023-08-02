@@ -27,7 +27,7 @@ class StudentService extends Service
                     'classes.name as class',
                     'students.nis as nis',
                     'students.nisn as nisn',
-                    'students.address as addresss',
+                    'students.address as address',
                     'students.birth_date as birth_date',
                     'students.password as password'
                 )

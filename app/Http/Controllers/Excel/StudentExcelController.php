@@ -10,28 +10,29 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
-use App\Models\Subject;
+use App\Models\Classes;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
-use App\Services\Master\TeacherService;
+use App\Services\Master\StudentService;
 use Carbon\Carbon;
 use App\Helpers\FileHelper;
 use App\Types\FileMetadata;
 use Exception;
+use Illuminate\Support\Facades\Crypt;
 
-class TeacherExcelController extends Controller
+class StudentExcelController extends Controller
 {
     private $service;
-    public function __construct(TeacherService $service)
+    public function __construct(StudentService $service)
     {
         $this->service = $service;
     }
 
     public function storeFile(mixed $file): FileMetadata | Exception
     {
-        return FileHelper::storeFile($file, "uploads/import/teachers", "public");
+        return FileHelper::storeFile($file, "uploads/import/students", "public");
     }
 
     public function template()
@@ -40,34 +41,39 @@ class TeacherExcelController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         // Set the column titles
-        $sheet->setCellValue('A1', 'Import Data Guru');
+        $sheet->setCellValue('A1', 'Import Data Siswa');
 
         // Set the column headers
         $sheet->setCellValue('A3', 'No');
         $sheet->setCellValue('B3', 'Nama Lengkap');
         $sheet->setCellValue('C3', 'Email');
-        $sheet->setCellValue('D3', 'NIP');
-        $sheet->setCellValue('E3', 'No. Handphone');
-        $sheet->setCellValue('F3', 'Mata Pelajaran');
-        $sheet->setCellValue('G3', 'Alamat');
+        $sheet->setCellValue('D3', 'Password');
+        $sheet->setCellValue('E3', 'NIS');
+        $sheet->setCellValue('F3', 'NISN');
+        $sheet->setCellValue('G3', 'Tanggal Lahir');
+        $sheet->setCellValue('H3', 'Kelas');
+        $sheet->setCellValue('I3', 'Alamat');
+
+        // default value for date
+        $sheet->setCellValue('G4', '01-01-2000');
 
         // Merge the cells
-        $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('A1:I1');
 
         $this->applyStyling($sheet);
 
         // Set the dropdown values and selected item
-        $dropdownValues = Subject::pluck('name')->toArray();
+        $dropdownValues = Classes::pluck('name')->toArray();
         $selectedItem = $dropdownValues[0]; // Replace with your desired selected item
 
         // Set the data validation with dropdown list
-        $validation = $sheet->getCell('F4')->getDataValidation();
+        $validation = $sheet->getCell('H4')->getDataValidation();
         $validation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
         $validation->setFormula1('"'.implode(',', $dropdownValues).'"');
         $validation->setShowDropDown(true);
 
         // Set the selected item as the default value in the dropdown
-        $selectedCell = $sheet->getCell('F4');
+        $selectedCell = $sheet->getCell('H4');
         $selectedCell->setValue($selectedItem);
 
         // Apply formatting to the dropdown cell
@@ -79,41 +85,42 @@ class TeacherExcelController extends Controller
         // Set the appropriate headers for the response
         $headers = [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'Content-Disposition' => 'attachment; filename="template_guru.xlsx"',
+            'Content-Disposition' => 'attachment; filename="template_siswa.xlsx"',
         ];
 
-        $filename = 'template_guru.xlsx';
+        $filename = 'template_siswa.xlsx';
         // Return the template file as a download
         return response()->streamDownload(function () use ($writer) {
             $writer->save('php://output');
         }, $filename, $headers);
     }
 
-    private function applyStyling(Worksheet $sheet)
+    public function applyStyling(Worksheet $sheet)
     {
         // Styling sheet for title
-        $sheet->getStyle('A1:G1')->getFont()->setBold(true);
-        $sheet->getStyle('A1:G1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A1:G1')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A1:I1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:I1')->getAlignment()->setWrapText(true);
 
         // Styling sheet for header
-        $sheet->getStyle('A3:G3')->getFont()->setBold(true);
-        $sheet->getStyle('A3:G3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A3:G3')->getAlignment()->setWrapText(true);
-        foreach (range('A', 'G') as $column) {
+        $sheet->getStyle('A3:I3')->getFont()->setBold(true);
+        $sheet->getStyle('A3:I3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A3:I3')->getAlignment()->setWrapText(true);
+        foreach (range('A', 'I') as $column) {
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
 
         // Styling sheet for text
-        $sheet->getStyle('D4')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
         $sheet->getStyle('E4')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+        $sheet->getStyle('F4')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+        $sheet->getStyle('G4')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
     }
 
     public function create()
     {
-        $data['title'] = 'Import Data Guru';
-        $data['action'] = route('api.teacher.import');
-        return view('pages.master.teacher.upload', ['data' => $data]);
+        $data['title'] = 'Import Data Siswa';
+        $data['action'] = route('api.student.import');
+        return view('pages.master.student.upload', ['data' => $data]);
     }
 
     public function import(Request $request)
@@ -121,6 +128,7 @@ class TeacherExcelController extends Controller
         $request->validate([
             'file' => 'required|mimes:xlsx',
         ]);
+
         $file = $request->file('file');
         if ($request->hasFile('file')) {
             $this->storeFile($request->file);
@@ -148,25 +156,27 @@ class TeacherExcelController extends Controller
             $user = User::create([
                 'name' => $value[1],
                 'email' => $value[2],
-                'password' => Hash::make('12345678'),
+                'password' => Hash::make($value[3]),
             ]);
             $user->email_verified_at = now();
             $user->remember_token = Str::random(10);
-            $user->assignRole('teacher');
+            $user->assignRole('student');
             $user->save();
 
-            $teacher = DB::table('teachers')->insert([
+            $student = DB::table('students')->insert([
                 'user_id' => $user->id,
-                'subject_id' => Subject::where('name', $value[5])->first()->id,
-                'nip' => (string)$value[3],
-                'address' => $value[6],
-                'phone' => (string)$value[4],
+                'nis' => $value[4],
+                'nisn' => $value[5],
+                'birth_date' => Carbon::parse($value[6]),
+                'class_id' => Classes::where('name', $value[7])->first()->id,
+                'address' => $value[8],
+                'password' => Crypt::encryptString($value[3]),
             ]);
         }
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Import data guru berhasil.'
+            'message' => 'Import data siswa berhasil.'
         ], 200);
     }
 
@@ -177,53 +187,56 @@ class TeacherExcelController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         // Set the column titles
-        $sheet->setCellValue('A1', 'Export Data Guru');
+        $sheet->setCellValue('A1', 'Export Data Siswa');
 
         // Set the column headers
         $sheet->setCellValue('A3', 'No');
         $sheet->setCellValue('B3', 'Nama Lengkap');
         $sheet->setCellValue('C3', 'Email');
-        $sheet->setCellValue('D3', 'NIP');
-        $sheet->setCellValue('E3', 'No. Handphone');
-        $sheet->setCellValue('F3', 'Mata Pelajaran');
-        $sheet->setCellValue('G3', 'Alamat');
+        $sheet->setCellValue('D3', 'Password');
+        $sheet->setCellValue('E3', 'NIS');
+        $sheet->setCellValue('F3', 'NISN');
+        $sheet->setCellValue('G3', 'Tanggal Lahir');
+        $sheet->setCellValue('H3', 'Kelas');
+        $sheet->setCellValue('I3', 'Alamat');
 
         // Merge the cells
-        $sheet->mergeCells('A1:G1');
+        $sheet->mergeCells('A1:I1');
 
         $this->applyStyling($sheet);
 
-        // Set the data rows
-        $data = $this->service->getTeachers();
+        $data = $this->service->getStudents();
         $row = 4;
         foreach ($data as $key => $item) {
             $sheet->setCellValue('A' . $row, ++$key);
             $sheet->setCellValue('B' . $row, $item->name);
             $sheet->setCellValue('C' . $row, $item->email);
-            $sheet->setCellValue('D' . $row, $item->nip);
-            $sheet->setCellValue('E' . $row, $item->phone);
-            $sheet->setCellValue('G' . $row, $item->address);
-            // $sheet->setCellValue('F' . $row, $item->subject);
+            $sheet->setCellValue('D' . $row, Crypt::decryptString($item->password));
+            $sheet->setCellValue('E' . $row, $item->nis);
+            $sheet->setCellValue('F' . $row, $item->nisn);
+            $sheet->setCellValue('G' . $row, Carbon::parse($item->birth_date)->format('d-m-Y'));
+            // $sheet->setCellValue('H' . $row, $item->class->name);
+            $sheet->setCellValue('I' . $row, $item->address);
 
-            // Set the dropdown values for column F
-            $dropdownValues = Subject::pluck('name')->toArray();
-            $selectedItem = $item->subject;
+            // Set the dropdown values for column H
+            $dropdownValues = Classes::pluck('name')->toArray();
+            $selectedItem = $item->class;
 
-            // Set data validation with dropdown list for column F
-            $validation = $sheet->getCell('F' . $row)->getDataValidation();
+            // Set data validation with dropdown list for column H
+            $validation = $sheet->getCell('H' . $row)->getDataValidation();
             $validation->setType(DataValidation::TYPE_LIST);
-            $validation->setFormula1('"'.implode(',', $dropdownValues).'"');
+            $validation->setFormula1('"' . implode(',', $dropdownValues) . '"');
             $validation->setShowDropDown(true);
 
-            // Set the selected item as the default value in the dropdown for column F
-            $selectedCell = $sheet->getCell('F' . $row);
+            // Set the selected item as the default value in the dropdown for column H
+            $selectedCell = $sheet->getCell('H' . $row);
             $selectedCell->setValue($selectedItem);
 
             // Apply formatting to the dropdown cell
             $selectedCell->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-            $sheet->getStyle('D' . $row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
             $sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+            $sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
 
             $row++;
         }
@@ -232,7 +245,7 @@ class TeacherExcelController extends Controller
         $writer = new Xlsx($spreadsheet);
 
         // Set the appropriate headers for the response
-        $filename = Carbon::now()->format('Y-m-d').'-export-guru.xlsx';
+        $filename = Carbon::now()->format('Y-m-d').'-export-siswa.xlsx';
         $headers = [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'Content-Disposition' => 'attachment; filename="'.$filename.'"',

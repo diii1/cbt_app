@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Excel Route Controller
 use App\Http\Controllers\Excel\TeacherExcelController;
+use App\Http\Controllers\Excel\StudentExcelController;
 
 // General Route Controller
 use App\Http\Controllers\General\SchoolProfileController;
@@ -45,11 +46,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('api/user/change_password/{id}', [ChangePasswordController::class, 'edit'])->name('api.user.change_password.edit');
     Route::put('api/user/change_password/{id}', [ChangePasswordController::class, 'update'])->name('api.user.change_password.update');
 
-    // route for api export import
+    // route for api export import teacher
     Route::get('api/excel/teacher/template', [TeacherExcelController::class, 'template'])->name('api.teacher.template');
     Route::get('api/excel/teacher', [TeacherExcelController::class, 'create'])->name('api.teacher.create');
     Route::get('api/excel/teacher/export', [TeacherExcelController::class, 'export'])->name('api.teacher.export');
     Route::post('api/excel/teacher/import', [TeacherExcelController::class, 'import'])->name('api.teacher.import');
+
+    // route for api export import student
+    Route::get('api/excel/student/template', [StudentExcelController::class, 'template'])->name('api.student.template');
+    Route::get('api/excel/student', [StudentExcelController::class, 'create'])->name('api.student.create');
+    Route::get('api/excel/student/export', [StudentExcelController::class, 'export'])->name('api.student.export');
+    Route::post('api/excel/student/import', [StudentExcelController::class, 'import'])->name('api.student.import');
 
     // route for dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
