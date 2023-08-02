@@ -16,6 +16,7 @@ use App\Http\Controllers\Master\AdminController;
 use App\Http\Controllers\Master\SubjectController;
 use App\Http\Controllers\Master\ClassesController;
 use App\Http\Controllers\Master\TeacherController;
+use App\Http\Controllers\Master\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,8 +57,11 @@ Route::middleware(['auth'])->group(function () {
     // route for master data
     Route::resource('master/subjects', SubjectController::class);
     Route::resource('master/classes', ClassesController::class);
+
+    // route for master user data
     Route::resource('pengguna/admins', AdminController::class);
     Route::resource('pengguna/teachers', TeacherController::class);
+    Route::resource('pengguna/students', StudentController::class);
     Route::get('/pengguna/teachers/upload', [TeacherController::class, 'upload'])->name('teachers.upload');
 });
 

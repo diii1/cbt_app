@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             AdminSeeder::class,
             TeacherSeeder::class,
+            StudentSeeder::class,
             // DefaultUserPermissionSeeder::class
         ]);
     }
