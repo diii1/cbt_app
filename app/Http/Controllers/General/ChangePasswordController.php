@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Services\General\ChangePasswordService;
 use App\Types\Entities\PasswordEntity;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Crypt;
+use App\Models\Student;
 
 class ChangePasswordController extends Controller
 {
@@ -26,14 +29,27 @@ class ChangePasswordController extends Controller
 
     public function update(ChangePasswordRequest $request, $id)
     {
+        $role = Role::findById($id)->name;
         $validated = $request->validated();
         $password = new PasswordEntity();
         $password->formRequest($validated);
-        $this->service->updatePassword($password, $id);
+        if ($role == 'student'){
+            $student = Student::findOrFail($id);
+            $student->password = Crypt::encryptString($validated['password']);
+            if(!$student->save()){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Data password detail pengguna gagal diperbarui.'
+                ], 500);
+            }
+        }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data password pengguna berhasil diperbarui.'
-        ], 200);
+        $updated = $this->service->updatePassword($password, $id);
+        if($updated != []) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data password pengguna berhasil diperbarui.'
+            ], 200);
+        }
     }
 }

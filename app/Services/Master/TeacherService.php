@@ -110,8 +110,8 @@ class TeacherService extends Service
             $user = User::find($id);
 
             if($teacher && $user) {
-                $user->delete();
                 $teacher->delete();
+                $user->delete();
 
                 $result = true;
             }

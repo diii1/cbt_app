@@ -2,8 +2,9 @@
 
 namespace App\DataTables;
 
-use App\Models\Teacher;
+use App\Models\Student;
 use App\Models\User;
+use App\Models\Classes;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -14,7 +15,7 @@ use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Gate;
 
-class TeacherDataTable extends DataTable
+class StudentDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -29,21 +30,21 @@ class TeacherDataTable extends DataTable
             ->addColumn('name', function($row){
                 return User::find($row->user_id)->name;
             })
-            ->addColumn('email', function($row){
-                return User ::find($row->user_id)->email;
+            ->addColumn('class', function($row){
+                return Classes::find($row->class_id)->name;
             })
             ->addColumn('action', function($row){
                 $action = '';
                 if(Gate::allows('change_password')){
                     $action = '<button type="button" data-id='.$row->user_id.' data-type="change_password" class="btn btn-secondary btn-sm action"><i class="ti-lock"></i></button>';
                 }
-                if(Gate::allows('read_teacher')){
+                if(Gate::allows('read_student')){
                     $action .= ' <button type="button" data-id='.$row->user_id.' data-type="detail" class="btn btn-primary btn-sm action"><i class="ti-eye"></i></button>';
                 }
-                if(Gate::allows('update_teacher')){
+                if(Gate::allows('update_student')){
                     $action .= ' <button type="button" data-id='.$row->user_id.' data-type="edit" class="btn btn-warning btn-sm action"><i class="ti-pencil"></i></button>';
                 }
-                if(Gate::allows('delete_teacher')){
+                if(Gate::allows('delete_student')){
                     if(auth()->user()->id == $row->user_id){
                         $action .= ' <button type="button" data-id='.$row->user_id.' data-type="delete" class="btn btn-danger btn-sm action" disabled><i class="ti-trash"></i></button>';
                     }else{
@@ -57,10 +58,10 @@ class TeacherDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Teacher $model
+     * @param \App\Models\Student $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Teacher $model): QueryBuilder
+    public function query(Student $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -74,11 +75,11 @@ class TeacherDataTable extends DataTable
     {
         return $this->builder()
                     ->parameters(['searchDelay' => 1500, 'responsive' => true, 'autoWidth' => false ])
-                    ->setTableId('teacher-table')
+                    ->setTableId('student-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(1);
-                    // ->dom('Bfrtip')
+                    //->dom('Bfrtip')
                     // ->selectStyleSingle()
                     // ->buttons([
                     //     Button::make('excel'),
@@ -102,15 +103,21 @@ class TeacherDataTable extends DataTable
                 ->width(15)
                 ->searchable(false)
                 ->orderable(false),
-            Column::make('nip')->title('NIP'),
+            Column::make('nis')
+                ->width(150)
+                ->title('NIS'),
+            Column::make('nisn')
+                ->width(150)
+                ->title('NISN'),
             Column::make('name')->title('Nama'),
-            Column::make('email')->title('Email'),
-            Column::make('phone')->title('No. HP'),
+            Column::make('class')
+                ->width(110)
+                ->title('Kelas'),
             Column::computed('action')
-                    ->exportable(false)
-                    ->printable(false)
-                    ->width(200)
-                    ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(200)
+                ->addClass('text-center'),
         ];
     }
 
@@ -121,6 +128,6 @@ class TeacherDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Teacher_' . date('YmdHis');
+        return 'Student_' . date('YmdHis');
     }
 }
