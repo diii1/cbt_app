@@ -19,6 +19,9 @@ use App\Http\Controllers\Master\ClassesController;
 use App\Http\Controllers\Master\TeacherController;
 use App\Http\Controllers\Master\StudentController;
 
+// Exam Route Controller
+use App\Http\Controllers\Exam\SessionController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -69,6 +72,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('pengguna/admins', AdminController::class);
     Route::resource('pengguna/teachers', TeacherController::class);
     Route::resource('pengguna/students', StudentController::class);
+
+    // route for exam session
+    Route::resource('exam/sessions', SessionController::class);
     Route::get('/pengguna/teachers/upload', [TeacherController::class, 'upload'])->name('teachers.upload');
 });
 
