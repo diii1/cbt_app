@@ -51,7 +51,8 @@ class AdminSeeder extends Seeder
             $role->givePermissionTo('master');
 
             // permission for prefix pengguna menu
-            $role->givePermissionTo('pengguna');
+            $role->givePermissionTo('user');
+            $role->givePermissionTo('exam');
 
             // permission for general change_password user
             $role->givePermissionTo('change_password');
@@ -94,6 +95,13 @@ class AdminSeeder extends Seeder
             $role->givePermissionTo('delete_student');
             $role->givePermissionTo('import_student');
             $role->givePermissionTo('export_student');
+
+            // permission for prefix exam/session menu
+            $role->givePermissionTo('list_session');
+            $role->givePermissionTo('create_session');
+            $role->givePermissionTo('read_session');
+            $role->givePermissionTo('update_session');
+            $role->givePermissionTo('delete_session');
 
             DB::commit();
         } catch (\Throwable $th) {

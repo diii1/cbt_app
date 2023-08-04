@@ -30,7 +30,7 @@ class SubjectController extends Controller
         $this->authorize('list_subject');
         $data['nav_title'] = 'Master | Subjects';
         $data['title'] = 'Data Mata Pelajaran';
-        $data['button_add'] = 'Tambah Data Mata Pelajaran';
+        $data['button_add'] = 'Tambah Data';
         return $dataTables->render('pages.master.subject.index', ['data' => $data]);
     }
 
