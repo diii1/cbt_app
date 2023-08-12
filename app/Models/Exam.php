@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Session;
 use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Classes;
+use App\Models\ExamParticipant;
 
 class Exam extends Model
 {
@@ -57,5 +59,10 @@ class Exam extends Model
     public function class(): BelongsTo
     {
         return $this->belongsTo(Classes::class);
+    }
+
+    public function participants(): HasMany
+    {
+        return $this->hasMany(ExamParticipant::class);
     }
 }
