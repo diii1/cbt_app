@@ -54,13 +54,14 @@
             @endcan
 
             @can('exam')
-            <li class="{{ request()->segment(1) == 'exam' ? 'active open' : '' }}">
+            <li class="{{ request()->segment(1) == 'exams' ? 'active open' : '' }}">
                 <a href="#" class="main-menu has-dropdown">
                     <i class="ti-book"></i>
                     <span>Data Ujian</span>
                 </a>
-                <ul class="sub-menu {{ request()->segment(1) == 'exam' ? 'expand' : '' }}">
-                    @can('list_session')<li class="{{ request()->segment(1) == 'exam' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="{{ route('sessions.index')}}" class="link"><span>Sesi Ujian</span></a></li>@endcan
+                <ul class="sub-menu {{ request()->segment(1) == 'exams' ? 'expand' : '' }}">
+                    @can('list_session')<li class="{{ request()->segment(1) == 'exams' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="{{ route('sessions.index')}}" class="link"><span>Sesi Ujian</span></a></li>@endcan
+                    @can('list_exam')<li class="{{ request()->segment(1) == 'exams' && request()->segment(2) == null ? 'active' : '' }}"><a href="{{ route('exams.index')}}" class="link"><span>Daftar Ujian</span></a></li>@endcan
                 </ul>
             </li>
             @endcan
