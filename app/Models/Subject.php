@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Teacher;
+use App\Models\Exam;
 
 class Subject extends Model
 {
@@ -28,5 +29,10 @@ class Subject extends Model
     public function teacher(): HasMany
     {
         return $this->hasMany(Teacher::class);
+    }
+
+    public function exam(): HasMany
+    {
+        return $this->hasMany(Exam::class);
     }
 }

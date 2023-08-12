@@ -44,11 +44,7 @@ class TeacherDataTable extends DataTable
                     $action .= ' <button type="button" data-id='.$row->user_id.' data-type="edit" class="btn btn-warning btn-sm action"><i class="ti-pencil"></i></button>';
                 }
                 if(Gate::allows('delete_teacher')){
-                    if(auth()->user()->id == $row->user_id){
-                        $action .= ' <button type="button" data-id='.$row->user_id.' data-type="delete" class="btn btn-danger btn-sm action" disabled><i class="ti-trash"></i></button>';
-                    }else{
-                        $action .= ' <button type="button" data-id='.$row->user_id.' data-type="delete" class="btn btn-danger btn-sm action"><i class="ti-trash"></i></button>';
-                    }
+                    $action .= ' <button type="button" data-id='.$row->user_id.' data-type="delete" class="btn btn-danger btn-sm action"><i class="ti-trash"></i></button>';
                 }
                 return $action;
             });
