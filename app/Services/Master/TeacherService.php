@@ -46,6 +46,24 @@ class TeacherService extends Service
         }
     }
 
+    public function getTeacherBySubjectID(int $id): Collection
+    {
+        try {
+            return DB::table('teachers')
+                ->join('users', 'teachers.user_id', '=', 'users.id')
+                ->join('subjects', 'teachers.subject_id', '=', 'subjects.id')
+                ->select(
+                    'teachers.user_id as id',
+                    'users.name as name'
+                )
+                ->where('teachers.subject_id', $id)
+                ->get();
+        } catch (\Throwable $th) {
+            $this->writeLog("TeacherService::getTeacherBySubjectID", $th);
+            return new Collection();
+        }
+    }
+
     public function insertTeacher(TeacherEntity $request): bool | Collection
     {
         try {

@@ -2,9 +2,8 @@
 
 namespace App\DataTables;
 
-use App\Models\Student;
-use App\Models\User;
-use App\Models\Classes;
+use App\Models\Exam;
+use App\Models\Session;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -14,8 +13,9 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Gate;
+use Carbon\Carbon;
 
-class StudentDataTable extends DataTable
+class ExamDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -27,25 +27,33 @@ class StudentDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->addColumn('name', function($row){
-                return User::find($row->user_id)->name;
+            ->editColumn('date', function($row){
+                $date = Carbon::parse($row->date)->locale('id');
+                $date->settings(['formatFunction' => 'translatedFormat']);
+                return $date->format('d F Y');
             })
-            ->addColumn('class', function($row){
-                return Classes::find($row->class_id)->name;
+            ->editColumn('session_id', function($row){
+                $session = Session::find($row->session_id);
+                $time_start = Carbon::createFromTimeString($session->time_start, 'Asia/Jakarta');
+                $time_end = Carbon::createFromTimeString($session->time_end, 'Asia/Jakarta');
+
+                return $time_start->format('g:i') . ' - ' . $time_end->format('g:i').' WIB';
             })
             ->addColumn('action', function($row){
                 $action = '';
-                if(Gate::allows('change_password')){
-                    $action = '<button type="button" data-id='.$row->user_id.' data-type="change_password" class="btn btn-secondary btn-sm action"><i class="ti-lock"></i></button>';
+                if(Gate::allows('update_exam')){
+                    $button = $row->is_active == 1 ? 'btn-success' : 'btn-secondary';
+                    $title = $row->is_active == 1 ? 'Aktif' : 'Tidak Aktif';
+                    $action .= '<button type="button" data-id='.$row->id.' data-type="update_status" class="btn '.$button.' btn-sm action">'.$title.'</button>';
                 }
-                if(Gate::allows('read_student')){
-                    $action .= ' <button type="button" data-id='.$row->user_id.' data-type="detail" class="btn btn-primary btn-sm action"><i class="ti-eye"></i></button>';
+                if(Gate::allows('read_exam')){
+                    $action .= ' <button type="button" data-id='.$row->id.' data-type="detail" class="btn btn-primary btn-sm action"><i class="ti-eye"></i></button>';
                 }
-                if(Gate::allows('update_student')){
-                    $action .= ' <button type="button" data-id='.$row->user_id.' data-type="edit" class="btn btn-warning btn-sm action"><i class="ti-pencil"></i></button>';
+                if(Gate::allows('update_exam')){
+                    $action .= ' <button type="button" data-id='.$row->id.' data-type="edit" class="btn btn-warning btn-sm action"><i class="ti-pencil"></i></button>';
                 }
-                if(Gate::allows('delete_student')){
-                    $action .= ' <button type="button" data-id='.$row->user_id.' data-type="delete" class="btn btn-danger btn-sm action"><i class="ti-trash"></i></button>';
+                if(Gate::allows('delete_exam')){
+                    $action .= ' <button type="button" data-id='.$row->id.' data-type="delete" class="btn btn-danger btn-sm action"><i class="ti-trash"></i></button>';
                 }
                 return $action;
             });
@@ -54,10 +62,10 @@ class StudentDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Student $model
+     * @param \App\Models\Exam $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Student $model): QueryBuilder
+    public function query(Exam $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -70,8 +78,8 @@ class StudentDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
+                    ->setTableId('exam-table')
                     ->parameters(['searchDelay' => 1500, 'responsive' => true, 'autoWidth' => false ])
-                    ->setTableId('student-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(1);
@@ -99,16 +107,16 @@ class StudentDataTable extends DataTable
                 ->width(15)
                 ->searchable(false)
                 ->orderable(false),
-            Column::make('nis')
-                ->width(150)
-                ->title('NIS'),
-            Column::make('nisn')
-                ->width(150)
-                ->title('NISN'),
-            Column::make('name')->title('Nama'),
-            Column::make('class')
-                ->width(110)
+            Column::make('title')
+                ->title('Judul Ujian'),
+            Column::make('date')
+                ->title('Tanggal'),
+            Column::make('class_name')
                 ->title('Kelas'),
+            Column::make('session_id')
+                ->title('Sesi Ujian'),
+            Column::make('subject_name')
+                ->title('Mata Pelajaran'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -124,6 +132,6 @@ class StudentDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Student_' . date('YmdHis');
+        return 'Exam_' . date('YmdHis');
     }
 }

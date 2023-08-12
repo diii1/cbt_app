@@ -21,6 +21,7 @@ use App\Http\Controllers\Master\StudentController;
 
 // Exam Route Controller
 use App\Http\Controllers\Exam\SessionController;
+use App\Http\Controllers\Exam\ExamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +62,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('api/excel/student/export', [StudentExcelController::class, 'export'])->name('api.student.export');
     Route::post('api/excel/student/import', [StudentExcelController::class, 'import'])->name('api.student.import');
 
+    // route for api get teachers
+    Route::get('api/teachers/{subject_id}/subject', [TeacherController::class, 'getBySubjectID'])->name('api.teachers.subjectID');
+
+    // route for api update status exam
+    Route::put('api/exams/{exam_id}/is_active', [ExamController::class, 'update_exam'])->name('api.exam.is_active');
+
     // route for dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -74,7 +81,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('pengguna/students', StudentController::class);
 
     // route for exam session
-    Route::resource('exam/sessions', SessionController::class);
+    Route::resource('exams/sessions', SessionController::class);
+    Route::resource('exams', ExamController::class);
     Route::get('/pengguna/teachers/upload', [TeacherController::class, 'upload'])->name('teachers.upload');
 });
 

@@ -136,4 +136,10 @@ class TeacherController extends Controller
             'message' => 'Data guru berhasil dihapus.'
         ], 200);
     }
+
+    public function getBySubjectID($subjectID)
+    {
+        $teachers = $this->service->getTeacherBySubjectID($subjectID);
+        return json_encode($teachers);
+    }
 }

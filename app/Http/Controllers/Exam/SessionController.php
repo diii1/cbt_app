@@ -30,7 +30,7 @@ class SessionController extends Controller
         $this->authorize('list_session');
         $data['nav_title'] = 'Exam | Sessions';
         $data['title'] = 'Data Sesi Ujian';
-        $data['button_add'] = 'Tambah Data';
+        $data['button_add'] = 'Tambah Data Sesi';
         return $dataTable->render('pages.exam.session.index', ['data' => $data]);
     }
 

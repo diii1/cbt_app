@@ -88,6 +88,7 @@ class StudentController extends Controller
      */
     public function show($id)
     {
+        $this->authorize('read_student');
         $data['title'] = 'Detail Data Siswa';
         $student = $this->service->getStudentByID((int)$id);
         $student->birth_date = Carbon::parse($student->birth_date)->format('d/m/Y');
