@@ -27,7 +27,7 @@ class Exam extends Model
         'subject_id',
         'teacher_id',
         'class_id',
-        'subjet_name',
+        'subject_name',
         'teacher_name',
         'class_name',
         'title',

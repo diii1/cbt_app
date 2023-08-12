@@ -16,14 +16,14 @@ return new class extends Migration
         Schema::create('exams', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('session_id');
-            $table->foreign('session_id')->references('id')->on('classes')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('session_id')->references('id')->on('sessions')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('subject_id');
-            $table->foreign('subject_id')->references('id')->on('classes')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('subject_id')->references('id')->on('subjects')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('teacher_id');
-            $table->foreign('teacher_id')->references('id')->on('classes')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('teacher_id')->references('user_id')->on('teachers')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('class_id');
             $table->foreign('class_id')->references('id')->on('classes')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('subjet_name');
+            $table->string('subject_name');
             $table->string('teacher_name');
             $table->string('class_name');
             $table->string('title');
