@@ -116,6 +116,7 @@ class AdminSeeder extends Seeder
             $role->givePermissionTo('read_participant');
             $role->givePermissionTo('update_participant');
             $role->givePermissionTo('delete_participant');
+            $role->givePermissionTo('card_participant');
 
             DB::commit();
         } catch (\Throwable $th) {

@@ -40,15 +40,15 @@
             @endcan
 
             @can('user')
-                <li class="{{ request()->segment(1) == 'user' ? 'active open' : '' }}">
+                <li class="{{ request()->segment(1) == 'pengguna' ? 'active open' : '' }}">
                     <a href="#" class="main-menu has-dropdown">
                         <i class="ti-user"></i>
                         <span>Data Pengguna</span>
                     </a>
-                    <ul class="sub-menu {{ request()->segment(1) == 'user' ? 'expand' : '' }}">
-                        @can('list_admin')<li class="{{ request()->segment(1) == 'user' && request()->segment(2) == 'admins' ? 'active' : '' }}"><a href="{{ route('admins.index')}}" class="link"><span>Administrator</span></a></li>@endcan
-                        @can('list_teacher')<li class="{{ request()->segment(1) == 'user' && request()->segment(2) == 'teachers' ? 'active' : '' }}"><a href="{{ route('teachers.index')}}" class="link"><span>Guru</span></a></li>@endcan
-                        @can('list_student')<li class="{{ request()->segment(1) == 'user' && request()->segment(2) == 'students' ? 'active' : '' }}"><a href="{{ route('students.index')}}" class="link"><span>Siswa</span></a></li>@endcan
+                    <ul class="sub-menu {{ request()->segment(1) == 'pengguna' ? 'expand' : '' }}">
+                        @can('list_admin')<li class="{{ request()->segment(1) == 'pengguna' && request()->segment(2) == 'admins' ? 'active' : '' }}"><a href="{{ route('admins.index')}}" class="link"><span>Administrator</span></a></li>@endcan
+                        @can('list_teacher')<li class="{{ request()->segment(1) == 'pengguna' && request()->segment(2) == 'teachers' ? 'active' : '' }}"><a href="{{ route('teachers.index')}}" class="link"><span>Guru</span></a></li>@endcan
+                        @can('list_student')<li class="{{ request()->segment(1) == 'pengguna' && request()->segment(2) == 'students' ? 'active' : '' }}"><a href="{{ route('students.index')}}" class="link"><span>Siswa</span></a></li>@endcan
                     </ul>
                 </li>
             @endcan
@@ -62,6 +62,7 @@
                 <ul class="sub-menu {{ request()->segment(1) == 'exams' ? 'expand' : '' }}">
                     @can('list_session')<li class="{{ request()->segment(1) == 'exams' && request()->segment(2) == 'sessions' ? 'active' : '' }}"><a href="{{ route('sessions.index')}}" class="link"><span>Sesi Ujian</span></a></li>@endcan
                     @can('list_exam')<li class="{{ request()->segment(1) == 'exams' && request()->segment(2) == null ? 'active' : '' }}"><a href="{{ route('exams.index')}}" class="link"><span>Daftar Ujian</span></a></li>@endcan
+                    @can('list_participant')<li class="{{ request()->segment(1) == 'exams' && request()->segment(2) == 'participants' ? 'active' : '' }}"><a href="{{ route('participants.index')}}" class="link"><span>Peserta Ujian</span></a></li>@endcan
                 </ul>
             </li>
             @endcan

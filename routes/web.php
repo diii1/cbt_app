@@ -22,6 +22,7 @@ use App\Http\Controllers\Master\StudentController;
 // Exam Route Controller
 use App\Http\Controllers\Exam\SessionController;
 use App\Http\Controllers\Exam\ExamController;
+use App\Http\Controllers\Exam\ExamParticipantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,10 @@ Route::middleware(['auth'])->group(function () {
     // route for api update status exam
     Route::put('api/exams/{exam_id}/is_active', [ExamController::class, 'update_exam'])->name('api.exam.is_active');
 
+    // route for api get table exam participant
+    Route::get('api/exams/{exam_id}/participants', [ExamParticipantController::class, 'getTable'])->name('api.exam.participants_table');
+    Route::get('api/exams/participant/{exam_id}/cards', [ExamParticipantController::class, 'print_cards'])->name('api.exam.participants_cards');
+
     // route for dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -82,8 +87,8 @@ Route::middleware(['auth'])->group(function () {
 
     // route for exam session
     Route::resource('exams/sessions', SessionController::class);
+    Route::resource('exams/participants', ExamParticipantController::class);
     Route::resource('exams', ExamController::class);
-    Route::get('/pengguna/teachers/upload', [TeacherController::class, 'upload'])->name('teachers.upload');
 });
 
 require __DIR__.'/auth.php';
