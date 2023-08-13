@@ -110,6 +110,14 @@ class AdminSeeder extends Seeder
             $role->givePermissionTo('update_exam');
             $role->givePermissionTo('delete_exam');
 
+            // permission for prefix exam participant menu
+            $role->givePermissionTo('list_participant');
+            $role->givePermissionTo('create_participant');
+            $role->givePermissionTo('read_participant');
+            $role->givePermissionTo('update_participant');
+            $role->givePermissionTo('delete_participant');
+            $role->givePermissionTo('card_participant');
+
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();

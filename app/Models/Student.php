@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\User;
 use App\Models\Classes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\ExamParticipant;
 
 class Student extends Model
 {
@@ -37,5 +39,10 @@ class Student extends Model
     public function class(): BelongsTo
     {
         return $this->belongsTo(Classes::class);
+    }
+
+    public function exam_participant(): HasMany
+    {
+        return $this->hasMany(ExamParticipant::class);
     }
 }
