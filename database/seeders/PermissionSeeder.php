@@ -86,5 +86,12 @@ class PermissionSeeder extends Seeder
         $permission = Permission::create(['name' => 'update_participant']);
         $permission = Permission::create(['name' => 'delete_participant']);
         $permission = Permission::create(['name' => 'card_participant']);
+
+        // permission for exam question feature
+        $permission = Permission::create(['name' => 'list_question']);
+        $permission = Permission::create(['name' => 'create_question']);
+        $permission = Permission::create(['name' => 'read_question']);
+        $permission = Permission::create(['name' => 'update_question']);
+        $permission = Permission::create(['name' => 'delete_question']);
     }
 }

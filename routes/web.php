@@ -23,6 +23,7 @@ use App\Http\Controllers\Master\StudentController;
 use App\Http\Controllers\Exam\SessionController;
 use App\Http\Controllers\Exam\ExamController;
 use App\Http\Controllers\Exam\ExamParticipantController;
+use App\Http\Controllers\Exam\QuestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('api/exams/participant/{exam_id}/cards', [ExamParticipantController::class, 'print_cards'])->name('api.exam.participants_cards');
 
     // route for dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // route for master data
     Route::resource('master/subjects', SubjectController::class);
@@ -89,6 +90,11 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('exams/sessions', SessionController::class);
     Route::resource('exams/participants', ExamParticipantController::class);
     Route::resource('exams', ExamController::class);
+
+    // route for question
+    Route::resource('questions', QuestionController::class);
+    Route::get('questions/create/{exam_id}', [QuestionController::class, 'create'])->name('questions.create');
+    Route::get('questions/list/{exam_id}', [QuestionController::class, 'question_list'])->name('questions.list');
 });
 
 require __DIR__.'/auth.php';

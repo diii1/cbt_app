@@ -67,6 +67,15 @@
             </li>
             @endcan
 
+            @can('list_question')
+                <li class="{{ request()->segment(1) == 'questions' ? 'active' : '' }}">
+                    <a href="{{ route('questions.index') }}" class="link">
+                        <i class="ti-clipboard"></i>
+                        <span>Bank Soal</span>
+                    </a>
+                </li>
+            @endcan
+
             {{-- @can('read exam')
                 <li class="{{ request()->segment(1) == 'exams' || request()->segment(1) == 'exam' ? 'active open' : '' }}">
                     <a href="#" class="main-menu has-dropdown">

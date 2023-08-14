@@ -38,7 +38,7 @@ class ExamService extends Service
         }
     }
 
-    public function getExamByID(int $id): Exam
+    public function getExamByID(int $id): Exam | Collection
     {
         try {
             return Exam::where('id', $id)->with('session')->first();
