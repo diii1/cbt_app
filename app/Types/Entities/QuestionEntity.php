@@ -10,7 +10,11 @@ class QuestionEntity
     public ?string $subject_name;
     public ?int $number;
     public ?string $question;
-    public ?string $options;
+    public ?string $option_a;
+    public ?string $option_b;
+    public ?string $option_c;
+    public ?string $option_d;
+    public ?string $option_e;
     public ?string $answer;
     public ?int $created_by;
 
@@ -20,9 +24,12 @@ class QuestionEntity
         $this->subject_id = $validatedRequest['subject_id'];
         $this->exam_title = $validatedRequest['exam_title'];
         $this->subject_name = $validatedRequest['subject_name'];
-        $this->number = $validatedRequest['number'];
         $this->question = $validatedRequest['question'];
-        $this->options = $validatedRequest['options'];
+        $this->option_a = $validatedRequest['option_a'];
+        $this->option_b = $validatedRequest['option_b'];
+        $this->option_c = $validatedRequest['option_c'];
+        $this->option_d = $validatedRequest['option_d'];
+        $this->option_e = $validatedRequest['option_e'];
         $this->answer = $validatedRequest['answer'];
         $this->created_by = $validatedRequest['created_by'];
     }

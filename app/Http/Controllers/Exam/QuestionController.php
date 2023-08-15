@@ -8,6 +8,8 @@ use App\DataTables\ListExamDataTable;
 use App\DataTables\QuestionDataTable;
 use App\Services\Exam\QuestionService;
 use App\Services\Exam\ExamService;
+use App\Types\Entities\QuestionEntity;
+use App\Http\Requests\QuestionRequest;
 
 class QuestionController extends Controller
 {
@@ -67,9 +69,45 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(QuestionRequest $request)
     {
-        //
+        $this->authorize('create_question');
+        $exam = $this->examService->getExamByID($request->exam_id);
+
+        $validated = $request->validated();
+        $validated['exam_title'] = $exam->title;
+        $validated['subject_name'] = $exam->subject->name;
+        $validated['created_by'] = auth()->user()->id;
+        switch ($request->answer) {
+            case 'A':
+                $validated['answer'] = $validated['option_a'];
+                break;
+
+            case 'B':
+                $validated['answer'] = $validated['option_b'];
+                break;
+
+            case 'C':
+                $validated['answer'] = $validated['option_c'];
+                break;
+
+            case 'D':
+                $validated['answer'] = $validated['option_d'];
+                break;
+
+            case 'E':
+                $validated['answer'] = $validated['option_e'];
+                break;
+        }
+
+        $question = new QuestionEntity();
+        $question->formRequest($validated);
+
+        $inserted = $this->service->insertQuestion($question);
+
+        if($inserted != []) return redirect()->route('questions.list', $exam->id)->with('success', 'Data Soal Berhasil Ditambahkan');
+
+        return redirect()->route('questions.list', $exam->id)->with('error', 'Data Soal Gagal Ditambahkan');
     }
 
     /**

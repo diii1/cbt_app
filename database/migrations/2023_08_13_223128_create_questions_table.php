@@ -23,7 +23,11 @@ return new class extends Migration
             $table->string('subject_name');
             // $table->integer('number');
             $table->longText('question');
-            $table->longText('options');
+            $table->longText('option_a');
+            $table->longText('option_b');
+            $table->longText('option_c');
+            $table->longText('option_d');
+            $table->longText('option_e');
             $table->longText('answer');
             $table->bigInteger('created_by');
             $table->timestamp('created_at')->useCurrent();

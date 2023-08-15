@@ -101,6 +101,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('questions', QuestionController::class);
     Route::get('questions/create/{exam_id}', [QuestionController::class, 'create'])->name('questions.create');
     Route::get('questions/list/{exam_id}', [QuestionController::class, 'question_list'])->name('questions.list');
+    // Route::post('questions', [QuestionController::class, 'store'])->name('questions.store');
+    // Route::get('questions', [QuestionController::class, 'index'])->name('questions.index');
 });
 
 require __DIR__.'/auth.php';

@@ -10,7 +10,85 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <textarea name="editor" id="editor"></textarea>
+                            <form action="{{ $data['action'] }}" method="post" id="formAction">
+                                @csrf
+                                @if ($data['type'] == 'edit')
+                                    @method('put')
+                                @endif
+                                <input type="hidden" name="exam_id" value="{{ $data['exam']->id }}">
+                                <input type="hidden" name="subject_id" value="{{ $data['exam']->subject_id }}">
+                                <div class="row">
+                                    <div class="col-md-12 mb-5">
+                                        <label for="question" class="form-label">
+                                            <h5>Soal Ujian</h5>
+                                        </label>
+                                        <textarea name="question" id="question"></textarea>
+                                    </div>
+                                    <div class="col-md-12 mb-5">
+                                        <label for="questionOptionsA" class="form-label">
+                                            <h5>Pilihan Jawaban A</h5>
+                                        </label>
+                                        <div class="input-group d-block">
+                                            <div class="input-group-text light">
+                                                <input class="form-check-input mt-0" type="radio" name="answer" value="A"
+                                                    aria-label="Radio button for following text input">
+                                            </div>
+                                            <textarea name="option_a" id="questionOptionsA"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-5">
+                                        <label for="questionOptionsB" class="form-label">
+                                            <h5>Pilihan Jawaban B</h5>
+                                        </label>
+                                        <div class="input-group d-block">
+                                            <div class="input-group-text light">
+                                                <input class="form-check-input mt-0" type="radio" name="answer" value="B"
+                                                    aria-label="Radio button for following text input">
+                                            </div>
+                                            <textarea name="option_b" id="questionOptionsB"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-5">
+                                        <label for="questionOptionsC" class="form-label">
+                                            <h5>Pilihan Jawaban C</h5>
+                                        </label>
+                                        <div class="input-group d-block">
+                                            <div class="input-group-text light">
+                                                <input class="form-check-input mt-0" type="radio" name="answer" value="C"
+                                                    aria-label="Radio button for following text input">
+                                            </div>
+                                            <textarea name="option_c" id="questionOptionsC"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-5">
+                                        <label for="questionOptionsD" class="form-label">
+                                            <h5>Pilihan Jawaban D</h5>
+                                        </label>
+                                        <div class="input-group d-block">
+                                            <div class="input-group-text light">
+                                                <input class="form-check-input mt-0" type="radio" name="answer" value="D"
+                                                    aria-label="Radio button for following text input">
+                                            </div>
+                                            <textarea name="option_d" id="questionOptionsD"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-5">
+                                        <label for="questionOptionsE" class="form-label">
+                                            <h5>Pilihan Jawaban E</h5>
+                                        </label>
+                                        <div class="input-group d-block">
+                                            <div class="input-group-text light">
+                                                <input class="form-check-input mt-0" type="radio" name="answer" value="E"
+                                                    aria-label="Radio button for following text input">
+                                            </div>
+                                            <textarea name="option_e" id="questionOptionsE"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb-3">
+                                        <button type="submit" class="btn btn-primary w-100">Simpan Data</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -64,7 +142,42 @@
         });
 
         tinymce.init({
-            selector: 'textarea#editor',
+            selector: '#question',
+            plugins: 'code table lists image',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table | image',
+            images_upload_handler: uploadImage
+        });
+
+        tinymce.init({
+            selector: '#questionOptionsA',
+            plugins: 'code table lists image',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table | image',
+            images_upload_handler: uploadImage
+        });
+
+        tinymce.init({
+            selector: '#questionOptionsB',
+            plugins: 'code table lists image',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table | image',
+            images_upload_handler: uploadImage
+        });
+
+        tinymce.init({
+            selector: '#questionOptionsC',
+            plugins: 'code table lists image',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table | image',
+            images_upload_handler: uploadImage
+        });
+
+        tinymce.init({
+            selector: '#questionOptionsD',
+            plugins: 'code table lists image',
+            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table | image',
+            images_upload_handler: uploadImage
+        });
+
+        tinymce.init({
+            selector: '#questionOptionsE',
             plugins: 'code table lists image',
             toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table | image',
             images_upload_handler: uploadImage
