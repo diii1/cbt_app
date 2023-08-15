@@ -12,6 +12,9 @@ use App\Http\Controllers\General\ChangePasswordController;
 use App\Http\Controllers\General\ExportImportController;
 use App\Http\Controllers\General\DashboardController;
 
+// General Route for upload image from tiny mce
+use App\Http\Controllers\General\ImageTinyMceController;
+
 // Master Route Controller
 use App\Http\Controllers\Master\AdminController;
 use App\Http\Controllers\Master\SubjectController;
@@ -48,6 +51,9 @@ Route::resource('school_profile', SchoolProfileController::class);
 // })->middleware(['auth'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
+    // route for api upload image from tiny mce
+    Route::post('api/tinymce/upload', [ImageTinyMceController::class, 'imageUpload'])->name('api.tinymce.upload');
+
     // route for api change password
     Route::get('api/user/change_password/{id}', [ChangePasswordController::class, 'edit'])->name('api.user.change_password.edit');
     Route::put('api/user/change_password/{id}', [ChangePasswordController::class, 'update'])->name('api.user.change_password.update');
