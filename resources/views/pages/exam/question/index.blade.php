@@ -15,21 +15,11 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            {{-- <div class="d-flex justify-content-end">
-                                @can('create_question')
-                                    <button type="button" class="btn mb-3 btn-success btn-sm btn-add"><i class="ti ti-plus"></i> {{ __($data['button_add']) }}</button>
-                                @endcan
-                            </div> --}}
                             {{ $dataTable->table() }}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modalAction" tabindex="-1" aria-labelledby="modalActionLabel" aria-hidden="true">
-        <div class="modal-dialog">
-
         </div>
     </div>
 @endsection

@@ -11,6 +11,8 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\Gate;
 
 class QuestionDataTable extends DataTable
 {
@@ -24,7 +26,44 @@ class QuestionDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->addColumn('action', 'question.action');
+            ->addColumn('question', function ($row){
+                return new HtmlString(html_entity_decode($row->question));
+            })
+            ->addColumn('option', function ($row){
+                $options = [
+                    'A.' => $row->option_a,
+                    'B.' => $row->option_b,
+                    'C.' => $row->option_c,
+                    'D.' => $row->option_d,
+                    'E.' => $row->option_e,
+                ];
+
+                $optionList = '<div class="row">';
+                foreach ($options as $key => $option) {
+                    $optionList .= '<div class="col-md-2 text-center">' . $key . '</div>';
+                    $optionList .= '<div class="col-md-10">' . $option . '</div>';
+                }
+                $optionList .= '</div>';
+
+                return new HtmlString(html_entity_decode($optionList));
+            })
+            ->addColumn('answer', function ($row){
+                return new HtmlString(html_entity_decode($row->answer));
+            })
+            ->addColumn('action', function ($row){
+                $action = '';
+
+                if(Gate::allows('read_question')){
+                    $action .= ' <button type="button" data-id='.$row->id.' data-type="detail" class="btn btn-primary btn-sm action"><i class="ti-eye"></i></button>';
+                }
+                if(Gate::allows('update_question')){
+                    $action .= ' <button type="button" data-id='.$row->id.' data-type="edit" class="btn btn-warning btn-sm action"><i class="ti-pencil"></i></button>';
+                }
+                if(Gate::allows('delete_question')){
+                    $action .= ' <button type="button" data-id='.$row->id.' data-type="delete" class="btn btn-danger btn-sm action"><i class="ti-trash"></i></button>';
+                }
+                return $action;
+            });
     }
 
     /**
@@ -83,6 +122,10 @@ class QuestionDataTable extends DataTable
                 ->searchable(false)
                 ->orderable(false),
             Column::computed('question'),
+            Column::computed('option')
+                ->width(300),
+            Column::computed('answer')
+                ->width(250),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
