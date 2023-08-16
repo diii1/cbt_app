@@ -48,7 +48,8 @@ class QuestionDataTable extends DataTable
                 return new HtmlString(html_entity_decode($optionList));
             })
             ->addColumn('answer', function ($row){
-                return new HtmlString(html_entity_decode($row->answer));
+                $answer = json_decode($row->answer);
+                return new HtmlString(html_entity_decode($answer['value']));
             })
             ->addColumn('action', function ($row){
                 $action = '';

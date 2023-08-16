@@ -80,23 +80,38 @@ class QuestionController extends Controller
         $validated['created_by'] = auth()->user()->id;
         switch ($request->answer) {
             case 'A':
-                $validated['answer'] = $validated['option_a'];
+                $validated['answer'] = json_encode([
+                    "option" => 'a',
+                    "value" => $validated['option_a']
+                ]);
                 break;
 
             case 'B':
-                $validated['answer'] = $validated['option_b'];
+                $validated['answer'] = json_encode([
+                    "option" => 'b',
+                    "value" => $validated['option_b']
+                ]);
                 break;
 
             case 'C':
-                $validated['answer'] = $validated['option_c'];
+                $validated['answer'] = json_encode([
+                    "option" => 'c',
+                    "value" => $validated['option_c']
+                ]);
                 break;
 
             case 'D':
-                $validated['answer'] = $validated['option_d'];
+                $validated['answer'] = json_encode([
+                    "option" => 'd',
+                    "value" => $validated['option_d']
+                ]);
                 break;
 
             case 'E':
-                $validated['answer'] = $validated['option_e'];
+                $validated['answer'] = json_encode([
+                    "option" => 'e',
+                    "value" => $validated['option_e']
+                ]);
                 break;
         }
 
