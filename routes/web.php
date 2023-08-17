@@ -12,6 +12,9 @@ use App\Http\Controllers\General\ChangePasswordController;
 use App\Http\Controllers\General\ExportImportController;
 use App\Http\Controllers\General\DashboardController;
 
+// General Route for upload image from tiny mce
+use App\Http\Controllers\General\ImageTinyMceController;
+
 // Master Route Controller
 use App\Http\Controllers\Master\AdminController;
 use App\Http\Controllers\Master\SubjectController;
@@ -23,6 +26,7 @@ use App\Http\Controllers\Master\StudentController;
 use App\Http\Controllers\Exam\SessionController;
 use App\Http\Controllers\Exam\ExamController;
 use App\Http\Controllers\Exam\ExamParticipantController;
+use App\Http\Controllers\Exam\QuestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +51,9 @@ Route::resource('school_profile', SchoolProfileController::class);
 // })->middleware(['auth'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
+    // route for api upload image from tiny mce
+    Route::post('api/tinymce/upload', [ImageTinyMceController::class, 'imageUpload'])->name('api.tinymce.upload');
+
     // route for api change password
     Route::get('api/user/change_password/{id}', [ChangePasswordController::class, 'edit'])->name('api.user.change_password.edit');
     Route::put('api/user/change_password/{id}', [ChangePasswordController::class, 'update'])->name('api.user.change_password.update');
@@ -74,7 +81,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('api/exams/participant/{exam_id}/cards', [ExamParticipantController::class, 'print_cards'])->name('api.exam.participants_cards');
 
     // route for dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // route for master data
     Route::resource('master/subjects', SubjectController::class);
@@ -89,6 +96,13 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('exams/sessions', SessionController::class);
     Route::resource('exams/participants', ExamParticipantController::class);
     Route::resource('exams', ExamController::class);
+
+    // route for question
+    Route::resource('questions', QuestionController::class);
+    Route::get('questions/create/{exam_id}', [QuestionController::class, 'create'])->name('questions.create');
+    Route::get('questions/list/{exam_id}', [QuestionController::class, 'question_list'])->name('questions.list');
+    // Route::post('questions', [QuestionController::class, 'store'])->name('questions.store');
+    // Route::get('questions', [QuestionController::class, 'index'])->name('questions.index');
 });
 
 require __DIR__.'/auth.php';

@@ -11,6 +11,7 @@ use App\Models\Subject;
 use App\Models\Teacher;
 use App\Models\Classes;
 use App\Models\ExamParticipant;
+use App\Models\Question;
 
 class Exam extends Model
 {
@@ -61,8 +62,13 @@ class Exam extends Model
         return $this->belongsTo(Classes::class);
     }
 
-    public function participants(): HasMany
+    public function participant(): HasMany
     {
         return $this->hasMany(ExamParticipant::class);
+    }
+
+    public function question(): HasMany
+    {
+        return $this->hasMany(Question::class);
     }
 }

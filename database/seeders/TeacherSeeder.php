@@ -55,6 +55,13 @@ class TeacherSeeder extends Seeder
             // user assign role to teacher
             $user->assignRole('teacher');
 
+            // pemission for prefix exam question menu
+            $role->givePermissionTo('list_question');
+            $role->givePermissionTo('create_question');
+            $role->givePermissionTo('read_question');
+            $role->givePermissionTo('update_question');
+            $role->givePermissionTo('delete_question');
+
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
