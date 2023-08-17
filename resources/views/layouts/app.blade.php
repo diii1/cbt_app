@@ -27,6 +27,12 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-override.min.css') }}">
     <link rel="stylesheet" id="theme-color" href="{{ asset('assets/css/dark.min.css') }}">
 
+    <style>
+        .header-left{
+            display: block !important;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -84,6 +90,7 @@
     @stack('js')
     <!-- ======= -->
 
+    <script src="{{ asset('js/clock.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <script>
         Main.init()

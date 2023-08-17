@@ -46,6 +46,11 @@ Route::get('/', function () {
 // route for school profile
 Route::resource('school_profile', SchoolProfileController::class);
 
+// route for clock
+Route::get('/clock', function () {
+    return view('clock');
+});
+
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');

@@ -1,8 +1,12 @@
 <header class="header-navbar fixed">
     <div class="toggle-mobile action-toggle"><i class="fas fa-bars"></i></div>
     <div class="header-wrapper">
-        <div class="header-left">
-            <div class="theme-switch-icon"></div>
+        <div class="header-left" style="width: 28%;">
+            {{-- <div class="theme-switch-icon"></div> --}}
+            <div id="clock" class="d-flex justify-content-between align-items-center h-100">
+                <div id="date"></div>
+                <div id="time"></div>
+            </div>
         </div>
         <div class="header-content">
             <div class="dropdown dropdown-menu-end">
