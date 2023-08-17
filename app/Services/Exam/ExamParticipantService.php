@@ -3,10 +3,12 @@
 namespace App\Services\Exam;
 
 use App\Models\ExamParticipant;
+use App\Models\Exam;
 use App\Types\Entities\ExamParticipantEntity;
 use Illuminate\Support\Facades\DB;
 use App\Services\Service;
 use Illuminate\Support\Collection;
+use Carbon\Carbon;
 
 class ExamParticipantService extends Service
 {
@@ -36,8 +38,15 @@ class ExamParticipantService extends Service
 
     public function getExamParticipantByStudentID(int $student_id): Collection
     {
+        $todayDate = Carbon::now()->format('Y-m-d');
         try {
-            return ExamParticipant::where('student_id', $student_id)->get();
+            return ExamParticipant::where('student_id', $student_id)
+                ->where('is_submitted', 0)
+                ->whereHas('exam', function ($query) use ($todayDate) {
+                    $query->whereRaw("DATE_FORMAT(date, '%Y-%m-%d') >= ?", [$todayDate]);
+                })
+                ->with('exam')
+                ->get();
         } catch (\Throwable $th) {
             $this->writeLog("ExamParticipantService::getExamParticipantByStudentID", $th);
             return new Collection();

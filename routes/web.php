@@ -81,6 +81,11 @@ Route::middleware(['auth'])->group(function () {
     // route for api update status exam
     Route::put('api/exams/{exam_id}/is_active', [ExamController::class, 'update_exam'])->name('api.exam.is_active');
 
+    // route for validate exam token
+    Route::get('api/exams/{exam_code}/validate_token', [ExamController::class, 'validate_token'])->name('api.exam.validate_token');
+    Route::post('api/exams/validate_exam', [ExamController::class, 'validate_exam'])->name('api.exam.validate_exam');
+    Route::get('api/exams/start/{exam_code}', [ExamController::class, 'start'])->name('api.exam.start');
+
     // route for api get table exam participant
     Route::get('api/exams/{exam_id}/participants', [ExamParticipantController::class, 'getTable'])->name('api.exam.participants_table');
     Route::get('api/exams/participant/{exam_id}/cards', [ExamParticipantController::class, 'print_cards'])->name('api.exam.participants_cards');

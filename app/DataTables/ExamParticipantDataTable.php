@@ -65,7 +65,7 @@ class ExamParticipantDataTable extends DataTable
     {
         $query = $model->newQuery();
 
-        $exam_id = request()->get('exam_id');
+        $exam_id = request()->route('exam_id');
         if($exam_id) $query->where('exam_id', $exam_id);
 
         return $query;

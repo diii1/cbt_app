@@ -48,6 +48,16 @@ class ExamService extends Service
         }
     }
 
+    public function getExamByCode(string $code): Exam | Collection
+    {
+        try {
+            return Exam::where('code', $code)->with('session')->first();
+        } catch (\Throwable $th) {
+            $this->writeLog("ExamService::getExamByCode", $th);
+            return new Collection();
+        }
+    }
+
     public function insertExam(ExamEntity $request):bool | Collection
     {
         try {
