@@ -15,6 +15,7 @@ use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ListExamDataTable extends DataTable
 {
@@ -41,10 +42,20 @@ class ListExamDataTable extends DataTable
                 return $date->format('d F Y');
             })
             ->addColumn('action', function($row){
+                $user = Auth::user();
                 $action = '';
 
-                if(Gate::allows('list_question')){
-                    $action .= '<a href="'. route('questions.list', $row->id) .'" class="btn btn-sm btn-primary"><i class="ti-list"></i>&nbsp; Data Soal</a>';
+                if($user && $user->hasRole('teacher')){
+                    if(Gate::allows('list_question')){
+                        $action .= '<a href="'. route('questions.list', $row->id) .'" class="btn btn-sm btn-primary"><i class="ti-list"></i>&nbsp; Data Soal</a>';
+                    }
+                }
+
+                if($user && $user->hasRole('admin')){
+                    if(Gate::allows('list_participant')){
+                        $action .= '<a href="'. route('questions.list', $row->id) .'" class="btn btn-sm btn-primary m-1"><i class="ti-list"></i>&nbsp; Data Soal</a>';
+                        $action .= '<a href="'. route('participants.list', $row->id) .'" class="btn btn-sm btn-primary m-1"><i class="ti-list"></i>&nbsp; Data Peserta</a>';
+                    }
                 }
 
                 return $action;
@@ -61,10 +72,10 @@ class ListExamDataTable extends DataTable
     {
         if(auth()->user()->hasRole('guru')){
             $teacher_id = Teacher::where('user_id', auth()->user()->id)->first()->id;
-            return $model->newQuery()->where('teacher_id', $teacher_id);
+            return $model->newQuery()->where('teacher_id', $teacher_id)->where('is_active', 1);
         }
 
-        return $model->newQuery();
+        return $model->newQuery()->where('is_active', 1);
     }
 
     /**

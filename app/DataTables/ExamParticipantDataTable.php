@@ -2,7 +2,10 @@
 
 namespace App\DataTables;
 
-use App\Models\Question;
+use App\Models\ExamParticipant;
+use App\Models\Exam;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -11,11 +14,9 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Auth;
 
-class QuestionDataTable extends DataTable
+class ExamParticipantDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -25,43 +26,29 @@ class QuestionDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        // $exam = Exam::where('id', $row->exam_id);
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->addColumn('question', function ($row){
-                return new HtmlString(html_entity_decode($row->question));
+            ->editColumn('nis', function($row) {
+                $student_nis = Student::where('user_id', $row->student_id)->first()->nis;
+                return $student_nis;
             })
-            ->addColumn('option', function ($row){
-                $options = [
-                    'A.' => $row->option_a,
-                    'B.' => $row->option_b,
-                    'C.' => $row->option_c,
-                    'D.' => $row->option_d,
-                    'E.' => $row->option_e,
-                ];
-
-                $optionList = '<div class="row">';
-                foreach ($options as $key => $option) {
-                    $optionList .= '<div class="col-md-2 text-center">' . $key . '</div>';
-                    $optionList .= '<div class="col-md-10">' . $option . '</div>';
-                }
-                $optionList .= '</div>';
-
-                return new HtmlString(html_entity_decode($optionList));
+            ->editColumn('nisn', function($row) {
+                $student_nisn = Student::where('user_id', $row->student_id)->first()->nisn;
+                return $student_nisn;
             })
-            ->addColumn('answer', function ($row){
-                $answer = json_decode($row->answer);
-                return new HtmlString(html_entity_decode($answer->value));
+            ->editColumn('name', function($row) {
+                $student_name = User::where('id', $row->student_id)->first()->name;
+                return $student_name;
             })
-            ->addColumn('action', function ($row){
+            ->editColumn('class', function($row) {
+                $student_class = Student::where('user_id', $row->student_id)->with('class')->first()->class->name;
+                return $student_class;
+            })
+            ->addColumn('action', function($row) {
                 $action = '';
 
-                if(Gate::allows('read_question')){
-                    $action .= '<button type="button" data-id='.$row->id.' data-type="detail" class="btn btn-primary btn-sm action"><i class="ti-eye"></i></button>';
-                }
-                if(Gate::allows('update_question')){
-                    $action .= ' <button type="button" data-id='.$row->id.' data-type="edit" class="btn btn-warning btn-sm action"><i class="ti-pencil"></i></button>';
-                }
-                if(Gate::allows('delete_question')){
+                if(Gate::allows('delete_participant')){
                     $action .= ' <button type="button" data-id='.$row->id.' data-type="delete" class="btn btn-danger btn-sm action"><i class="ti-trash"></i></button>';
                 }
                 return $action;
@@ -71,17 +58,15 @@ class QuestionDataTable extends DataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\Question $model
+     * @param \App\Models\ExamParticipant $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Question $model): QueryBuilder
+    public function query(ExamParticipant $model): QueryBuilder
     {
         $query = $model->newQuery();
 
         $exam_id = request()->get('exam_id');
-        if($exam_id){
-            $query->where('exam_id', $exam_id);
-        }
+        if($exam_id) $query->where('exam_id', $exam_id);
 
         return $query;
     }
@@ -94,12 +79,12 @@ class QuestionDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('question-table')
+                    ->setTableId('examparticipant-table')
                     ->parameters(['searchDelay' => 1500, 'responsive' => true, 'autoWidth' => false ])
                     ->columns($this->getColumns())
                     ->minifiedAjax();
-                    //->dom('Bfrtip')
                     // ->orderBy(1)
+                    //->dom('Bfrtip')
                     // ->selectStyleSingle()
                     // ->buttons([
                     //     Button::make('excel'),
@@ -118,32 +103,22 @@ class QuestionDataTable extends DataTable
      */
     public function getColumns(): array
     {
-        $user = Auth::user();
-        $columns = [
+        return [
             Column::make('DT_RowIndex')->title('No')
                 ->width(15)
                 ->searchable(false)
                 ->orderable(false),
-            Column::computed('question')
-                ->title('Pertanyaan'),
-            Column::computed('option')
-                ->title('Pilihan')
-                ->width(300),
-            Column::computed('answer')
-                ->title('Jawaban')
-                ->width(250),
-        ];
-
-        if($user && $user->hasRole('guru')){
-            $columns[] = Column::computed('action')
+            Column::make('nis')->title('NIS'),
+            Column::make('nisn')->title('NISN'),
+            Column::make('name')->title('Nama'),
+            Column::make('class')->title('Kelas'),
+            Column::computed('action')
                 ->title('Aksi')
                 ->exportable(false)
                 ->printable(false)
                 ->width(200)
-                ->addClass('text-center');
-        }
-
-        return $columns;
+                ->addClass('text-center'),
+        ];
     }
 
     /**
@@ -153,6 +128,6 @@ class QuestionDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Question_' . date('YmdHis');
+        return 'ExamParticipant_' . date('YmdHis');
     }
 }
