@@ -28,6 +28,11 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalAction" tabindex="-1" aria-labelledby="modalActionLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+
+        </div>
+    </div>
 @endsection
 
 @push('js')
@@ -37,4 +42,73 @@
     <script src="{{ asset('vendor/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('vendor/select2/dist/js/select2.min.js') }}"></script>
     {{ $dataTable->scripts() }}
+
+    <script type="text/javascript">
+        $('#question-table').on('click', '.action', function(){
+            let data = $(this).data();
+            let id = data.id;
+            let type = data.type;
+
+            if(type == 'delete'){
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Data yang dihapus tidak dapat dikembalikan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Tidak, batalkan!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            method: 'DELETE',
+                            url: '{{ route('questions.destroy', ':id') }}'.replace(':id', id),
+                            headers: {
+                                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(res) {
+                                window.LaravelDataTables["question-table"].ajax.reload();
+                                Toast.fire({
+                                    icon: res.status,
+                                    title: res.message
+                                })
+                            },
+                            error: function(res) {
+                                Toast.fire({
+                                    icon: res.status,
+                                    title: res.message
+                                })
+                            }
+                        })
+                    }
+                })
+            }
+
+            if(type == 'edit'){
+                window.location.href = '{{ route('questions.edit', ':id') }}'.replace(':id', id);
+            }
+
+            if(type == 'detail'){
+                // window.location.href = '{{ route('questions.show', ':id') }}'.replace(':id', id);
+                $.ajax({
+                    method: 'GET',
+                    url: '{{ route('questions.show', ':id') }}'.replace(':id', id),
+                    headers: {
+                        'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(res) {
+                        $('#modalAction .modal-dialog').html(res);
+                        $('#modalAction').modal('show');
+                    },
+                    error: function(res) {
+                        Toast.fire({
+                            icon: res.status,
+                            title: res.message
+                        })
+                    }
+                })
+            }
+        });
+    </script>
 @endpush

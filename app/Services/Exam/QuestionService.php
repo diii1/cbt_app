@@ -67,10 +67,6 @@ class QuestionService extends Service
     {
         try {
             return DB::table('questions')->where('id', $id)->update([
-                'exam_id' => $request->exam_id,
-                'subject_id' => $request->subject_id,
-                'exam_title' => $request->exam_title,
-                'subject_name' => $request->subject_name,
                 'question' => $request->question,
                 'option_a' => $request->option_a,
                 'option_b' => $request->option_b,
@@ -78,7 +74,6 @@ class QuestionService extends Service
                 'option_d' => $request->option_d,
                 'option_e' => $request->option_e,
                 'answer' => $request->answer,
-                'created_by' => $request->created_by,
             ]);
         } catch (\Throwable $th) {
             $this->writeLog("QuestionService::updateQuestion", $th);

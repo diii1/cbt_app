@@ -33,4 +33,15 @@ class QuestionEntity
         $this->answer = $validatedRequest['answer'];
         $this->created_by = $validatedRequest['created_by'];
     }
+
+    function updateRequest(array $validatedRequest)
+    {
+        $this->question = $validatedRequest['question'];
+        $this->option_a = $validatedRequest['option_a'];
+        $this->option_b = $validatedRequest['option_b'];
+        $this->option_c = $validatedRequest['option_c'];
+        $this->option_d = $validatedRequest['option_d'];
+        $this->option_e = $validatedRequest['option_e'];
+        $this->answer = $validatedRequest['answer'];
+    }
 }

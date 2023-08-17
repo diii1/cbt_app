@@ -133,7 +133,12 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        //
+        $this->authorize('read_question');
+        $question = $this->service->getQuestionByID($id);
+        $data['title'] = 'Detail Data Soal';
+        $question->answer = json_decode($question->answer);
+
+        return view('pages.exam.question.show', ['data' => $data, 'question' => $question]);
     }
 
     /**
@@ -144,7 +149,15 @@ class QuestionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $this->authorize('update_question');
+        $data['nav_title'] = 'Edit Questions';
+        $data['action'] = route('questions.update', $id);
+        $data['type'] = 'edit';
+        $data['title'] = 'Edit Data Soal';
+        $question = $this->service->getQuestionByID($id);
+        $question->answer = json_decode($question->answer);
+
+        return view('pages.exam.question.form', ['data' => $data, 'question' => $question]);
     }
 
     /**
@@ -156,7 +169,52 @@ class QuestionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $dataQuestion = $this->service->getQuestionByID($id);
+        $validated = $request->all();
+        switch ($request->answer) {
+            case 'A':
+                $validated['answer'] = json_encode([
+                    "option" => 'a',
+                    "value" => $validated['option_a']
+                ]);
+                break;
+
+            case 'B':
+                $validated['answer'] = json_encode([
+                    "option" => 'b',
+                    "value" => $validated['option_b']
+                ]);
+                break;
+
+            case 'C':
+                $validated['answer'] = json_encode([
+                    "option" => 'c',
+                    "value" => $validated['option_c']
+                ]);
+                break;
+
+            case 'D':
+                $validated['answer'] = json_encode([
+                    "option" => 'd',
+                    "value" => $validated['option_d']
+                ]);
+                break;
+
+            case 'E':
+                $validated['answer'] = json_encode([
+                    "option" => 'e',
+                    "value" => $validated['option_e']
+                ]);
+                break;
+        }
+
+        $question = new QuestionEntity();
+        $question->updateRequest($validated);
+
+        $updated = $this->service->updateQuestion($question, $id);
+        if($updated != []) return redirect()->route('questions.list', $dataQuestion->exam_id)->with('success', 'Data Soal Berhasil Diperbarui');
+
+        return redirect()->route('questions.list', $dataQuestion->exam_id)->with('error', 'Data Soal Gagal Diperbarui');
     }
 
     /**
@@ -167,6 +225,18 @@ class QuestionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->authorize('delete_question');
+        $deleted = $this->service->deleteQuestion($id);
+        if($deleted != []){
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data Soal berhasil dihapus.'
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Data Soal gagal dihapus.'
+        ], 500);
     }
 }

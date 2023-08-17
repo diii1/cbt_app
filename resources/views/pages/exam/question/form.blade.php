@@ -15,14 +15,14 @@
                                 @if ($data['type'] == 'edit')
                                     @method('put')
                                 @endif
-                                <input type="hidden" name="exam_id" value="{{ $data['exam']->id }}">
-                                <input type="hidden" name="subject_id" value="{{ $data['exam']->subject_id }}">
+                                <input type="hidden" name="exam_id" value="{{ $data['exam']->id ?? $question->exam_id }}">
+                                <input type="hidden" name="subject_id" value="{{ $data['exam']->subject_id ?? $question->subject_id }}">
                                 <div class="row">
                                     <div class="col-md-12 mb-5">
                                         <label for="question" class="form-label">
                                             <h5>Soal Ujian</h5>
                                         </label>
-                                        <textarea name="question" id="question"></textarea>
+                                        <textarea name="question" id="question">{!! $question->question !!}</textarea>
                                     </div>
                                     <div class="col-md-12 mb-5">
                                         <label for="questionOptionsA" class="form-label">
@@ -31,9 +31,9 @@
                                         <div class="input-group d-block">
                                             <div class="input-group-text light">
                                                 <input class="form-check-input mt-0" type="radio" name="answer" value="A"
-                                                    aria-label="Radio button for following text input">
+                                                    aria-label="Radio button for following text input" @if ($question->answer->option == 'a') checked @endif>
                                             </div>
-                                            <textarea name="option_a" id="questionOptionsA"></textarea>
+                                            <textarea name="option_a" id="questionOptionsA">{!! $question->option_a !!}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-5">
@@ -43,9 +43,9 @@
                                         <div class="input-group d-block">
                                             <div class="input-group-text light">
                                                 <input class="form-check-input mt-0" type="radio" name="answer" value="B"
-                                                    aria-label="Radio button for following text input">
+                                                    aria-label="Radio button for following text input" @if ($question->answer->option == 'b') checked @endif>
                                             </div>
-                                            <textarea name="option_b" id="questionOptionsB"></textarea>
+                                            <textarea name="option_b" id="questionOptionsB">{!! $question->option_b !!}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-5">
@@ -55,9 +55,9 @@
                                         <div class="input-group d-block">
                                             <div class="input-group-text light">
                                                 <input class="form-check-input mt-0" type="radio" name="answer" value="C"
-                                                    aria-label="Radio button for following text input">
+                                                    aria-label="Radio button for following text input" @if ($question->answer->option == 'c') checked @endif>
                                             </div>
-                                            <textarea name="option_c" id="questionOptionsC"></textarea>
+                                            <textarea name="option_c" id="questionOptionsC">{!! $question->option_c !!}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-5">
@@ -67,9 +67,9 @@
                                         <div class="input-group d-block">
                                             <div class="input-group-text light">
                                                 <input class="form-check-input mt-0" type="radio" name="answer" value="D"
-                                                    aria-label="Radio button for following text input">
+                                                    aria-label="Radio button for following text input" @if ($question->answer->option == 'd') checked @endif>
                                             </div>
-                                            <textarea name="option_d" id="questionOptionsD"></textarea>
+                                            <textarea name="option_d" id="questionOptionsD">{!! $question->option_d !!}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-5">
@@ -79,9 +79,9 @@
                                         <div class="input-group d-block">
                                             <div class="input-group-text light">
                                                 <input class="form-check-input mt-0" type="radio" name="answer" value="E"
-                                                    aria-label="Radio button for following text input">
+                                                    aria-label="Radio button for following text input" @if ($question->answer->option == 'e') checked @endif>
                                             </div>
-                                            <textarea name="option_e" id="questionOptionsE"></textarea>
+                                            <textarea name="option_e" id="questionOptionsE">{!! $question->option_e !!}</textarea>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mb-3">

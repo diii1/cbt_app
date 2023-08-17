@@ -49,13 +49,13 @@ class QuestionDataTable extends DataTable
             })
             ->addColumn('answer', function ($row){
                 $answer = json_decode($row->answer);
-                return new HtmlString(html_entity_decode($answer['value']));
+                return new HtmlString(html_entity_decode($answer->value));
             })
             ->addColumn('action', function ($row){
                 $action = '';
 
                 if(Gate::allows('read_question')){
-                    $action .= ' <button type="button" data-id='.$row->id.' data-type="detail" class="btn btn-primary btn-sm action"><i class="ti-eye"></i></button>';
+                    $action .= '<button type="button" data-id='.$row->id.' data-type="detail" class="btn btn-primary btn-sm action"><i class="ti-eye"></i></button>';
                 }
                 if(Gate::allows('update_question')){
                     $action .= ' <button type="button" data-id='.$row->id.' data-type="edit" class="btn btn-warning btn-sm action"><i class="ti-pencil"></i></button>';
@@ -122,12 +122,16 @@ class QuestionDataTable extends DataTable
                 ->width(15)
                 ->searchable(false)
                 ->orderable(false),
-            Column::computed('question'),
+            Column::computed('question')
+                ->title('Pertanyaan'),
             Column::computed('option')
+                ->title('Pilihan')
                 ->width(300),
             Column::computed('answer')
+                ->title('Jawaban')
                 ->width(250),
             Column::computed('action')
+                ->title('Aksi')
                 ->exportable(false)
                 ->printable(false)
                 ->width(200)
