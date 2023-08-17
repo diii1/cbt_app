@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\Exam\ExamParticipantService;
 use App\Services\Exam\ExamService;
+use App\DataTables\ListExamDataTable;
+use App\DataTables\ExamParticipantDataTable;
 use DataTables;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Classes;
@@ -31,44 +33,52 @@ class ExamParticipantController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(ListExamDataTable $dataTables)
     {
         $this->authorize('list_participant');
-        $data['nav_title'] = 'Exam | Participants';
-        $data['title'] = 'Data Peserta Ujian';
-        $data['exams'] = $this->examService->getExams();
-        $data['button_add'] = 'Tambah Data Peserta';
-        return view('pages.exam.participant.index', ['data' => $data]);
+        $data['nav_title'] = 'Exam | List Exam';
+        $data['title'] = 'Data Ujian';
+        // $data['exams'] = $this->examService->getExams();
+        // $data['button_add'] = 'Tambah Data Peserta';
+        // return view('pages.exam.participant.index', ['data' => $data]);
+        return $dataTables->render('pages.exam.participant.index', ['data' => $data]);
     }
 
-    public function getTable($id)
+    public function participant_list(ExamParticipantDataTable $dataTables, $id)
     {
-        $participants = $this->service->getExamParticipantByExamID($id);
-        $dataTables = DataTables::of($participants)
-            ->addIndexColumn()
-            ->addColumn('nis', function($row){
-                return $row->student_nis;
-            })
-            ->addColumn('nisn', function($row){
-                return $row->student_nisn;
-            })
-            ->addColumn('name', function($row){
-                return $row->student_name;
-            })
-            ->addColumn('class', function($row){
-                return $row->class_name;
-            })
-            ->addColumn('action', function($row){
-                $action = '<div class="text-center">';
-                if(Gate::allows('delete_participant')){
-                    $action .= ' <button type="button" data-id='.$row->id.' data-type="delete" class="btn btn-danger btn-sm action"><i class="ti-trash"></i></button>';
-                }
-                $action .= '</div>';
-                return $action;
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-        return $dataTables;
+        // $participants = $this->service->getExamParticipantByExamID($id);
+        // $dataTables = DataTables::of($participants)
+        //     ->addIndexColumn()
+        //     ->addColumn('nis', function($row){
+        //         return $row->student_nis;
+        //     })
+        //     ->addColumn('nisn', function($row){
+        //         return $row->student_nisn;
+        //     })
+        //     ->addColumn('name', function($row){
+        //         return $row->student_name;
+        //     })
+        //     ->addColumn('class', function($row){
+        //         return $row->class_name;
+        //     })
+        //     ->addColumn('action', function($row){
+        //         $action = '<div class="text-center">';
+        //         if(Gate::allows('delete_participant')){
+        //             $action .= ' <button type="button" data-id='.$row->id.' data-type="delete" class="btn btn-danger btn-sm action"><i class="ti-trash"></i></button>';
+        //         }
+        //         $action .= '</div>';
+        //         return $action;
+        //     })
+        //     ->rawColumns(['action'])
+        //     ->make(true);
+        // return $dataTables;
+        $this->authorize('list_participant');
+        $exam = $this->examService->getExamByID($id);
+        $data['nav_title'] = 'Participants';
+        $data['title'] = 'Data Peserta Ujian';
+        $data['button_add'] = 'Tambah Data Peserta';
+        $data['exam'] = $exam;
+        return $dataTables->render('pages.exam.participant.list', ['data' => $data]);
     }
 
     /**

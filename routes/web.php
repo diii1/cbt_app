@@ -95,14 +95,13 @@ Route::middleware(['auth'])->group(function () {
     // route for exam session
     Route::resource('exams/sessions', SessionController::class);
     Route::resource('exams/participants', ExamParticipantController::class);
+    Route::get('exams/participants/list/{exam_id}', [ExamParticipantController::class, 'participant_list'])->name('participants.list');
     Route::resource('exams', ExamController::class);
 
     // route for question
     Route::resource('questions', QuestionController::class);
     Route::get('questions/create/{exam_id}', [QuestionController::class, 'create'])->name('questions.create');
     Route::get('questions/list/{exam_id}', [QuestionController::class, 'question_list'])->name('questions.list');
-    // Route::post('questions', [QuestionController::class, 'store'])->name('questions.store');
-    // Route::get('questions', [QuestionController::class, 'index'])->name('questions.index');
 });
 
 require __DIR__.'/auth.php';
