@@ -45,7 +45,7 @@
 
         @yield('content')
 
-        @include('layouts.settings')
+        {{-- @include('layouts.settings') --}}
 
         @include('layouts.footer')
 
