@@ -32,11 +32,11 @@ const Main = (function () {
 
     // settings handler
     function themeHandler() {
-        document
-            .querySelector(".settings-icon")
-            .addEventListener("click", function (e) {
-                this.parentElement.parentElement.classList.toggle("show");
-            });
+        // document
+        //     .querySelector(".settings-icon")
+        //     .addEventListener("click", function (e) {
+        //         this.parentElement.parentElement.classList.toggle("show");
+        //     });
 
         maxWidth < 900 && $body.classList.add("collapse-sidebar");
 
@@ -105,33 +105,33 @@ const Main = (function () {
         //theme handler
         const themeColor = document.getElementById("theme-color");
 
-        const switchTheme = document.querySelector(".theme-switch-icon");
-        switchTheme.addEventListener("click", function () {
-            const currTheme = JSON.parse(localStorage.getItem("themeSettings"));
-            if (currTheme?.themeColor == "light") {
-                document.getElementById("dark").checked = true;
-                // themeColor.href = '../assets/css/dark.css'
-                localStorage.setItem(
-                    "themeSettings",
-                    JSON.stringify({
-                        ...currTheme,
-                        themeColor: "dark",
-                    })
-                );
-                $body.classList.add("dark");
-            } else {
-                document.getElementById("light").checked = true;
-                // themeColor.href = ''
-                localStorage.setItem(
-                    "themeSettings",
-                    JSON.stringify({
-                        ...currTheme,
-                        themeColor: "light",
-                    })
-                );
-                $body.classList.remove("dark");
-            }
-        });
+        // const switchTheme = document.querySelector(".theme-switch-icon");
+        // switchTheme.addEventListener("click", function () {
+        //     const currTheme = JSON.parse(localStorage.getItem("themeSettings"));
+        //     if (currTheme?.themeColor == "light") {
+        //         document.getElementById("dark").checked = true;
+        //         // themeColor.href = '../assets/css/dark.css'
+        //         localStorage.setItem(
+        //             "themeSettings",
+        //             JSON.stringify({
+        //                 ...currTheme,
+        //                 themeColor: "dark",
+        //             })
+        //         );
+        //         $body.classList.add("dark");
+        //     } else {
+        //         document.getElementById("light").checked = true;
+        //         // themeColor.href = ''
+        //         localStorage.setItem(
+        //             "themeSettings",
+        //             JSON.stringify({
+        //                 ...currTheme,
+        //                 themeColor: "light",
+        //             })
+        //         );
+        //         $body.classList.remove("dark");
+        //     }
+        // });
 
         document.querySelectorAll(".theme-color").forEach(function (e) {
             //inital theme settings

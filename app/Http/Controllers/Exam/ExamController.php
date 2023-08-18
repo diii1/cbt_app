@@ -230,4 +230,43 @@ class ExamController extends Controller
             'message' => 'Data status ujian gagal diperbarui.'
         ], 500);
     }
+
+    public function validate_token($code)
+    {
+        $data['title'] = "Validasi Token Ujian";
+        $data['exam'] = $this->service->getExamByCode($code);
+        return view('pages.exam.student.validate', ["data" => $data]);
+    }
+
+    public function validate_exam(Request $request)
+    {
+        $exam = $this->service->getExamByCode($request->code);
+        if($exam->token != $request->token){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token tidak valid.'
+            ]);
+        }
+        if(Carbon::now()->greaterThan($exam->expired_token)){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token sudah kadaluarsa.'
+            ]);
+        }
+        if($exam->token == $request->token && Carbon::now()->lessThan($exam->expired_token)){
+            return response()->json([
+                'status' => 'success',
+                'code' => $request->code,
+                'message' => 'Validasi token berhasil.'
+            ]);
+        }
+    }
+
+    public function start($code)
+    {
+        $data['exam'] = $this->service->getExamByCode($code);
+        $data['nav_title'] = 'Exam Start';
+
+        return view('pages.exam.student.start', ['data' => $data]);
+    }
 }
