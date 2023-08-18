@@ -8,12 +8,14 @@ use App\DataTables\ExamDataTable;
 use App\Http\Requests\ExamRequest;
 use App\Services\Exam\ExamService;
 use App\Services\Exam\SessionService;
+use App\Services\Exam\QuestionService;
 use App\Services\Master\ClassService;
 use App\Services\Master\SubjectService;
 use App\Services\Master\TeacherService;
 use App\Types\Entities\ExamEntity;
 use App\Models\Exam;
 use App\Models\Session;
+use App\Models\Student;
 use Carbon\Carbon;
 
 class ExamController extends Controller
@@ -23,14 +25,16 @@ class ExamController extends Controller
     private $classService;
     private $subjectService;
     private $teacherService;
+    private $questionService;
 
-    public function __construct(ExamService $service, SessionService $sessionService, ClassService $classService, SubjectService $subjectService, TeacherService $teacherService)
+    public function __construct ()
     {
-        $this->service = $service;
-        $this->sessionService = $sessionService;
-        $this->classService = $classService;
-        $this->subjectService = $subjectService;
-        $this->teacherService = $teacherService;
+        $this->service = new ExamService();
+        $this->sessionService = new SessionService();
+        $this->classService = new ClassService();
+        $this->subjectService = new SubjectService();
+        $this->teacherService = new TeacherService();
+        $this->questionService = new QuestionService();
     }
     /**
      * Display a listing of the resource.
@@ -266,7 +270,24 @@ class ExamController extends Controller
     {
         $data['exam'] = $this->service->getExamByCode($code);
         $data['nav_title'] = 'Exam Start';
+        $data['time_start'] = Carbon::createFromTimeString($data['exam']->session->time_start, 'Asia/Jakarta');
+        $data['time_end'] = Carbon::createFromTimeString($data['exam']->session->time_end, 'Asia/Jakarta');
+        $startTime = Carbon::parse($data['exam']->session->time_start);
+        $endTime = Carbon::parse($data['exam']->session->time_end);
+
+        $data['student'] = Student::where('user_id', auth()->user()->id)->with('user')->first();
+
+        $data['duration'] = $startTime->diffInMinutes($endTime);
 
         return view('pages.exam.student.start', ['data' => $data]);
+    }
+
+    public function start_exam(Request $request)
+    {
+        $exam_id = $request->exam_id;
+
+        $questions = $this->questionService->getMappedQuestionByExamID($exam_id);
+        $shuffledQuestions = $this->questionService->getShuffledQuestions($questions);
+        dd($shuffledQuestions);
     }
 }

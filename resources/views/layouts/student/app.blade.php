@@ -36,6 +36,8 @@
         <div class="overlay action-toggle">
         </div>
     </div>
+
+    <script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.bundle.js') }}"></script>
     <script src="{{ asset('vendor/perfect-scrollbar/dist/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>

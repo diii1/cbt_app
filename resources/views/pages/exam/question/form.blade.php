@@ -31,7 +31,7 @@
                                         <div class="input-group d-block">
                                             <div class="input-group-text light">
                                                 <input class="form-check-input mt-0" type="radio" name="answer" value="A"
-                                                    aria-label="Radio button for following text input" @if ($question->answer->option == 'a') checked @endif>
+                                                    aria-label="Radio button for following text input" @if ($question->answer && $question->answer->option == 'a') checked @endif>
                                             </div>
                                             <textarea name="option_a" id="questionOptionsA">{!! $question->option_a !!}</textarea>
                                         </div>
@@ -43,7 +43,7 @@
                                         <div class="input-group d-block">
                                             <div class="input-group-text light">
                                                 <input class="form-check-input mt-0" type="radio" name="answer" value="B"
-                                                    aria-label="Radio button for following text input" @if ($question->answer->option == 'b') checked @endif>
+                                                    aria-label="Radio button for following text input" @if ($question->answer && $question->answer->option == 'b') checked @endif>
                                             </div>
                                             <textarea name="option_b" id="questionOptionsB">{!! $question->option_b !!}</textarea>
                                         </div>
@@ -55,7 +55,7 @@
                                         <div class="input-group d-block">
                                             <div class="input-group-text light">
                                                 <input class="form-check-input mt-0" type="radio" name="answer" value="C"
-                                                    aria-label="Radio button for following text input" @if ($question->answer->option == 'c') checked @endif>
+                                                    aria-label="Radio button for following text input" @if ($question->answer && $question->answer->option == 'c') checked @endif>
                                             </div>
                                             <textarea name="option_c" id="questionOptionsC">{!! $question->option_c !!}</textarea>
                                         </div>
@@ -67,7 +67,7 @@
                                         <div class="input-group d-block">
                                             <div class="input-group-text light">
                                                 <input class="form-check-input mt-0" type="radio" name="answer" value="D"
-                                                    aria-label="Radio button for following text input" @if ($question->answer->option == 'd') checked @endif>
+                                                    aria-label="Radio button for following text input" @if ($question->answer && $question->answer->option == 'd') checked @endif>
                                             </div>
                                             <textarea name="option_d" id="questionOptionsD">{!! $question->option_d !!}</textarea>
                                         </div>
@@ -79,7 +79,7 @@
                                         <div class="input-group d-block">
                                             <div class="input-group-text light">
                                                 <input class="form-check-input mt-0" type="radio" name="answer" value="E"
-                                                    aria-label="Radio button for following text input" @if ($question->answer->option == 'e') checked @endif>
+                                                    aria-label="Radio button for following text input" @if ($question->answer && $question->answer->option == 'e') checked @endif>
                                             </div>
                                             <textarea name="option_e" id="questionOptionsE">{!! $question->option_e !!}</textarea>
                                         </div>

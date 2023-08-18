@@ -10,6 +10,7 @@ use App\Services\Exam\QuestionService;
 use App\Services\Exam\ExamService;
 use App\Types\Entities\QuestionEntity;
 use App\Http\Requests\QuestionRequest;
+use App\Models\Question;
 
 class QuestionController extends Controller
 {
@@ -60,7 +61,8 @@ class QuestionController extends Controller
         $data['type'] = 'create';
         $data['title'] = 'Tambah Data Soal';
         $data['exam'] = $exam;
-        return view('pages.exam.question.form', ['data' => $data]);
+        $question = new Question();
+        return view('pages.exam.question.form', ['data' => $data, 'question' => $question]);
     }
 
     /**

@@ -40,6 +40,76 @@ class QuestionService extends Service
         }
     }
 
+    public function getMappedQuestionByExamID(int $id): Collection
+    {
+        try {
+            return DB::table('questions')->where('exam_id', $id)->get()->map(function ($data){
+                return (object)[
+                    "id" => $data->id,
+                    "question" => $data->question,
+                    "options" => [
+                        (object)[
+                            "option" => "A",
+                            "value" => $data->option_a
+                        ],
+                        (object)[
+                            "option" => "B",
+                            "value" => $data->option_b
+                        ],
+                        (object)[
+                            "option" => "C",
+                            "value" => $data->option_c
+                        ],
+                        (object)[
+                            "option" => "D",
+                            "value" => $data->option_d
+                        ],
+                        (object)[
+                            "option" => "E",
+                            "value" => $data->option_e
+                        ]
+                    ]
+                ];
+            });
+        } catch (\Throwable $th) {
+            $this->writeLog("QuestionService::getMappedQuestionByExamID", $th);
+            return new Collection();
+        }
+    }
+
+    public function getShuffledQuestions(object $data): Collection
+    {
+        try {
+            $shuffledQuestions = $this->fisherYatesShuffle($data);
+
+            foreach ($shuffledQuestions as $data) {
+                $data->options = $this->fisherYatesShuffle($data->options);
+            }
+
+            return $shuffledQuestions;
+        } catch (\Throwable $th) {
+            $this->writeLog("QuestionService::getShuffledQuestions", $th);
+            return new Collection();
+        }
+    }
+
+    public function fisherYatesShuffle($array)
+    {
+        $count = count($array);
+
+        for ($i = $count - 1; $i > 0; $i--) {
+            // random number pos in array with Mersenne Twister
+            $j = mt_rand(0, $i);
+
+            // set pos to new random number
+            $temp = $array[$i];
+            $array[$i] = $array[$j];
+            $array[$j] = $temp;
+        }
+
+        return $array;
+    }
+
     public function insertQuestion(QuestionEntity $request):bool | Collection
     {
         try {

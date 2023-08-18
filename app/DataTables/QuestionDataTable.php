@@ -54,7 +54,6 @@ class QuestionDataTable extends DataTable
             })
             ->addColumn('action', function ($row){
                 $action = '';
-
                 if(Gate::allows('read_question')){
                     $action .= '<button type="button" data-id='.$row->id.' data-type="detail" class="btn btn-primary btn-sm action"><i class="ti-eye"></i></button>';
                 }
@@ -134,7 +133,7 @@ class QuestionDataTable extends DataTable
                 ->width(250),
         ];
 
-        if($user && $user->hasRole('guru')){
+        if($user && $user->hasRole('teacher')){
             $columns[] = Column::computed('action')
                 ->title('Aksi')
                 ->exportable(false)
