@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Exam;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\DataTables\ExamDataTable;
 use App\Http\Requests\ExamRequest;
 use App\Services\Exam\ExamService;
@@ -16,6 +18,7 @@ use App\Types\Entities\ExamEntity;
 use App\Models\Exam;
 use App\Models\Session;
 use App\Models\Student;
+use App\Models\Answer;
 use Carbon\Carbon;
 
 class ExamController extends Controller
@@ -245,19 +248,27 @@ class ExamController extends Controller
     public function validate_exam(Request $request)
     {
         $exam = $this->service->getExamByCode($request->code);
-        if($exam->token != $request->token){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Token tidak valid.'
-            ]);
-        }
-        if(Carbon::now()->greaterThan($exam->expired_token)){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Token sudah kadaluarsa.'
-            ]);
-        }
-        if($exam->token == $request->token && Carbon::now()->lessThan($exam->expired_token)){
+        // if($exam->token != $request->token){
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Token tidak valid.'
+        //     ]);
+        // }
+        // if(Carbon::now()->greaterThan($exam->expired_token)){
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'Token sudah kadaluarsa.'
+        //     ]);
+        // }
+        // if($exam->token == $request->token && Carbon::now()->lessThan($exam->expired_token)){
+        //     return response()->json([
+        //         'status' => 'success',
+        //         'code' => $request->code,
+        //         'message' => 'Validasi token berhasil.'
+        //     ]);
+        // }
+
+        if($exam->token == $request->token){
             return response()->json([
                 'status' => 'success',
                 'code' => $request->code,
@@ -284,10 +295,157 @@ class ExamController extends Controller
 
     public function start_exam(Request $request)
     {
+        $student_id = Auth::user()->id;
         $exam_id = $request->exam_id;
+        $exam = $this->service->getExamByID($exam_id);
 
         $questions = $this->questionService->getMappedQuestionByExamID($exam_id);
-        $shuffledQuestions = $this->questionService->getShuffledQuestions($questions);
-        dd($shuffledQuestions);
+        $shuffledQuestions = $this->questionService->getShuffledQuestions($questions)->take($exam->total_question);
+
+        $answers = Answer::where('exam_id', $exam->id)->where('student_id', $student_id)->get();
+
+        if(count($answers) > 0){
+            return response()->json([
+                'status' => 'success',
+                'code' => $exam->code,
+                'message' => 'Data soal berhasil didapatkan.'
+            ], 200);
+        }
+
+        if($shuffledQuestions) {
+            DB::beginTransaction();
+
+            foreach ($shuffledQuestions as $key => $question) {
+                Answer::create([
+                    'question_id' => $question->id,
+                    'student_id' => $student_id,
+                    'exam_id' => $exam_id,
+                    'number' => ++$key,
+                    'answer' => null,
+                    'doubtful_answer' => false,
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'code' => $exam->code,
+                'message' => 'Data soal berhasil didapatkan.'
+            ], 200);
+        }else{
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data soal tidak ditemukan.'
+            ], 500);
+        }
+    }
+
+    public function get_question($code, $index)
+    {
+        $exam = $this->service->getExamByCode($code);
+        $data['exam'] = $exam;
+        $data['sessionEnd'] = Carbon::parse($exam->session->time_end)->format('H:i');
+        $question_id = Answer::where('number', $index)->first()->question_id;
+        $data['nav_title'] = 'Student | Question Exam';
+        $data['question'] = $this->questionService->getMappedQuestionByID($question_id);
+        $data['question']->options = $this->questionService->shuffleOption($data['question']->options);
+        // $data['question_numbers'] = Answer::where('exam_id', $exam->id)->pluck('number')->chunk(4);
+        $data['answers'] = Answer::where('exam_id', $exam->id)->where('student_id', Auth::user()->id)->get()->chunk(4);
+        $data['answer'] = Answer::where('exam_id', $exam->id)
+            ->where('number', $index)
+            ->where('student_id', Auth::user()->id)
+            ->first();
+        $questionStep = $this->calculateQuestionStep($exam->total_question, $exam->total_question_step);
+        $data['possible_step'] = $questionStep;
+        $data['step'] = 0;
+        $score = $this->getCurrentScore($exam->id);
+        foreach ($questionStep as $value) {
+            if($index > $value){
+                $data['step'] = $value;
+                if($score < $exam->min_score){
+                    return redirect()->route('api.exam.get_question', [$exam->code, $data['step']])->with('error', 'Maaf, Nilai anda masih belum mencukupi.');
+                }
+            }
+        }
+
+        return view('pages.exam.student.question', ['data' => $data, 'index' => $index]);
+    }
+
+    public function getCurrentScore($exam_id)
+    {
+        $exam = $this->service->getExamByID($exam_id);
+        $student_id = Auth::user()->id;
+        $answers = Answer::where('exam_id', $exam_id)->where('student_id', $student_id)->get();
+        $score = 0;
+        $total_answer = 0;
+        foreach ($answers as $answer) {
+            $key_answer = json_decode($answer->question->answer);
+            if($answer->answer){
+                if($key_answer->value == $answer->answer){
+                    $score++;
+                }
+                $total_answer++;
+            }
+        }
+
+        return ($score / $total_answer) * 100;
+    }
+
+    public function calculateQuestionStep($dividend, $divisor)
+    {
+        $result = [];
+        for($i = $divisor; $i <= $dividend; $i += $divisor){
+            $result[] = $i;
+        }
+        return $result;
+    }
+
+    public function set_answer(Request $request)
+    {
+        $student_id = Auth::user()->id;
+        $answer = Answer::where('exam_id', $request->exam)
+            ->where('number', $request->index)
+            ->where('student_id', $student_id)
+            ->first();
+
+        $answer->answer = $request->answer;
+
+        if($answer->save()){
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Jawaban berhasil disimpan.'
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Jawaban gagal disimpan.'
+        ], 500);
+    }
+
+    public function set_doubtful_answer(Request $request)
+    {
+        $student_id = Auth::user()->id;
+        $answer = Answer::where('exam_id', $request->exam)
+            ->where('number', $request->index)
+            ->where('student_id', $student_id)
+            ->first();
+
+        $answer->doubtful_answer = $request->doubtful[0] == 'true' ? true : false;
+
+        if($answer->save()){
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Jawaban berhasil disimpan.'
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Jawaban gagal disimpan.'
+        ], 500);
     }
 }

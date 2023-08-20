@@ -86,6 +86,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('api/exams/validate_exam', [ExamController::class, 'validate_exam'])->name('api.exam.validate_exam');
     Route::get('api/exams/start/{exam_code}', [ExamController::class, 'start'])->name('api.exam.start');
     Route::post('api/exams/start', [ExamController::class, 'start_exam'])->name('api.exam.start.store');
+    Route::get('exam/question/{exam_code}/{index_question}', [ExamController::class, 'get_question'])->name('api.exam.get_question');
+
+    // route for api set answer
+    Route::post('api/exams/set_answer', [ExamController::class, 'set_answer'])->name('api.exam.set_answer');
+    Route::post('api/exams/set_doubtful', [ExamController::class, 'set_doubtful_answer'])->name('api.exam.set_doubtful_answer');
 
     // route for api get table exam participant
     Route::get('api/exams/{exam_id}/participants', [ExamParticipantController::class, 'getTable'])->name('api.exam.participants_table');

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\User;
 use App\Models\Classes;
 use App\Models\ExamParticipant;
+use App\Models\Answer;
 
 class Student extends Model
 {
@@ -44,5 +45,10 @@ class Student extends Model
     public function exam_participant(): HasMany
     {
         return $this->hasMany(ExamParticipant::class);
+    }
+
+    public function answer(): HasMany
+    {
+        return $this->hasMany(Answer::class);
     }
 }
