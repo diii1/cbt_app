@@ -83,12 +83,12 @@
                                             {{ $item->exam->code }} |
                                             {{ $item->exam->title }} |
                                             @php
-                                                $time_start = \Carbon\Carbon::createFromTimeString($item->exam->session->first()->time_start, 'Asia/Bangkok');
-                                                $time_end = \Carbon\Carbon::createFromTimeString($item->exam->session->first()->time_end, 'Asia/Bangkok');
+                                                $time_start = \Carbon\Carbon::createFromTimeString($item->exam->session->time_start, 'Asia/Bangkok');
+                                                $time_end = \Carbon\Carbon::createFromTimeString($item->exam->session->time_end, 'Asia/Bangkok');
                                                 $exam_date = \Carbon\Carbon::parse($item->exam->date)->locale('id')->settings(['formatFunction' => 'translatedFormat']);
                                             @endphp
                                             {{ $exam_date->format('d F Y') }} |
-                                            {{ $time_start->format('g:i') }}-{{ $time_end->format('g:i A') }}
+                                            {{ $time_start->format('H:i') }}-{{ $time_end->format('H:i A') }}
                                             @if ($item->is_submitted)
                                                 | <span class="ms-1 text-success">Sudah Dikerjakan</span>
                                             @elseif ($data['date2']->format('H:i') >= $time_end->format('H:i'))
@@ -116,12 +116,12 @@
                                                 <tr>
                                                     <td>Sesi Ujian</td>
                                                     <td> : </td>
-                                                    <td>{{ $item->exam->session->first()->name }}</td>
+                                                    <td>{{ $item->exam->session->name }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Waktu Ujian</td>
                                                     <td> : </td>
-                                                    <td>{{ $time_start->format('g:i').' - '.$time_end->format('g:i A') }}</td>
+                                                    <td>{{ $time_start->format('H:i').' - '.$time_end->format('H:i A') }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Jumlah Soal</td>

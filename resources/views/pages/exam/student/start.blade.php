@@ -66,6 +66,14 @@
                                     icon: res.status,
                                     title: res.message
                                 })
+
+                                if (res.status == 'success') {
+                                    const url = "{{ route('api.exam.get_question', [':code', 1]) }}".replace(':code', res.code);
+
+                                    setTimeout(function() {
+                                        window.location.href = url;
+                                    }, 2000);
+                                }
                             },
                             error: function(res) {
                                 Toast.fire({

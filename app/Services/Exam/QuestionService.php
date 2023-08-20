@@ -77,6 +77,43 @@ class QuestionService extends Service
         }
     }
 
+    public function getMappedQuestionByID(int $id): object
+    {
+        try {
+            $data = DB::table('questions')->where('id', $id)->first();
+
+            return (object)[
+                "id" => $data->id,
+                "question" => $data->question,
+                "options" => [
+                    (object)[
+                        "option" => "A",
+                        "value" => $data->option_a
+                    ],
+                    (object)[
+                        "option" => "B",
+                        "value" => $data->option_b
+                    ],
+                    (object)[
+                        "option" => "C",
+                        "value" => $data->option_c
+                    ],
+                    (object)[
+                        "option" => "D",
+                        "value" => $data->option_d
+                    ],
+                    (object)[
+                        "option" => "E",
+                        "value" => $data->option_e
+                    ]
+                ]
+            ];
+        } catch (\Throwable $th) {
+            $this->writeLog("QuestionService::getMappedQuestionByID", $th);
+            return new Collection();
+        }
+    }
+
     public function getShuffledQuestions(object $data): Collection
     {
         try {
@@ -91,6 +128,11 @@ class QuestionService extends Service
             $this->writeLog("QuestionService::getShuffledQuestions", $th);
             return new Collection();
         }
+    }
+
+    public function shuffleOption(array $data): array
+    {
+        return $this->fisherYatesShuffle($data);
     }
 
     public function fisherYatesShuffle($array)
