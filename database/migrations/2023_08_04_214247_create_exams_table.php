@@ -32,6 +32,8 @@ return new class extends Migration
             $table->date('date');
             $table->integer('token');
             $table->datetime('expired_token');
+            $table->integer('total_question_step');
+            $table->float('min_score');
             $table->enum('type', ['pts', 'pas']);
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->useCurrent();

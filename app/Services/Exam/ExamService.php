@@ -29,6 +29,8 @@ class ExamService extends Service
                     'exams.date as date',
                     'exams.token as token',
                     'exams.expired_token as expired_token',
+                    'exams.total_question_step as total_question_step',
+                    'exams.min_score as min_score',
                     'exams.type as type',
                 )
                 ->get();
@@ -75,6 +77,8 @@ class ExamService extends Service
                 'date' => $request->date,
                 'token' => $request->token,
                 'expired_token' => $request->expired_token,
+                'total_question_step' => $request->total_question_step,
+                'min_score' => $request->min_score,
                 'type' => $request->type,
             ]);
         } catch (\Throwable $th) {
@@ -100,6 +104,8 @@ class ExamService extends Service
             $exam->date = $request->date;
             $exam->token = $request->token;
             $exam->expired_token = $request->expired_token;
+            $exam->total_question_step = $request->total_question_step;
+            $exam->min_score = $request->min_score;
             $exam->type = $request->type;
 
             return $exam->save();

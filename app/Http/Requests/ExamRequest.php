@@ -30,6 +30,8 @@ class ExamRequest extends FormRequest
             'class_id' => ['required', 'integer'],
             'title' => ['required', 'string', 'max:255'],
             'total_question' => ['required', 'integer'],
+            'total_question_step' => ['required', 'integer'],
+            'min_score' => ['required', 'numeric'],
             'date' => ['required', 'date'],
             'type' => ['required', 'string', 'max:3'],
         ];

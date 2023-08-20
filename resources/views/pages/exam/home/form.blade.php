@@ -79,6 +79,18 @@
                         <input type="number" min="0" value="{{ $exam->total_question }}" placeholder="Jumlah Soal" name="total_question" class="form-control" id="examAmount">
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="examStep" class="form-label">Jumlah Soal Per Step</label>
+                        <input type="number" min="0" value="{{ $exam->total_question_step }}" placeholder="Jumlah Soal Per Step" name="total_question_step" class="form-control" id="examStep">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="examScore" class="form-label">Nilai KKM</label>
+                        <input type="number" min="0" value="{{ $exam->min_score }}" placeholder="Nilai KKM" name="min_score" class="form-control" id="examScore">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="modal-footer">

@@ -19,6 +19,8 @@ class ExamEntity
     public ?string $date;
     public ?int $token;
     public ?string $expired_token;
+    public ?int $total_question_step;
+    public ?float $min_score;
     public ?string $type;
 
     function formRequest(array $validatedRequest)
@@ -36,6 +38,8 @@ class ExamEntity
         $this->date = Carbon::parse($validatedRequest['date'])->format('Y-m-d');
         $this->token = $validatedRequest['token'];
         $this->expired_token = Carbon::parse($validatedRequest['expired_token']);
+        $this->total_question_step = $validatedRequest['total_question_step'];
+        $this->min_score = $validatedRequest['min_score'];
         $this->type = $validatedRequest['type'];
     }
 }

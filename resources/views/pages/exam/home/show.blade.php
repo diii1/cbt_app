@@ -44,7 +44,7 @@
                     </button>
                 </div>
             </div>
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
                 <label for="examDate" class="form-label">Tanggal Ujian</label>
                 <div class="input-group input-append date"data-date-format="dd-mm-yyyy">
                     <input class="form-control" type="text" id="examDate" value="{{ $exam->date->format('j F Y') }}" readonly="" autocomplete="off">
@@ -53,7 +53,7 @@
                     </button>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="mb-3">
                     <label for="timeExam" class="form-label">Sesi Ujian</label>
                     <input type="text" value="{{ $exam->session }}" class="form-control" id="timeExam" disabled>
@@ -73,14 +73,26 @@
             </div>
             <div class="col-md-4">
                 <div class="mb-3">
+                    <label for="examStatus" class="form-label">Status Ujian</label>
+                    <input type="text" value="{{ $exam->is_active == 1 ? 'Aktif' : 'Tidak Aktif' }}" class="form-control" id="examStatus" disabled>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
                     <label for="amount_questionExam" class="form-label">Jumlah Soal</label>
                     <input type="text" value="{{ $exam->total_question }}" class="form-control" id="amount_questionExam" disabled>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="mb-3">
-                    <label for="examStatus" class="form-label">Status Ujian</label>
-                    <input type="text" value="{{ $exam->is_active == 1 ? 'Aktif' : 'Tidak Aktif' }}" class="form-control" id="examStatus" disabled>
+                    <label for="examStep" class="form-label">Jumlah Soal Per Step</label>
+                    <input type="text" value="{{ $exam->total_question_step }}" class="form-control" id="examStep" disabled>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="examMinScore" class="form-label">Nilai KKM</label>
+                    <input type="text" value="{{ $exam->min_score }}" class="form-control" id="examMinScore" disabled>
                 </div>
             </div>
         </div>

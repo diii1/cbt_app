@@ -21,7 +21,7 @@ class ExamSeeder extends Seeder
      */
     public function run()
     {
-        $session = Session::where('name', 'Sesi 1')->first();
+        $session = Session::where('name', 'Sesi 4')->first();
         $subject = Subject::where('name', 'Matematika')->first();
         $teacher = Teacher::with('user')->whereHas('user', function ($query) {
             $query->where('name', 'Teacher');
@@ -54,6 +54,8 @@ class ExamSeeder extends Seeder
                 'date' => $date,
                 'token' => $token,
                 'expired_token' => $expired_token,
+                'total_question_step' => 10,
+                'min_score' => (float)75,
                 'type' => 'pts',
             ]);
 
