@@ -94,7 +94,7 @@ class QuestionDataTable extends DataTable
     {
         return $this->builder()
                     ->setTableId('question-table')
-                    ->parameters(['searchDelay' => 1500, 'responsive' => true, 'autoWidth' => false ])
+                    ->parameters(['searchDelay' => 1500, 'responsive' => true, 'autoWidth' => false, 'searching' => false, ])
                     ->columns($this->getColumns())
                     ->minifiedAjax();
                     //->dom('Bfrtip')
