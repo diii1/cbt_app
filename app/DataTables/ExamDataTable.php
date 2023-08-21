@@ -13,6 +13,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class ExamDataTable extends DataTable
@@ -67,7 +68,14 @@ class ExamDataTable extends DataTable
      */
     public function query(Exam $model): QueryBuilder
     {
-        return $model->newQuery();
+        $query = $model->newQuery();
+
+        $user = Auth::user();
+        if($user && $user->hasRole('teacher')){
+            $query->where('teacher_id', $user->id);
+        }
+
+        return $query;
     }
 
     /**
@@ -102,7 +110,8 @@ class ExamDataTable extends DataTable
      */
     public function getColumns(): array
     {
-        return [
+        $user = Auth::user();
+        $columns = [
             Column::make('DT_RowIndex')->title('No')
                 ->width(15)
                 ->searchable(false)
@@ -117,12 +126,18 @@ class ExamDataTable extends DataTable
                 ->title('Sesi Ujian'),
             Column::make('subject_name')
                 ->title('Mata Pelajaran'),
-            Column::computed('action')
+        ];
+
+        if($user && $user->hasRole('admin')){
+            $columns[] = Column::computed('action')
+                ->title('Aksi')
                 ->exportable(false)
                 ->printable(false)
                 ->width(200)
-                ->addClass('text-center'),
-        ];
+                ->addClass('text-center');
+        }
+
+        return $columns;
     }
 
     /**

@@ -121,6 +121,10 @@ class AdminSeeder extends Seeder
             // permission for prefix exam question  menu
             $role->givePermissionTo('list_question');
 
+            // permission for result menu
+            $role->givePermissionTo('list_result');
+            $role->givePermissionTo('export_result');
+
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();

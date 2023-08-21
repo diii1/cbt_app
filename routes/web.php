@@ -27,6 +27,7 @@ use App\Http\Controllers\Exam\SessionController;
 use App\Http\Controllers\Exam\ExamController;
 use App\Http\Controllers\Exam\ExamParticipantController;
 use App\Http\Controllers\Exam\QuestionController;
+use App\Http\Controllers\Exam\ResultController;
 
 /*
 |--------------------------------------------------------------------------
@@ -123,6 +124,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('questions', QuestionController::class);
     Route::get('questions/create/{exam_id}', [QuestionController::class, 'create'])->name('questions.create');
     Route::get('questions/list/{exam_id}', [QuestionController::class, 'question_list'])->name('questions.list');
+
+    // route for result
+    Route::get('results', [ResultController::class, 'index'])->name('results.index');
+    Route::get('results/{exam_id}/list', [ResultController::class, 'list'])->name('results.list');
 });
 
 require __DIR__.'/auth.php';

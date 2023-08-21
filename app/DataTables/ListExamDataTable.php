@@ -53,9 +53,13 @@ class ListExamDataTable extends DataTable
 
                 if($user && $user->hasRole('admin')){
                     if(Gate::allows('list_participant')){
-                        $action .= '<a href="'. route('questions.list', $row->id) .'" class="btn btn-sm btn-primary m-1"><i class="ti-list"></i>&nbsp; Data Soal</a>';
-                        $action .= '<a href="'. route('participants.list', $row->id) .'" class="btn btn-sm btn-primary m-1"><i class="ti-list"></i>&nbsp; Data Peserta</a>';
+                        $action .= ' <a href="'. route('questions.list', $row->id) .'" class="btn btn-sm btn-primary m-1"><i class="ti-list"></i>&nbsp; Data Soal</a>';
+                        $action .= ' <a href="'. route('participants.list', $row->id) .'" class="btn btn-sm btn-primary m-1"><i class="ti-list"></i>&nbsp; Data Peserta</a>';
                     }
+                }
+
+                if(Gate::allows('list_result')){
+                    $action .= ' <a href="'. route('results.list', $row->id) .'" class="btn btn-sm btn-primary"><i class="ti-list"></i>&nbsp; Hasil Ujian</a>';
                 }
 
                 return $action;
@@ -70,12 +74,14 @@ class ListExamDataTable extends DataTable
      */
     public function query(Exam $model): QueryBuilder
     {
-        if(auth()->user()->hasRole('guru')){
-            $teacher_id = Teacher::where('user_id', auth()->user()->id)->first()->id;
-            return $model->newQuery()->where('teacher_id', $teacher_id)->where('is_active', 1);
+        $query = $model->newQuery();
+        $user = Auth::user();
+
+        if($user && $user->hasRole('teacher')){
+            $query->where('teacher_id', $user->id);
         }
 
-        return $model->newQuery()->where('is_active', 1);
+        return $query->where('is_active', 1);
     }
 
     /**
@@ -127,7 +133,7 @@ class ListExamDataTable extends DataTable
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
-                ->width(200)
+                ->width(450)
                 ->addClass('text-center'),
         ];
     }

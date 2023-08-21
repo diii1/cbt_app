@@ -55,6 +55,16 @@ class TeacherSeeder extends Seeder
             // user assign role to teacher
             $user->assignRole('teacher');
 
+            // permission for prefix pengguna menu
+            $role->givePermissionTo('exam');
+
+            // permission for prefix exam menu
+            $role->givePermissionTo('list_exam');
+
+            // permission for result menu
+            $role->givePermissionTo('list_result');
+            $role->givePermissionTo('export_result');
+
             // pemission for prefix exam question menu
             $role->givePermissionTo('list_question');
             $role->givePermissionTo('create_question');
