@@ -100,14 +100,8 @@
                                 @foreach ($answers as $answer)
                                     @php
                                         $isLocked = false;
-                                        foreach ($data['possible_step'] as $value) {
-                                            if($answer->number > $value && $data['step'] != $value){
-                                                $isLocked = true;
-                                            }
-
-                                            if($data['step'] > $answer->number){
-                                                $isLocked = true;
-                                            }
+                                        if ($answer->number > session('step_exam')) {
+                                            $isLocked = true;
                                         }
                                     @endphp
                                     <div class="col-md-3">

@@ -358,48 +358,39 @@ class ExamController extends Controller
             ->where('number', $index)
             ->where('student_id', Auth::user()->id)
             ->first();
-        $questionStep = $this->calculateQuestionStep($exam->total_question, $exam->total_question_step);
-        $data['possible_step'] = $questionStep;
-        $data['step'] = 0;
-        $score = $this->getCurrentScore($exam->id);
-        foreach ($questionStep as $value) {
-            if($index > $value){
-                $data['step'] = $value;
-                if($score < $exam->min_score){
-                    return redirect()->route('api.exam.get_question', [$exam->code, $data['step']])->with('error', 'Maaf, Nilai anda masih belum mencukupi.');
-                }
+
+        $sessionStep = session('step_exam');
+        $score = $this->getCurrentScore($exam->id, $sessionStep);
+        if($index > $sessionStep) {
+            if($score > $exam->min_score){
+                $sessionStep += $exam->total_question_step;
+                session(['step_exam' => $sessionStep]);
+            }else{
+                return redirect()->back()->with('error', 'Maaf, Nilai anda masih belum mencukupi.');
             }
         }
 
         return view('pages.exam.student.question', ['data' => $data, 'index' => $index]);
     }
 
-    public function getCurrentScore($exam_id)
+    public function getCurrentScore($exam_id, $step)
     {
         $exam = $this->service->getExamByID($exam_id);
         $student_id = Auth::user()->id;
-        $answers = Answer::where('exam_id', $exam_id)->where('student_id', $student_id)->get();
+        $answers = Answer::where('exam_id', $exam_id)->where('student_id', $student_id)->orderBy('number')->limit($step)->get();
         $score = 0;
-        $total_answer = 0;
         foreach ($answers as $answer) {
             $key_answer = json_decode($answer->question->answer);
             if($answer->answer){
                 if($key_answer->value == $answer->answer){
                     $score++;
                 }
-                $total_answer++;
             }
         }
 
-        return ($score / $total_answer) * 100;
-    }
+        if($step != 0) $result = ($score / $step) * 100;
+        else $result = 0;
 
-    public function calculateQuestionStep($dividend, $divisor)
-    {
-        $result = [];
-        for($i = $divisor; $i <= $dividend; $i += $divisor){
-            $result[] = $i;
-        }
         return $result;
     }
 
