@@ -253,27 +253,21 @@ class ExamController extends Controller
     public function validate_exam(Request $request)
     {
         $exam = $this->service->getExamByCode($request->code);
-        // if($exam->token != $request->token){
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Token tidak valid.'
-        //     ]);
-        // }
-        // if(Carbon::now()->greaterThan($exam->expired_token)){
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Token sudah kadaluarsa.'
-        //     ]);
-        // }
-        // if($exam->token == $request->token && Carbon::now()->lessThan($exam->expired_token)){
-        //     return response()->json([
-        //         'status' => 'success',
-        //         'code' => $request->code,
-        //         'message' => 'Validasi token berhasil.'
-        //     ]);
-        // }
 
-        if($exam->token == $request->token){
+        if($exam->token != $request->token){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token tidak valid.'
+            ]);
+        }
+        if(Carbon::now()->greaterThan($exam->expired_token)){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Token sudah kadaluarsa.'
+            ]);
+        }
+        if($exam->token == $request->token && Carbon::now()->lessThan($exam->expired_token)){
+            session(['doing_exam' => true]);
             return response()->json([
                 'status' => 'success',
                 'code' => $request->code,
@@ -357,6 +351,8 @@ class ExamController extends Controller
         $exam = $this->service->getExamByCode($code);
         $data['exam'] = $exam;
 
+        if(is_array($exam)) return redirect()->back()->with('error', 'Ujian tidak ditemukan.');
+
         $studentParticipation = $this->participantService->getParticipantByStudentAndExamID(auth()->user()->id, $exam->id);
         if($studentParticipation->is_submitted) return redirect()->back()->with('error', 'Ujian telah diselesaikan.');
 
@@ -375,7 +371,10 @@ class ExamController extends Controller
         $sessionStep = session('step_exam');
         $score = $this->getCurrentScore($exam->id, $sessionStep);
         if($index > $sessionStep) {
-            if($score > $exam->min_score){
+            if($score == 0){
+                $sessionStep = $exam->total_question_step;
+                session(['step_exam' => $sessionStep]);
+            }elseif($score != 0 && $score > $exam->min_score){
                 $sessionStep += $exam->total_question_step;
                 session(['step_exam' => $sessionStep]);
             }else{
@@ -473,6 +472,7 @@ class ExamController extends Controller
             if($create) {
                 $participation->is_submitted = true;
                 $participation->save();
+                session()->forget('step_exam');
 
                 return response()->json([
                     'status' => 'success',
@@ -490,8 +490,41 @@ class ExamController extends Controller
 
     public function finished($id)
     {
+        $student_id = Auth::user()->id;
+        $studentParticipation = $this->participantService->getParticipantByStudentAndExamID($student_id, $id);
+
+        if(!$studentParticipation->is_submitted) return redirect()->route('dashboard')->with('error', 'Ujian belum diselesaikan.');
+
         $data['exam'] = $this->service->getExamByID($id);
         $data['nav_title'] = 'Exam | Finished';
         return view('pages.exam.student.finish', ['data' => $data]);
+    }
+
+    public function force_finish(Request $request)
+    {
+        $student_id = Auth::user()->id;
+        $exam = $this->service->getExamByID($request->exam_id);
+        $score = $this->getCurrentScore($exam->id, $exam->total_question);
+
+        $studentParticipation = $this->participantService->getParticipantByStudentAndExamID($student_id, $exam->id);
+        $participation = ExamParticipant::find($studentParticipation->id);
+
+        $create = ExamResult::create([
+            'exam_id' => $exam->id,
+            'student_id' => $student_id,
+            'score' => $score
+        ]);
+
+        if($create) {
+            $participation->is_submitted = true;
+            $participation->save();
+            session()->forget('step_exam');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Ujian berhasil diselesaikan.',
+                'url' => route('exam.finished', $exam->id)
+            ]);
+        }
     }
 }

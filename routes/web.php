@@ -92,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
 
     // route for api finish exam
     Route::post('api/exams/finish', [ExamController::class, 'finish'])->name('api.exam.finish');
+    Route::post('api/exams/force_finish', [ExamController::class, 'force_finish'])->name('api.exam.force_finish');
 
     // route for api get table exam participant
     Route::get('api/exams/{exam_id}/participants', [ExamParticipantController::class, 'getTable'])->name('api.exam.participants_table');

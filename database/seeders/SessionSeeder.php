@@ -38,8 +38,8 @@ class SessionSeeder extends Seeder
                 ],
                 [
                     'name' => 'Sesi 4',
-                    'time_start' => Carbon::parse('00:00:00'),
-                    'time_end' => Carbon::parse('23:59:59'),
+                    'time_start' => Carbon::parse('23:49:00'),
+                    'time_end' => Carbon::parse('23:53:00'),
                 ]
             ];
 

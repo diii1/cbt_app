@@ -163,6 +163,7 @@
             if(now >= timeEnd){
                 clearInterval(intervalTime);
                 // postAnswer('url');
+                sendAnswer();
                 return;
             }
 
@@ -177,8 +178,38 @@
             $('#sessionEnd').html(formattedTime);
         }
 
+        function sendAnswer(){
+            const exam_id = "{{ $data['exam']->id }}";
+            $.ajax({
+                method: 'POST',
+                url: "{{ route('api.exam.force_finish') }}",
+                headers: {
+                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {exam_id: exam_id },
+                success: function(res) {
+                    Toast.fire({
+                        icon: res.status,
+                        title: res.message
+                    })
+
+                    if (res.status == 'success') {
+                        setTimeout(function() {
+                            window.location.href = res.url;
+                        }, 2000);
+                    }
+                },
+                error: function(res) {
+                    Toast.fire({
+                        icon: res.status,
+                        title: res.message
+                    })
+                }
+            })
+        }
         const interval = 1000; // Update every second
         intervalTime = setInterval(updateTime, interval);
+
     </script>
 
     <script type="text/javascript">
