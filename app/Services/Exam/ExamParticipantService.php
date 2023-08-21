@@ -41,7 +41,6 @@ class ExamParticipantService extends Service
         $todayDate = Carbon::now()->format('Y-m-d');
         try {
             return ExamParticipant::where('student_id', $student_id)
-                ->where('is_submitted', 0)
                 ->whereHas('exam', function ($query) use ($todayDate) {
                     $query->whereRaw("DATE_FORMAT(date, '%Y-%m-%d') >= ?", [$todayDate]);
                 })
@@ -68,9 +67,22 @@ class ExamParticipantService extends Service
                     'exams.class_name as class_name',
                 )
                 ->where('exam_id', $exam_id)
-                ->get()->chunk(2);
+            ->get()->chunk(2);
         } catch (\Throwable $th) {
             $this->writeLog("ExamParticipantService::getExamParticipants", $th);
+            return new Collection();
+        }
+    }
+
+    public function getParticipantByStudentAndExamID(int $studentID, int $examID): ExamParticipant
+    {
+        try {
+            return ExamParticipant::where('exam_id', $examID)
+                ->where('student_id', $studentID)
+                ->with('student', 'exam')
+                ->first();
+        } catch (\Throwable $th) {
+            $this->writeLog("ExamParticipantService::getParticipantByStudentAndExamID", $th);
             return new Collection();
         }
     }

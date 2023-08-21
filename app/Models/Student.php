@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Classes;
 use App\Models\ExamParticipant;
 use App\Models\Answer;
+use App\Models\ExamResult;
 
 class Student extends Model
 {
@@ -50,5 +51,10 @@ class Student extends Model
     public function answer(): HasMany
     {
         return $this->hasMany(Answer::class);
+    }
+
+    public function result(): HasMany
+    {
+        return $this->hasMany(ExamResult::class);
     }
 }

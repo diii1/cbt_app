@@ -12,6 +12,8 @@ use App\Models\Teacher;
 use App\Models\Classes;
 use App\Models\ExamParticipant;
 use App\Models\Question;
+use App\Models\Answer;
+use App\Models\ExamResult;
 
 class Exam extends Model
 {
@@ -70,5 +72,15 @@ class Exam extends Model
     public function question(): HasMany
     {
         return $this->hasMany(Question::class);
+    }
+
+    public function answer(): HasMany
+    {
+        return $this->hasMany(Answer::class);
+    }
+
+    public function result(): HasMany
+    {
+        return $this->hasMany(ExamResult::class);
     }
 }

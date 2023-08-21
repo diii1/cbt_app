@@ -8,6 +8,11 @@
             border: 1px solid #ccc;
             padding: 10px;
         }
+
+        .question{
+            min-height: 350px;
+            overflow-y: auto;
+        }
     </style>
 @endpush
 
@@ -26,7 +31,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body question">
                         <div class="row px-2">
                             <div class="col-md-12">
                                 <span>
@@ -73,7 +78,7 @@
                     <div class="card-footer">
                         <div class="row py-2">
                             <div class="col-md-4 d-flex justify-content-start">
-                                <button class="btn btn-info" data-index="{{ $index }}" id="previous"><i class="ti-arrow-left"></i>&nbsp; Sebelumnya</button>
+                                <button class="btn btn-info {{ $index == 1 ? 'd-none' : '' }}" data-index="{{ $index }}" id="previous"><i class="ti-arrow-left"></i>&nbsp; Sebelumnya</button>
                             </div>
                             <div class="col-md-4 d-flex justify-content-center">
                                 <span class="me-2"><i class="ti-flag-alt"></i></span>
@@ -83,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="col-md-4 d-flex justify-content-end">
-                                <button class="btn btn-info" data-index="{{ $index }}" id="next">Selanjutnya &nbsp;<i class="ti-arrow-right"></i></button>
+                                <button class="btn btn-info {{ $index == $data['exam']->total_question ? 'd-none' : '' }}" data-index="{{ $index }}" id="next">Selanjutnya &nbsp;<i class="ti-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -128,41 +133,9 @@
                                 @endforeach
                             </div>
                         @endforeach
-                        {{-- @foreach ($data['question_numbers'] as $numbers)
-                            <div class="row d-flex justify-content-center align-item-center">
-                                @foreach ($numbers as $number)
-                                    @php
-                                        $isLocked = false;
-                                        foreach ($data['possible_step'] as $value) {
-                                            if($number > $value){
-                                                $isLocked = true;
-                                            }
-                                        }
-                                    @endphp
-                                    <div class="col-md-3">
-                                        <a style="text-decoration: none" href="{{ route('api.exam.get_question', [$data['exam']->code, $number]) }}">
-                                            <div class="card {{ $number == $index ? 'text-white bg-info' : 'text-secondary' }} {{ $isLocked ? 'bg-light' : '' }}">
-                                                <div class="card-header p-0 p-2">
-                                                    <div class="row">
-                                                        <div class="col-md-6 text-start" id="lock-number">
-                                                            @if ($isLocked)
-                                                                <i class="ti-lock"></i>
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-md-6 text-end">
-                                                            <i class="ti-flag-alt"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card-body px-2">
-                                                    <h5 class="text-center">{{ $number }}</h5>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endforeach --}}
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-light w-100 my-2" data-exam_id="{{ $data['exam']->id }}" id="finishExam">Selesaikan Ujian</button>
                     </div>
                 </div>
             </div>
@@ -234,10 +207,7 @@
         });
 
         $('input[type="checkbox"]').on('change', function() {
-            const doubtful = [];
-            $('input[name="doubtful"]:checked').each(function() {
-                doubtful.push($(this).val());
-            });
+            const isChecked = $(this).is(':checked');
 
             $.ajax({
                 url: `{{ route('api.exam.set_doubtful_answer') }}`,
@@ -246,7 +216,7 @@
                     'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
                 },
                 data: {
-                    doubtful,
+                    isChecked: isChecked,
                     index: "{{ $index }}",
                     question: "{{ $data['question']->id }}",
                     exam: "{{ $data['exam']->id }}"
@@ -263,15 +233,63 @@
         $('#next').on('click', function() {
             const data = $(this).data();
             const nextIndex = data.index + 1;
-
-            window.location.href = "{{ route('api.exam.get_question', [$data['exam']->code, ':index']) }}".replace(':index', nextIndex);
+            const max = "{{ $data['exam']->total_question }}";
+            if(nextIndex > max) finish(data.index);
+            else window.location.href = "{{ route('api.exam.get_question', [$data['exam']->code, ':index']) }}".replace(':index', nextIndex);
         });
 
         $('#previous').on('click', function() {
             const data = $(this).data();
             const previousIndex = data.index - 1;
 
-            window.location.href = "{{ route('api.exam.get_question', [$data['exam']->code, ':index']) }}".replace(':index', previousIndex);
+            if(previousIndex < 1) window.location.href = "{{ route('api.exam.get_question', [$data['exam']->code, 1]) }}";
+            else window.location.href = "{{ route('api.exam.get_question', [$data['exam']->code, ':index']) }}".replace(':index', previousIndex);
         });
+
+        $('#finishExam').on('click', function(){
+            const data = $(this).data();
+            finish(data.exam_id);
+        });
+
+        function finish(exam_id) {
+            Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Ingin menyelesaikan ujian!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, selesaikan!',
+                    cancelButtonText: 'Tidak, batalkan!',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            method: 'POST',
+                            url: "{{ route('api.exam.finish') }}",
+                            headers: {
+                                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: {exam_id: exam_id },
+                            success: function(res) {
+                                Toast.fire({
+                                    icon: res.status,
+                                    title: res.message
+                                })
+
+                                if (res.status == 'success') {
+                                    setTimeout(function() {
+                                        window.location.href = res.url;
+                                    }, 2000);
+                                }
+                            },
+                            error: function(res) {
+                                Toast.fire({
+                                    icon: res.status,
+                                    title: res.message
+                                })
+                            }
+                        })
+                    }
+                });
+        }
     </script>
 @endpush

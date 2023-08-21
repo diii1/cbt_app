@@ -84,13 +84,14 @@ Route::middleware(['auth'])->group(function () {
     // route for validate exam token
     Route::get('api/exams/{exam_code}/validate_token', [ExamController::class, 'validate_token'])->name('api.exam.validate_token');
     Route::post('api/exams/validate_exam', [ExamController::class, 'validate_exam'])->name('api.exam.validate_exam');
-    Route::get('api/exams/start/{exam_code}', [ExamController::class, 'start'])->name('api.exam.start');
     Route::post('api/exams/start', [ExamController::class, 'start_exam'])->name('api.exam.start.store');
-    Route::get('exam/question/{exam_code}/{index_question}', [ExamController::class, 'get_question'])->name('api.exam.get_question');
 
     // route for api set answer
     Route::post('api/exams/set_answer', [ExamController::class, 'set_answer'])->name('api.exam.set_answer');
     Route::post('api/exams/set_doubtful', [ExamController::class, 'set_doubtful_answer'])->name('api.exam.set_doubtful_answer');
+
+    // route for api finish exam
+    Route::post('api/exams/finish', [ExamController::class, 'finish'])->name('api.exam.finish');
 
     // route for api get table exam participant
     Route::get('api/exams/{exam_id}/participants', [ExamParticipantController::class, 'getTable'])->name('api.exam.participants_table');
@@ -112,6 +113,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('exams/sessions', SessionController::class);
     Route::resource('exams/participants', ExamParticipantController::class);
     Route::get('exams/participants/list/{exam_id}', [ExamParticipantController::class, 'participant_list'])->name('participants.list');
+    Route::get('exams/start/{exam_code}', [ExamController::class, 'start'])->name('api.exam.start');
+    Route::get('exams/question/{exam_code}/{index_question}', [ExamController::class, 'get_question'])->name('api.exam.get_question');
+    Route::get('exams/finished/{exam_id}', [ExamController::class, 'finished'])->name('exam.finished');
     Route::resource('exams', ExamController::class);
 
     // route for question

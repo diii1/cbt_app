@@ -11,11 +11,14 @@ use App\Http\Requests\ExamRequest;
 use App\Services\Exam\ExamService;
 use App\Services\Exam\SessionService;
 use App\Services\Exam\QuestionService;
+use App\Services\Exam\ExamParticipantService;
 use App\Services\Master\ClassService;
 use App\Services\Master\SubjectService;
 use App\Services\Master\TeacherService;
 use App\Types\Entities\ExamEntity;
 use App\Models\Exam;
+use App\Models\ExamParticipant;
+use App\Models\ExamResult;
 use App\Models\Session;
 use App\Models\Student;
 use App\Models\Answer;
@@ -29,6 +32,7 @@ class ExamController extends Controller
     private $subjectService;
     private $teacherService;
     private $questionService;
+    private $participantService;
 
     public function __construct ()
     {
@@ -38,6 +42,7 @@ class ExamController extends Controller
         $this->subjectService = new SubjectService();
         $this->teacherService = new TeacherService();
         $this->questionService = new QuestionService();
+        $this->participantService = new ExamParticipantService();
     }
     /**
      * Display a listing of the resource.
@@ -280,6 +285,10 @@ class ExamController extends Controller
     public function start($code)
     {
         $data['exam'] = $this->service->getExamByCode($code);
+        $studentParticipation = $this->participantService->getParticipantByStudentAndExamID(auth()->user()->id, $data['exam']->id);
+
+        if($studentParticipation->is_submitted) return redirect()->back()->with('error', 'Ujian telah diselesaikan.');
+
         $data['nav_title'] = 'Exam Start';
         $data['time_start'] = Carbon::createFromTimeString($data['exam']->session->time_start, 'Asia/Jakarta');
         $data['time_end'] = Carbon::createFromTimeString($data['exam']->session->time_end, 'Asia/Jakarta');
@@ -347,6 +356,10 @@ class ExamController extends Controller
     {
         $exam = $this->service->getExamByCode($code);
         $data['exam'] = $exam;
+
+        $studentParticipation = $this->participantService->getParticipantByStudentAndExamID(auth()->user()->id, $exam->id);
+        if($studentParticipation->is_submitted) return redirect()->back()->with('error', 'Ujian telah diselesaikan.');
+
         $data['sessionEnd'] = Carbon::parse($exam->session->time_end)->format('H:i');
         $question_id = Answer::where('number', $index)->first()->question_id;
         $data['nav_title'] = 'Student | Question Exam';
@@ -387,6 +400,7 @@ class ExamController extends Controller
                 }
             }
         }
+        if($step > $exam->total_question) $step = $exam->total_question;
 
         if($step != 0) $result = ($score / $step) * 100;
         else $result = 0;
@@ -425,18 +439,59 @@ class ExamController extends Controller
             ->where('student_id', $student_id)
             ->first();
 
-        $answer->doubtful_answer = $request->doubtful[0] == 'true' ? true : false;
+        $answer->doubtful_answer = $request->isChecked == 'true' ? true : false;
 
         if($answer->save()){
             return response()->json([
                 'status' => 'success',
-                'message' => 'Jawaban berhasil disimpan.'
+                'message' => 'Status jawaban berhasil disimpan.'
             ], 200);
         }
 
         return response()->json([
             'status' => 'error',
-            'message' => 'Jawaban gagal disimpan.'
+            'message' => 'Status jawaban gagal disimpan.'
         ], 500);
+    }
+
+    public function finish(Request $request)
+    {
+        $student_id = Auth::user()->id;
+        $exam = $this->service->getExamByID($request->exam_id);
+        $score = $this->getCurrentScore($exam->id, $exam->total_question);
+
+        $studentParticipation = $this->participantService->getParticipantByStudentAndExamID($student_id, $exam->id);
+        $participation = ExamParticipant::find($studentParticipation->id);
+
+        if($score > $exam->min_score){
+            $create = ExamResult::create([
+                'exam_id' => $exam->id,
+                'student_id' => $student_id,
+                'score' => $score
+            ]);
+
+            if($create) {
+                $participation->is_submitted = true;
+                $participation->save();
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Ujian berhasil diselesaikan.',
+                    'url' => route('exam.finished', $exam->id)
+                ]);
+            }
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Maaf, Nilai anda belum mencukupi.'
+        ]);
+    }
+
+    public function finished($id)
+    {
+        $data['exam'] = $this->service->getExamByID($id);
+        $data['nav_title'] = 'Exam | Finished';
+        return view('pages.exam.student.finish', ['data' => $data]);
     }
 }
