@@ -32,15 +32,15 @@ class QuestionSeeder extends Seeder
                     "subject_id" => $subject->id,
                     "exam_title" => $exam->title,
                     "subject_name" => $subject->name,
-                    "question" => "<p>Soal $i</p>",
-                    "option_a" => "<p>Option A</p>",
-                    "option_b" => "<p>Option B</p>",
-                    "option_c" => "<p>Option C</p>",
-                    "option_d" => "<p>Option D</p>",
-                    "option_e" => "<p>Option E</p>",
+                    "question" => "<p>Berapakah hasil dari $i + 5?</p>",
+                    "option_a" => "<p>" . ($i + 5 - 2) . "</p>",
+                    "option_b" => "<p>" . ($i + 5 + 1) . "</p>",
+                    "option_c" => "<p>" . ($i + 5) . "</p>",
+                    "option_d" => "<p>" . ($i + 5 - 1) . "</p>",
+                    "option_e" => "<p>" . ($i + 5 + 2) . "</p>",
                     "answer" => json_encode([
-                        "option" => "a",
-                        "value" => "<p>Option A</p>"
+                        "option" => "c",
+                        "value" => "<p>" . ($i + 5) . "</p>"
                     ]),
                     "created_by" => $teacher->user_id,
                 ]);

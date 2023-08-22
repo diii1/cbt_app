@@ -18,7 +18,6 @@
                             <div class="d-flex justify-content-end">
                                 @can('create_question')
                                     <a href="{{ route('questions.create', $data['exam']->id) }}" class="btn btn-sm btn-success mb-3"><i class="ti ti-plus"></i> {{ __($data['button_add']) }}</a>
-                                    {{-- <button type="button" class="btn mb-3 btn-success btn-sm btn-add"><i class="ti ti-plus"></i> {{ __($data['button_add']) }}</button> --}}
                                 @endcan
                             </div>
                             {{ $dataTable->table() }}

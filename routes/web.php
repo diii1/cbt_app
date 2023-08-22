@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 // Excel Route Controller
 use App\Http\Controllers\Excel\TeacherExcelController;
 use App\Http\Controllers\Excel\StudentExcelController;
+use App\Http\Controllers\Excel\ResultExcelController;
 
 // General Route Controller
 use App\Http\Controllers\General\SchoolProfileController;
@@ -76,6 +77,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('api/excel/student/export', [StudentExcelController::class, 'export'])->name('api.student.export');
     Route::post('api/excel/student/import', [StudentExcelController::class, 'import'])->name('api.student.import');
 
+    // route for api export result
+    Route::get('api/excel/results/{exam_id}/export', [ResultExcelController::class, 'export'])->name('api.result.export');
+
     // route for api get teachers
     Route::get('api/teachers/{subject_id}/subject', [TeacherController::class, 'getBySubjectID'])->name('api.teachers.subjectID');
 
@@ -127,7 +131,7 @@ Route::middleware(['auth'])->group(function () {
 
     // route for result
     Route::get('results', [ResultController::class, 'index'])->name('results.index');
-    Route::get('results/{exam_id}/list', [ResultController::class, 'list'])->name('results.list');
+    Route::get('results/list/{exam_id}', [ResultController::class, 'list'])->name('results.list');
 });
 
 require __DIR__.'/auth.php';

@@ -79,7 +79,7 @@
             @can('list_result')
                 <li class="{{ request()->segment(1) == 'results' ? 'active' : '' }}">
                     <a href="{{ route('results.index') }}" class="link">
-                        <i class="ti-list"></i>
+                        <i class="ti-bookmark-alt"></i>
                         <span>Hasil Ujian</span>
                     </a>
                 </li>
