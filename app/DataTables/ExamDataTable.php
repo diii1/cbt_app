@@ -38,7 +38,7 @@ class ExamDataTable extends DataTable
                 $time_start = Carbon::createFromTimeString($session->time_start, 'Asia/Jakarta');
                 $time_end = Carbon::createFromTimeString($session->time_end, 'Asia/Jakarta');
 
-                return $time_start->format('g:i') . ' - ' . $time_end->format('g:i').' WIB';
+                return $time_start->format('H:i') . ' - ' . $time_end->format('H:i').' WIB';
             })
             ->addColumn('action', function($row){
                 $action = '';
