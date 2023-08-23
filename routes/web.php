@@ -53,11 +53,10 @@ Route::get('/clock', function () {
     return view('clock');
 });
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
-
 Route::middleware(['auth'])->group(function () {
+    // route for api get Exam Table
+    Route::get('api/exams/{teacher_id}/table', [DashboardController::class, 'examTable'])->name('api.dashboard.exam.table');
+
     // route for api upload image from tiny mce
     Route::post('api/tinymce/upload', [ImageTinyMceController::class, 'imageUpload'])->name('api.tinymce.upload');
 
