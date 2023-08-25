@@ -21,7 +21,8 @@ class ResultController extends Controller
     public function list(ExamResultDataTable $dataTables, $id)
     {
         $this->authorize('list_result');
-        $data['exam_id'] = ExamResult::find($id)->exam_id;
+        $exam = ExamResult::find($id);
+        $data['exam_id'] = $exam->exam_id ?? $id;
         $data['title'] = 'List Hasil Ujian';
         $data['nav_title'] = 'Exam | List Hasil Ujian';
         return $dataTables->render('pages.exam.result.list', ['data' => $data]);
