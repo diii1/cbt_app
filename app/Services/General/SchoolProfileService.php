@@ -17,7 +17,7 @@ class SchoolProfileService
 
     public function deleteLogo(mixed $image): bool | Exception
     {
-        return FileHelper::deleteFile("public", $filename);
+        return FileHelper::deleteFile("public", $image);
     }
 
     public function getSchoolProfile(): object | null
@@ -55,10 +55,6 @@ class SchoolProfileService
         $schoolProfile = SchoolProfile::find($id);
         if (!$schoolProfile) {
             throw new Exception('School profile not found');
-        }
-
-        if ($profile->logo) {
-            $this->deleteLogo($schoolProfile->logo);
         }
 
         $isUpdated = $schoolProfile->update([

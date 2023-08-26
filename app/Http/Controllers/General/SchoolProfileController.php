@@ -124,6 +124,8 @@ class SchoolProfileController extends Controller
         $schoolLogo = null;
 
         if ($request->hasFile('logo')) {
+            $profile = $this->service->getSchoolProfile();
+            $this->service->deleteLogo($profile->logo);
             $schoolLogo = $this->service->storeLogo($request->logo);
         }
 
