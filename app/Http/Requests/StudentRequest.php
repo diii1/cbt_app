@@ -33,6 +33,7 @@ class StudentRequest extends FormRequest
             'nisn' => ['required', 'string', 'max:255', Rule::unique('students', 'nisn')->ignore($this->student)],
             'address' => ['nullable', 'string', 'max:255'],
             'birth_date' => ['required', 'date'],
+            'gender' => ['required', 'string', 'max:1', Rule::in(['L', 'P'])],
             'class_id' => ['required', 'integer', 'exists:classes,id'],
         ];
     }

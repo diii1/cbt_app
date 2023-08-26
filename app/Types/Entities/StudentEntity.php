@@ -14,6 +14,7 @@ class StudentEntity extends UserEntity
     public ?string $nisn;
     public ?string $address;
     public ?string $birth_date;
+    public ?string $gender;
     public ?string $passwordStudent;
 
     function formRequest(array $validatedRequest)
@@ -29,6 +30,7 @@ class StudentEntity extends UserEntity
         $this->nisn = $validatedRequest['nisn'];
         $this->address = $validatedRequest['address'];
         $this->birth_date = Carbon::parse($validatedRequest['birth_date']);
+        $this->gender = $validatedRequest['gender'];
         $this->passwordStudent = Crypt::encryptString($validatedRequest['password']);
     }
 
@@ -44,5 +46,6 @@ class StudentEntity extends UserEntity
         $this->nisn = $validatedRequest['nisn'];
         $this->address = $validatedRequest['address'];
         $this->birth_date = Carbon::parse($validatedRequest['birth_date']);
+        $this->gender = $validatedRequest['gender'];
     }
 }

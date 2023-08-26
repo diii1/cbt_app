@@ -17,10 +17,16 @@
                     <input type="text" value="{{ $student->nisn ?? '' }}" class="form-control" id="studentNISN" readonly>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <div class="mb-3">
                     <label for="studentName" class="form-label">Nama</label>
                     <input type="text" value="{{ $student->user->name ?? '' }}" class="form-control" id="studentName" readonly>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label for="studentGender" class="form-label">Jenis Kelamin</label>
+                    <input type="text" value="{{ $student->gender == 'L' ? 'Laki - Laki' : 'Perempuan' }}" class="form-control" id="studentGender" readonly>
                 </div>
             </div>
             <div class="col-md-12">

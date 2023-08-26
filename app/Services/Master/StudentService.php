@@ -29,6 +29,7 @@ class StudentService extends Service
                     'students.nisn as nisn',
                     'students.address as address',
                     'students.birth_date as birth_date',
+                    'students.gender as gender',
                     'students.password as password'
                 )
                 ->get();
@@ -68,6 +69,7 @@ class StudentService extends Service
                 'nisn' => $request->nisn,
                 'address' => $request->address,
                 'birth_date' => $request->birth_date,
+                'gender' => $request->gender,
                 'password' => $request->passwordStudent
             ]);
 
@@ -95,6 +97,7 @@ class StudentService extends Service
                 $student->nisn = $request->nisn;
                 $student->address = $request->address;
                 $student->birth_date = $request->birth_date;
+                $student->gender = $request->gender;
                 $student->save();
 
                 if($user && $student) $result = true;

@@ -46,19 +46,20 @@ class StudentExcelController extends Controller
         // Set the column headers
         $sheet->setCellValue('A3', 'No');
         $sheet->setCellValue('B3', 'Nama Lengkap');
-        $sheet->setCellValue('C3', 'Email');
-        $sheet->setCellValue('D3', 'Password');
-        $sheet->setCellValue('E3', 'NIS');
-        $sheet->setCellValue('F3', 'NISN');
-        $sheet->setCellValue('G3', 'Tanggal Lahir');
-        $sheet->setCellValue('H3', 'Kelas');
-        $sheet->setCellValue('I3', 'Alamat');
+        $sheet->setCellValue('C3', 'Jenis Kelamin');
+        $sheet->setCellValue('D3', 'Email');
+        $sheet->setCellValue('E3', 'Password');
+        $sheet->setCellValue('F3', 'NIS');
+        $sheet->setCellValue('G3', 'NISN');
+        $sheet->setCellValue('H3', 'Tanggal Lahir');
+        $sheet->setCellValue('I3', 'Kelas');
+        $sheet->setCellValue('J3', 'Alamat');
 
         // default value for date
-        $sheet->setCellValue('G4', '01-01-2000');
+        $sheet->setCellValue('H4', '01-01-2000');
 
         // Merge the cells
-        $sheet->mergeCells('A1:I1');
+        $sheet->mergeCells('A1:J1');
 
         $this->applyStyling($sheet);
 
@@ -66,18 +67,50 @@ class StudentExcelController extends Controller
         $dropdownValues = Classes::pluck('name')->toArray();
         $selectedItem = $dropdownValues[0]; // Replace with your desired selected item
 
-        // Set the data validation with dropdown list
-        $validation = $sheet->getCell('H4')->getDataValidation();
+        $jenis_kelamin = ['L', 'P'];
+        $selectedItemJK = $jenis_kelamin[0];
+
+        $dropdownCell = $sheet->getCell('I4');
+        $dropdownCell->setValue($selectedItem);
+
+        $validation = $dropdownCell->getDataValidation();
         $validation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
         $validation->setFormula1('"'.implode(',', $dropdownValues).'"');
         $validation->setShowDropDown(true);
 
-        // Set the selected item as the default value in the dropdown
-        $selectedCell = $sheet->getCell('H4');
-        $selectedCell->setValue($selectedItem);
+        $dropdownCell->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
-        // Apply formatting to the dropdown cell
-        $selectedCell->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $dropdownCellJK = $sheet->getCell('C4');
+        $dropdownCellJK->setValue($selectedItemJK);
+
+        $validationJK = $dropdownCellJK->getDataValidation();
+        $validationJK->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
+        $validationJK->setFormula1('"'.implode(',', $jenis_kelamin).'"');
+        $validationJK->setShowDropDown(true);
+
+        $dropdownCellJK->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        // // Set the data validation with dropdown list
+        // $validation = $sheet->getCell('I4')->getDataValidation();
+        // $validation->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
+        // $validation->setFormula1('"'.implode(',', $dropdownValues).'"');
+        // $validation->setShowDropDown(true);
+
+        // $validationJK = $sheet->getCell('C4')->getDataValidation();
+        // $validationJK->setType(\PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST);
+        // $validationJK->setFormula1('"'.implode(',', $jenis_kelamin).'"');
+        // $validationJK->setShowDropDown(true);
+
+        // // Set the selected item as the default value in the dropdown
+        // $selectedCell = $sheet->getCell('I4');
+        // $selectedCell->setValue($selectedItem);
+
+        // $selectedCellJK = $sheet->getCell('C4');
+        // $selectedCellJK->setValue($selectedItemJK);
+
+        // // Apply formatting to the dropdown cell
+        // $selectedCell->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        // $selectedCellJK->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
 
         // Create a new Excel writer
         $writer = new Xlsx($spreadsheet);
@@ -98,22 +131,22 @@ class StudentExcelController extends Controller
     public function applyStyling(Worksheet $sheet)
     {
         // Styling sheet for title
-        $sheet->getStyle('A1:I1')->getFont()->setBold(true);
-        $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A1:I1')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A1:J1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:J1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:J1')->getAlignment()->setWrapText(true);
 
         // Styling sheet for header
-        $sheet->getStyle('A3:I3')->getFont()->setBold(true);
-        $sheet->getStyle('A3:I3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-        $sheet->getStyle('A3:I3')->getAlignment()->setWrapText(true);
-        foreach (range('A', 'I') as $column) {
+        $sheet->getStyle('A3:J3')->getFont()->setBold(true);
+        $sheet->getStyle('A3:J3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A3:J3')->getAlignment()->setWrapText(true);
+        foreach (range('A', 'J') as $column) {
             $sheet->getColumnDimension($column)->setAutoSize(true);
         }
 
         // Styling sheet for text
-        $sheet->getStyle('E4')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
         $sheet->getStyle('F4')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
         $sheet->getStyle('G4')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+        $sheet->getStyle('H4')->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
     }
 
     public function create()
@@ -155,8 +188,8 @@ class StudentExcelController extends Controller
         foreach ($data as $value) {
             $user = User::create([
                 'name' => $value[1],
-                'email' => $value[2],
-                'password' => Hash::make($value[3]),
+                'email' => $value[3],
+                'password' => Hash::make($value[4]),
             ]);
             $user->email_verified_at = now();
             $user->remember_token = Str::random(10);
@@ -165,12 +198,13 @@ class StudentExcelController extends Controller
 
             $student = DB::table('students')->insert([
                 'user_id' => $user->id,
-                'nis' => $value[4],
-                'nisn' => $value[5],
-                'birth_date' => Carbon::parse($value[6]),
-                'class_id' => Classes::where('name', $value[7])->first()->id,
-                'address' => $value[8],
-                'password' => Crypt::encryptString($value[3]),
+                'nis' => $value[5],
+                'nisn' => $value[6],
+                'birth_date' => Carbon::parse($value[7]),
+                'gender' => $value[2],
+                'class_id' => Classes::where('name', $value[8])->first()->id,
+                'address' => $value[9],
+                'password' => Crypt::encryptString($value[4]),
             ]);
         }
 
@@ -192,16 +226,17 @@ class StudentExcelController extends Controller
         // Set the column headers
         $sheet->setCellValue('A3', 'No');
         $sheet->setCellValue('B3', 'Nama Lengkap');
-        $sheet->setCellValue('C3', 'Email');
-        $sheet->setCellValue('D3', 'Password');
-        $sheet->setCellValue('E3', 'NIS');
-        $sheet->setCellValue('F3', 'NISN');
-        $sheet->setCellValue('G3', 'Tanggal Lahir');
-        $sheet->setCellValue('H3', 'Kelas');
-        $sheet->setCellValue('I3', 'Alamat');
+        $sheet->setCellValue('C3', 'Jenis Kelamin');
+        $sheet->setCellValue('D3', 'Email');
+        $sheet->setCellValue('E3', 'Password');
+        $sheet->setCellValue('F3', 'NIS');
+        $sheet->setCellValue('G3', 'NISN');
+        $sheet->setCellValue('H3', 'Tanggal Lahir');
+        $sheet->setCellValue('I3', 'Kelas');
+        $sheet->setCellValue('J3', 'Alamat');
 
         // Merge the cells
-        $sheet->mergeCells('A1:I1');
+        $sheet->mergeCells('A1:J1');
 
         $this->applyStyling($sheet);
 
@@ -210,33 +245,51 @@ class StudentExcelController extends Controller
         foreach ($data as $key => $item) {
             $sheet->setCellValue('A' . $row, ++$key);
             $sheet->setCellValue('B' . $row, $item->name);
-            $sheet->setCellValue('C' . $row, $item->email);
-            $sheet->setCellValue('D' . $row, Crypt::decryptString($item->password));
-            $sheet->setCellValue('E' . $row, $item->nis);
-            $sheet->setCellValue('F' . $row, $item->nisn);
-            $sheet->setCellValue('G' . $row, Carbon::parse($item->birth_date)->format('d-m-Y'));
+            // $sheet->setCellValue('C' . $row, $item->gender);
+            $sheet->setCellValue('D' . $row, $item->email);
+            $sheet->setCellValue('E' . $row, Crypt::decryptString($item->password));
+            $sheet->setCellValue('F' . $row, $item->nis);
+            $sheet->setCellValue('G' . $row, $item->nisn);
+            $sheet->setCellValue('H' . $row, Carbon::parse($item->birth_date)->format('d-m-Y'));
             // $sheet->setCellValue('H' . $row, $item->class->name);
-            $sheet->setCellValue('I' . $row, $item->address);
+            $sheet->setCellValue('J' . $row, $item->address);
 
             // Set the dropdown values for column H
             $dropdownValues = Classes::pluck('name')->toArray();
             $selectedItem = $item->class;
 
             // Set data validation with dropdown list for column H
-            $validation = $sheet->getCell('H' . $row)->getDataValidation();
+            $validation = $sheet->getCell('I' . $row)->getDataValidation();
             $validation->setType(DataValidation::TYPE_LIST);
             $validation->setFormula1('"' . implode(',', $dropdownValues) . '"');
             $validation->setShowDropDown(true);
 
             // Set the selected item as the default value in the dropdown for column H
-            $selectedCell = $sheet->getCell('H' . $row);
+            $selectedCell = $sheet->getCell('I' . $row);
             $selectedCell->setValue($selectedItem);
 
             // Apply formatting to the dropdown cell
             $selectedCell->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+            $dropdownJK = ['L', 'P'];
+            $selectedJK = $item->gender;
+
+            // Set data validation with dropdown list for column C
+            $validationJK = $sheet->getCell('C' . $row)->getDataValidation();
+            $validationJK->setType(DataValidation::TYPE_LIST);
+            $validationJK->setFormula1('"' . implode(',', $dropdownJK) . '"');
+            $validationJK->setShowDropDown(true);
+
+            // Set the selected item as the default value in the dropdown for column C
+            $selectedCellJK = $sheet->getCell('C' . $row);
+            $selectedCellJK->setValue($selectedJK);
+
+            // Apply formatting to the dropdown cell
+            $selectedCellJK->getStyle()->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
             $sheet->getStyle('A' . $row)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-            $sheet->getStyle('E' . $row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
             $sheet->getStyle('F' . $row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
+            $sheet->getStyle('G' . $row)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_TEXT);
 
             $row++;
         }

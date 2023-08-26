@@ -29,42 +29,48 @@ class StudentSeeder extends Seeder
                 'email' => 'student1@gmail.com',
                 'password' => 'password',
                 'address' => 'Jl. Student 1',
-                'birth_date' => Carbon::parse('02/03/2003')
+                'birth_date' => Carbon::parse('02/03/2003'),
+                'gender' => 'L'
             ],
             (object)[
                 'name' => 'Student 2',
                 'email' => 'student2@gmail.com',
                 'password' => 'password',
                 'address' => 'Jl. Student 2',
-                'birth_date' => Carbon::parse('02/03/2003')
+                'birth_date' => Carbon::parse('02/03/2003'),
+                'gender' => 'L'
             ],
             (object)[
                 'name' => 'Student 3',
                 'email' => 'student3@gmail.com',
                 'password' => 'password',
                 'address' => 'Jl. Student 3',
-                'birth_date' => Carbon::parse('02/03/2003')
+                'birth_date' => Carbon::parse('02/03/2003'),
+                'gender' => 'L'
             ],
             (object)[
                 'name' => 'Student 4',
                 'email' => 'student4@gmail.com',
                 'password' => 'password',
                 'address' => 'Jl. Student 4',
-                'birth_date' => Carbon::parse('02/03/2003')
+                'birth_date' => Carbon::parse('02/03/2003'),
+                'gender' => 'L'
             ],
             (object)[
                 'name' => 'Student 5',
                 'email' => 'student5@gmail.com',
                 'password' => 'password',
                 'address' => 'Jl. Student 5',
-                'birth_date' => Carbon::parse('02/03/2003')
+                'birth_date' => Carbon::parse('02/03/2003'),
+                'gender' => 'L'
             ],
             (object)[
                 'name' => 'Student 6',
                 'email' => 'student6@gmail.com',
                 'password' => 'password',
                 'address' => 'Jl. Student 6',
-                'birth_date' => Carbon::parse('02/03/2003')
+                'birth_date' => Carbon::parse('02/03/2003'),
+                'gender' => 'L'
             ]
         ];
 
@@ -95,6 +101,7 @@ class StudentSeeder extends Seeder
                     'nisn' => random_int(100000, 999999),
                     'address' => $item->address,
                     'birth_date' => $item->birth_date,
+                    'gender' => $item->gender,
                     'password' => Crypt::encryptString($item->password),
                     'user_id' => $user->id,
                     'class_id' => $class->id

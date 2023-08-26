@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('nisn');
             $table->text('address')->nullable();
             $table->date('birth_date');
+            $table->enum('gender', ['L', 'P']);
             $table->string('password');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

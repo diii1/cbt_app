@@ -10,10 +10,20 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-8">
                     <div class="mb-3">
                         <label for="studentName" class="form-label">Nama</label>
                         <input type="text" placeholder="Tuliskan nama disini ..." value="{{ $student->user->name ?? '' }}" name="name" class="form-control" id="studentName">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Jenis Kelamin</label>
+                        <select class="form-control" name="gender" id="gender">
+                            <option value="" selected disabled>Pilih Jenis Kelamin</option>
+                            <option value="L" {{ $student->gender == 'L' ? 'selected' : ''}}>Laki - Laki</option>
+                            <option value="P" {{ $student->gender == 'P' ? 'selected' : ''}}>Perempuan</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-12">

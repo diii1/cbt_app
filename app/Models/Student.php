@@ -30,6 +30,7 @@ class Student extends Model
         'nisn',
         'address',
         'birth_date',
+        'gender',
         'password',
     ];
 
