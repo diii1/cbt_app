@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Services\Exam\ExamParticipantService;
+use App\Services\Exam\ExamService;
 use App\Services\Master\StudentService;
 use App\Models\Student;
 use App\Models\Exam;
@@ -16,11 +17,13 @@ class DashboardController extends Controller
 {
     private $studentService;
     private $participantService;
+    private $examService;
 
     public function __construct()
     {
         $this->studentService = new StudentService();
         $this->participantService = new ExamParticipantService();
+        $this->examService = new ExamService();
     }
 
     public function index()
@@ -57,6 +60,14 @@ class DashboardController extends Controller
 
     public function examTable($id)
     {
-        dd($id);
+        $data['exam'] = $this->examService->getExamByTeacherID($id);
+        $data['exam'] = $data['exam']->map(function ($item) {
+            $item->date = Carbon::parse($item->date)->locale('id')->settings(['formatFunction' => 'translatedFormat']);
+            $item->session_time_start = Carbon::parse($item->session_time_start)->locale('id')->settings(['formatFunction' => 'translatedFormat']);
+            $item->session_time_end = Carbon::parse($item->session_time_end)->locale('id')->settings(['formatFunction' => 'translatedFormat']);
+            return $item;
+        });
+        $data['title'] = 'Data Ujian Yang Akan Datang';
+        return view('pages.general.dashboard.exam-table', ['data' => $data]);
     }
 }

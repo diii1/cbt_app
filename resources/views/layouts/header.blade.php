@@ -1,7 +1,7 @@
 <header class="header-navbar fixed">
     <div class="toggle-mobile action-toggle"><i class="fas fa-bars"></i></div>
     <div class="header-wrapper">
-        <div class="header-left" style="width: 28%;">
+        <div class="header-left" style="width: 50%;">
             {{-- <div class="theme-switch-icon"></div> --}}
             <div id="clock" class="d-flex justify-content-between align-items-center h-100">
                 <div id="date"></div>
@@ -37,6 +37,13 @@
                                 <i class="ti-settings"></i> Setting
                             </div>
                         </a> --}}
+                        @can('update_school_profile')
+                            <a href="{{ route('school_profile.show') }}">
+                                <div class="description">
+                                    <i class="ti-settings"></i> Profil Sekolah
+                                </div>
+                            </a>
+                        @endcan
                         <form action="{{ route('logout') }}" method="post">
                             @csrf
                             <a href="#" onclick="this.parentNode.submit();">

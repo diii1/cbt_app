@@ -8,40 +8,52 @@
                 <div class="col-md-12">
                     <div class="row d-flex justify-content-between">
                         <div class="col-md-4">
-                            <div class="card text-info border-info mb-3">
+                            <div class="card text-info border-3 border-info mb-3">
                                 <div class="card-body">
                                     <div class="row d-flex align-items-center">
-                                        <div class="card-header py-1 border-bottom-1 border-info">
-                                            <h5 class="card-title text-center">Jumlah Guru</h5>
+                                        <div class="card-header py-1 border-3 border-bottom border-info">
+                                            <h5 class="card-title text-center">
+                                                <b>Jumlah Guru</b>
+                                            </h5>
                                         </div>
                                         <hr>
-                                        <h5 class="card-title text-center">{{ $data['teacher'] }}</h5>
+                                        <h5 class="card-title text-center">
+                                            <b>{{ $data['teacher'] }}</b>
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card text-info border-info mb-3">
+                            <div class="card text-info border-3 border-info mb-3">
                                 <div class="card-body">
                                     <div class="row d-flex align-items-center">
-                                        <div class="card-header py-1 border-bottom-1 border-info">
-                                            <h5 class="card-title text-center">Jumlah Siswa</h5>
+                                        <div class="card-header py-1 border-3 border-bottom border-info">
+                                            <h5 class="card-title text-center">
+                                                <b>Jumlah Siswa</b>
+                                            </h5>
                                         </div>
                                         <hr>
-                                        <h5 class="card-title text-center">{{ $data['student'] }}</h5>
+                                        <h5 class="card-title text-center">
+                                            <b>{{ $data['student'] }}</b>
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="card text-info border-info mb-3">
+                            <div class="card text-info border-3 border-info mb-3">
                                 <div class="card-body">
                                     <div class="row d-flex align-items-center">
-                                        <div class="card-header py-1 border-bottom-1 border-info">
-                                            <h5 class="card-title text-center">Jumlah Ujian</h5>
+                                        <div class="card-header py-1 border-3 border-bottom border-info">
+                                            <h5 class="card-title text-center">
+                                                <b>Jumlah Ujian</b>
+                                            </h5>
                                         </div>
                                         <hr>
-                                        <h5 class="card-title text-center">{{ $data['exam'] }}</h5>
+                                        <h5 class="card-title text-center">
+                                            <b>{{ $data['exam'] }}</b>
+                                        </h5>
                                     </div>
                                 </div>
                             </div>

@@ -13,7 +13,11 @@
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
         integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
         crossorigin="anonymous" /> --}}
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/logo-removebg.png') }}" />
+    @php
+        $profile = App\Models\SchoolProfile::first();
+    @endphp
+
+    <link rel="icon" type="image/png" href="{{ $profile->logo ? asset('storage/'.$profile->logo) : asset('assets/images/logo-removebg.png') }}" />
 
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/themify-icons/themify-icons.css') }}">

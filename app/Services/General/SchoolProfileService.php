@@ -49,4 +49,33 @@ class SchoolProfileService
         }
         return $isSaved->id;
     }
+
+    public function updateSchoolProfile(SchoolProfileEntity $profile, int $id): bool | Exception
+    {
+        $schoolProfile = SchoolProfile::find($id);
+        if (!$schoolProfile) {
+            throw new Exception('School profile not found');
+        }
+
+        if ($profile->logo) {
+            $this->deleteLogo($schoolProfile->logo);
+        }
+
+        $isUpdated = $schoolProfile->update([
+            'name' => $profile->name,
+            'contact' => $profile->contact,
+            'email' => $profile->email,
+            'address' => $profile->address,
+            'district' => $profile->district,
+            'regency' => $profile->regency,
+            'province' => $profile->province,
+            'acreditation' => $profile->acreditation,
+            'logo' => $profile->logo,
+        ]);
+
+        if (!$isUpdated) {
+            throw new Exception('Failed to update school profile');
+        }
+        return $isUpdated;
+    }
 }

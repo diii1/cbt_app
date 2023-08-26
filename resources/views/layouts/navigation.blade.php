@@ -10,7 +10,7 @@
         </a>
     </div>
     <div class="d-flex justify-content-center mt-3">
-        <img src="{{ asset('assets/images/logo-removebg.png') }}" style="width:50px">
+        <img src="{{ $profile->logo ? asset('storage/'.$profile->logo) : asset('assets/images/logo-removebg.png') }}" style="width:50px">
     </div>
     <div class="close-sidebar action-toggle pt-5">
         <i class="ti-close"></i>

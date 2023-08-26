@@ -7,6 +7,7 @@ use App\Types\Entities\ExamEntity;
 use Illuminate\Support\Facades\DB;
 use App\Services\Service;
 use Illuminate\Support\Collection;
+use Carbon\Carbon;
 
 class ExamService extends Service
 {
@@ -56,6 +57,33 @@ class ExamService extends Service
             return Exam::where('code', $code)->with('session')->first();
         } catch (\Throwable $th) {
             $this->writeLog("ExamService::getExamByCode", $th);
+            return new Collection();
+        }
+    }
+
+    public function getExamByTeacherID(int $id): Collection
+    {
+        $date = Carbon::now()->format('Y-m-d');
+        try {
+            return DB::table('exams')
+                ->join('sessions', 'exams.session_id', '=', 'sessions.id')
+                ->where('teacher_id', $id)
+                ->whereDate('date', '>=', $date)
+                ->whereTime('sessions.time_start', '>=', Carbon::now()->format('H:i'))
+                ->where('is_active', true)
+                ->select(
+                    "exams.id as id",
+                    "sessions.name as session_name",
+                    "sessions.time_start as session_time_start",
+                    "sessions.time_end as session_time_end",
+                    "exams.title as title",
+                    "exams.code as code",
+                    "exams.date as date",
+                )
+                ->orderBy('date', 'asc')
+                ->get();
+        } catch (\Throwable $th) {
+            $this->writeLog("ExamService::getExamByTeacherID", $th);
             return new Collection();
         }
     }

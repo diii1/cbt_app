@@ -86,9 +86,13 @@ class SchoolProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        $this->authorize('update_school_profile');
+        $profile = $this->service->getSchoolProfile();
+        $data['nav_title'] = 'School Profile';
+        $data['title'] = 'Profil Sekolah';
+        return view('pages.general.detail_school_profile', ['data' => $data, 'profile' => $profile]);
     }
 
     /**
@@ -99,7 +103,12 @@ class SchoolProfileController extends Controller
      */
     public function edit($id)
     {
-        //
+        $this->authorize('update_school_profile');
+        $profile = $this->service->getSchoolProfile();
+        $data['nav_title'] = 'School Profile';
+        $data['title'] = 'Perbarui Profil Sekolah';
+        $data['action'] = route('school_profile.update', $profile->id);
+        return view('pages.general.edit_school_profile', ['data' => $data, 'profile' => $profile]);
     }
 
     /**
@@ -111,6 +120,25 @@ class SchoolProfileController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated = $request->all();
+        $schoolLogo = null;
+
+        if ($request->hasFile('logo')) {
+            $schoolLogo = $this->service->storeLogo($request->logo);
+        }
+
+        $profile = new SchoolProfileEntity();
+        $profile->formRequest($validated, $schoolLogo->path);
+
+        $updated = $this->service->updateSchoolProfile($profile, $id);
+
+        if($updated instanceof Exception) {
+            $output = new ConsoleOutput();
+            $output->writeln($updated->getMessage());
+
+            return redirect()->back()->with('error', 'Gagal memperbarui profil sekolah.')->withInput();
+        }
+
+        return redirect()->route('school_profile.show')->with('success', 'Berhasil memperbarui profil sekolah.');
     }
 }

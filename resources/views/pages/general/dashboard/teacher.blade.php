@@ -49,7 +49,7 @@
         </div>
     </div>
     <div class="modal fade" id="modalExamTable" tabindex="-1" aria-labelledby="modalExamTableLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
 
         </div>
     </div>

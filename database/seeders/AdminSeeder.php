@@ -46,6 +46,7 @@ class AdminSeeder extends Seeder
 
             // permission for prefix school profile
             $role->givePermissionTo('school_profile');
+            $role->givePermissionTo('update_school_profile');
 
             // permission for prefix master menu
             $role->givePermissionTo('master');

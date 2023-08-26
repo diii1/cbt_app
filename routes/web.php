@@ -46,7 +46,10 @@ Route::get('/', function () {
 });
 
 // route for school profile
-Route::resource('school_profile', SchoolProfileController::class);
+Route::get('school_profile', [SchoolProfileController::class, 'index'])->name('school_profile.index');
+Route::get('school_profile/create', [SchoolProfileController::class, 'create'])->name('school_profile.create');
+Route::post('school_profile', [SchoolProfileController::class, 'store'])->name('school_profile.store');
+// Route::resource('school_profile', SchoolProfileController::class);
 
 // route for clock
 Route::get('/clock', function () {
@@ -101,6 +104,11 @@ Route::middleware(['auth'])->group(function () {
     // route for api get table exam participant
     Route::get('api/exams/{exam_id}/participants', [ExamParticipantController::class, 'getTable'])->name('api.exam.participants_table');
     Route::get('api/exams/participant/{exam_id}/cards', [ExamParticipantController::class, 'print_cards'])->name('api.exam.participants_cards');
+
+    // route for setting school profile
+    Route::get('school_profile/show', [SchoolProfileController::class, 'show'])->name('school_profile.show');
+    Route::get('school_profile/{profile_id}/edit', [SchoolProfileController::class, 'edit'])->name('school_profile.edit');
+    Route::put('school_profile/update/{profile_id}', [SchoolProfileController::class, 'update'])->name('school_profile.update');
 
     // route for dashboard
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');

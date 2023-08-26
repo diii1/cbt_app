@@ -17,6 +17,7 @@ class PermissionSeeder extends Seeder
     {
         // permission for school profile feature
         $permission = Permission::create(['name' => 'school_profile']);
+        $permission = Permission::create(['name' => 'update_school_profile']);
 
         // permission for master menu
         $permission = Permission::create(['name' => 'master']);
