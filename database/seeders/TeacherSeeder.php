@@ -50,27 +50,8 @@ class TeacherSeeder extends Seeder
                 'subject_id' => $subject->id,
             ]);
 
-            $role = Role::create(['name' => 'teacher']);
-
             // user assign role to teacher
             $user->assignRole('teacher');
-
-            // permission for prefix pengguna menu
-            $role->givePermissionTo('exam');
-
-            // permission for prefix exam menu
-            $role->givePermissionTo('list_exam');
-
-            // permission for result menu
-            $role->givePermissionTo('list_result');
-            $role->givePermissionTo('export_result');
-
-            // pemission for prefix exam question menu
-            $role->givePermissionTo('list_question');
-            $role->givePermissionTo('create_question');
-            $role->givePermissionTo('read_question');
-            $role->givePermissionTo('update_question');
-            $role->givePermissionTo('delete_question');
 
             DB::commit();
         } catch (\Throwable $th) {

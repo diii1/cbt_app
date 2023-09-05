@@ -83,8 +83,6 @@ class StudentSeeder extends Seeder
                 'description' => null
             ]);
 
-            $role = Role::create(['name' => 'student']);
-
             // create default user as student
             foreach ($data as $item) {
                 $user = User::create([
