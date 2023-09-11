@@ -10,6 +10,7 @@ use App\Types\Entities\PasswordEntity;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Crypt;
 use App\Models\Student;
+use App\Models\User;
 
 class ChangePasswordController extends Controller
 {
@@ -29,7 +30,8 @@ class ChangePasswordController extends Controller
 
     public function update(ChangePasswordRequest $request, $id)
     {
-        $role = Role::findById($id)->name;
+        $user = User::find($id);
+        $role = $user->getRoleNames()[0];
         $validated = $request->validated();
         $password = new PasswordEntity();
         $password->formRequest($validated);

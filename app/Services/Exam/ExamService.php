@@ -69,7 +69,7 @@ class ExamService extends Service
                 ->join('sessions', 'exams.session_id', '=', 'sessions.id')
                 ->where('teacher_id', $id)
                 ->whereDate('date', '>=', $date)
-                ->whereTime('sessions.time_start', '>=', Carbon::now()->format('H:i'))
+                // ->whereTime('sessions.time_start', '>=', Carbon::now()->format('H:i'))
                 ->where('is_active', true)
                 ->select(
                     "exams.id as id",

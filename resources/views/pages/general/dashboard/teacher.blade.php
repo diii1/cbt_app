@@ -16,7 +16,7 @@
                                 <div class="card-body">
                                     <div class="row d-flex align-items-center">
                                         <div class="col-md-10">
-                                            <h5 class="card-title">Ujian Sedang Berlangsung</h5>
+                                            <h5 class="card-title">Ujian Akan Datang</h5>
                                         </div>
                                         <div class="col-md-2 d-flex align-items-center">
                                             <button class="btn btn-sm btn-outline-warning w-100 btn-exam-table" data-teacher_id="{{ $data['teacher_id'] }}">

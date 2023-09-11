@@ -50,7 +50,7 @@
 
         $('.btn-add')?.on('click', function(){
             const segments = window.location.pathname.split('/');
-            const exam_id = segments[4];
+            const exam_id = segments[5];
 
             $.ajax({
                 method: "GET",
@@ -66,7 +66,7 @@
 
         $('.btn-print').click(function() {
             const segments = window.location.pathname.split('/');
-            const exam_id = segments[4];
+            const exam_id = segments[5];
             window.open("{{ route('api.exam.participants_cards', ':id') }}".replace(':id', exam_id), '_blank');
         });
 
