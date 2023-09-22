@@ -20,6 +20,16 @@ class SchoolProfileService
         return FileHelper::deleteFile("public", $image);
     }
 
+    public function storeBackground(mixed $image): FileMetadata | Exception
+    {
+        return FileHelper::storeFile($image, "uploads/background", "public");
+    }
+
+    public function deleteBackground(mixed $image): bool | Exception
+    {
+        return FileHelper::deleteFile("public", $image);
+    }
+
     public function getSchoolProfile(): object | null
     {
         $schoolProfile = SchoolProfile::first();
@@ -42,6 +52,7 @@ class SchoolProfileService
             'province' => $profile->province,
             'acreditation' => $profile->acreditation,
             'logo' => $profile->logo,
+            'background' => $profile->bg,
         ]);
 
         if (!$isSaved) {
@@ -67,6 +78,7 @@ class SchoolProfileService
             'province' => $profile->province,
             'acreditation' => $profile->acreditation,
             'logo' => $profile->logo,
+            'background' => $profile->bg,
         ]);
 
         if (!$isUpdated) {

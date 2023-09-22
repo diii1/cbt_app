@@ -133,7 +133,7 @@ Route::middleware(['auth'])->group(function () {
 
     // route for question
     Route::resource('questions', QuestionController::class);
-    Route::get('questions/create/{exam_id}', [QuestionController::class, 'create'])->name('questions.create');
+    Route::get('questions/create/{exam_id}', [QuestionController::class, 'create'])->name('exam.create_question');
     Route::get('questions/list/{exam_id}', [QuestionController::class, 'question_list'])->name('questions.list');
 
     // route for result

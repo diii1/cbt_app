@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('province')->nullable();
             $table->string('acreditation');
             $table->string('logo')->nullable();
+            $table->string('background')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

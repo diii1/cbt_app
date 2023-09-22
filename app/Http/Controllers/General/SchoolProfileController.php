@@ -67,8 +67,12 @@ class SchoolProfileController extends Controller
             $schoolLogo = $this->service->storeLogo($request->logo);
         }
 
+        if ($request->hasFile('bg_app')) {
+            $schoolBackground = $this->service->storeBackground($request->bg_app);
+        }
+
         $profile = new SchoolProfileEntity();
-        $profile->formRequest($validated, $schoolLogo->path);
+        $profile->formRequest($validated, $schoolLogo->path, $schoolBackground->path);
 
         $inserted = $this->service->insertSchoolProfile($profile);
         if($inserted instanceof Exception) {
@@ -129,8 +133,14 @@ class SchoolProfileController extends Controller
             $schoolLogo = $this->service->storeLogo($request->logo);
         }
 
+        if ($request->hasFile('bg_app')) {
+            $profile = $this->service->getSchoolProfile();
+            $this->service->deleteBackground($profile->background);
+            $schoolBackground = $this->service->storeBackground($request->bg_app);
+        }
+
         $profile = new SchoolProfileEntity();
-        $profile->formRequest($validated, $schoolLogo->path);
+        $profile->formRequest($validated, $schoolLogo->path, $schoolBackground->path);
 
         $updated = $this->service->updateSchoolProfile($profile, $id);
 

@@ -58,37 +58,43 @@
                                         <div class="col-md-12">
                                             <div class="mb-3">
                                                 <label for="schoolAddress" class="form-label">Alamat Sekolah</label>
-                                                <textarea name="address" placeholder="Tuliskan alamat sekolah disini..." class="form-control" id="schoolAddress" cols="30" rows="10"></textarea>
+                                                <textarea name="address" placeholder="Tuliskan alamat sekolah disini..." class="form-control" id="schoolAddress" cols="30" rows="10" required></textarea>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label for="schoolDistrict" class="form-label">Kecamatan</label>
                                                 <input type="text" name="district" placeholder="Tuliskan kecamatan sekolah disini..." class="form-control" id="schoolDistrict">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label for="schoolRegency" class="form-label">Kabupaten/Kota</label>
                                                 <input type="text" name="regency" placeholder="Tuliskan kabupaten/kota sekolah disini..." class="form-control" id="schoolRegency">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label for="schoolProvince" class="form-label">Provinsi</label>
                                                 <input type="text" name="province" placeholder="Tuliskan provinsi sekolah disini..." class="form-control" id="schoolProvince">
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label for="schoolAcreditation" class="form-label">Akreditasi</label>
                                                 <input type="text" name="acreditation" placeholder="Tuliskan akreditasi sekolah disini..." class="form-control" id="schoolAcreditation" required>
                                             </div>
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <div class="mb-3">
                                                 <label for="schoolLogo" class="form-label">Logo Sekolah</label>
                                                 <input type="file" name="logo" class="form-control" id="schoolLogo" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="bg-app" class="form-label">Background Aplikasi</label>
+                                                <input type="file" name="bg_app" class="form-control" id="bg-app">
                                             </div>
                                         </div>
                                         <div class="col-md-12 mt-2">

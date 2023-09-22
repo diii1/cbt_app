@@ -13,8 +13,9 @@ class SchoolProfileEntity
     public ?string $province;
     public ?string $acreditation;
     public ?string $logo;
+    public ?string $bg;
 
-    function formRequest(array $validatedRequest, string $logoPath = null)
+    function formRequest(array $validatedRequest, string $logoPath = null, string $bgPath = null)
     {
         $this->name = $validatedRequest['name'];
         $this->contact = $validatedRequest['contact'];
@@ -25,5 +26,6 @@ class SchoolProfileEntity
         $this->province = $validatedRequest['province'];
         $this->acreditation = $validatedRequest['acreditation'];
         $this->logo = $logoPath;
+        $this->bg = $bgPath;
     }
 }

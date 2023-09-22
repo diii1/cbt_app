@@ -27,6 +27,7 @@ class SchoolProfile extends Model
         'province',
         'acreditation',
         'logo',
+        'background',
     ];
 
 }

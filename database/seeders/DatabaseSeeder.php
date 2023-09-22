@@ -16,17 +16,16 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         $this->call([
-            SchoolProfileSeeder::class,
+            // SchoolProfileSeeder::class,
             PermissionSeeder::class,
             RoleSeeder::class,
             AdminSeeder::class,
-            TeacherSeeder::class,
-            StudentSeeder::class,
-            SessionSeeder::class,
-            ExamSeeder::class,
-            ExamParticipantSeeder::class,
-            QuestionSeeder::class,
-            // DefaultUserPermissionSeeder::class
+            // TeacherSeeder::class,
+            // StudentSeeder::class,
+            // SessionSeeder::class,
+            // ExamSeeder::class,
+            // ExamParticipantSeeder::class,
+            // QuestionSeeder::class,
         ]);
     }
 }
