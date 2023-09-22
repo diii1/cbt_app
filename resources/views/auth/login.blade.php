@@ -19,6 +19,15 @@
 
     </head>
 
+    <style>
+        body {
+            background-image: url("{{ asset('storage/'.$profile->background) }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            /* Add additional CSS properties for positioning and styling as needed */
+        }
+    </style>
+
     <body style="background-color: lightgray">
         <section class="container h-100">
             <div class="row justify-content-sm-center h-100 align-items-center">
@@ -46,7 +55,7 @@
                                 <div class="mb-3">
                                     <label class="text-muted" for="password" :value="__('Password')">Kata Sandi</label>
                                     <div class="input-group input-group-join mb-3">
-                                        <input type="password" class="form-control" name="password" placeholder="Masukkan Kata Sandi" required>
+                                        <input type="password" class="form-control" name="password" id="password" placeholder="Masukkan Kata Sandi" required>
                                         <span class="input-group-text rounded-end password cursor-pointer">&nbsp<i class="fa fa-eye"></i>&nbsp</span>
                                         <div class="invalid-feedback">
                                             Kata sandi tidak boleh kosong.
@@ -60,7 +69,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="text-center mt-4 text-muted">
+                    <div class="text-center mt-4 text-muted {{ $profile->background ? 'fixed-bottom bg-light py-3' : '' }}">
                         Copyright &copy; {{ date('Y') }} &mdash; {{ $profile->name }}
                     </div>
                 </div>

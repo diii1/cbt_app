@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Laravel - A PHP Framework for web Artisan 
- * 
+ * Laravel - A PHP Framework for web Artisan
+ *
  * @package Laravel
  * @author Admin@CBT.mts
  */
 
 $url = urldecode(
-    parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)    
+    parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)
 );
 
 if ($url !== '/' && file_exists(__DIR__.'/public'.$url)){

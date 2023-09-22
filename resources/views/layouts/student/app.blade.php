@@ -10,6 +10,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>App CBT &mdash; {{ $data['nav_title'] }}</title>
     <link rel="stylesheet" href="{{ asset('assets/fontawesome/css/all.min.css') }}">
+    @php
+        $profile = App\Models\SchoolProfile::first();
+    @endphp
     <link rel="icon" type="image/png" href="{{ asset('assets/images/logo-removebg.png') }}" />
 
     <link rel="stylesheet" href="{{ asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}">
@@ -23,7 +26,17 @@
     <link rel="stylesheet" href="{{ asset('assets/css/style.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-override.min.css') }}">
     <link rel="stylesheet" id="theme-color" href="{{ asset('assets/css/dark.min.css') }}">
+
+    <style>
+        body {
+            background-image: url("{{ asset('storage/'.$profile->background) }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            /* Add additional CSS properties for positioning and styling as needed */
+        }
+    </style>
 </head>
+
 
 <body>
     <div id="app">

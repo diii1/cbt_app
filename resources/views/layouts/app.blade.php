@@ -35,6 +35,13 @@
         .header-left{
             display: block !important;
         }
+
+        body {
+            background-image: url("{{ asset('storage/'.$profile->background) }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            /* Add additional CSS properties for positioning and styling as needed */
+        }
     </style>
 
 </head>
