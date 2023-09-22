@@ -28,7 +28,7 @@ class TeacherRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->teacher)],
-            'password' => ['required', Password::min(8), 'confirmed'],
+            'password' => ['required', Password::min(4), 'confirmed'],
             'nip' => ['required', 'string', 'max:255', Rule::unique('teachers', 'nip')->ignore($this->teacher)],
             'address' => ['string', 'max:255'],
             'phone' => ['string', 'max:13'],

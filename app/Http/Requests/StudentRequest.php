@@ -28,7 +28,7 @@ class StudentRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($this->student)],
-            'password' => ['required', Password::min(8), 'confirmed'],
+            'password' => ['required', Password::min(4), 'confirmed'],
             'nis' => ['required', 'string', 'max:255', Rule::unique('students', 'nis')->ignore($this->student)],
             'nisn' => ['required', 'string', 'max:255', Rule::unique('students', 'nisn')->ignore($this->student)],
             'address' => ['nullable', 'string', 'max:255'],
