@@ -28,6 +28,9 @@ class ExamDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
+			->editColumn('type', function($row){
+				return $row->type == 'pts' ? 'PTS' : 'PAS';
+			})
             ->editColumn('date', function($row){
                 $date = Carbon::parse($row->date)->locale('id');
                 $date->settings(['formatFunction' => 'translatedFormat']);
@@ -72,7 +75,7 @@ class ExamDataTable extends DataTable
 
         $user = Auth::user();
         if($user && $user->hasRole('teacher')){
-            $query->where('teacher_id', $user->id);
+            $query->where('teacher_id', $user->id)->where('is_active', 1);
         }
 
         return $query;
@@ -118,6 +121,8 @@ class ExamDataTable extends DataTable
                 ->orderable(false),
             Column::make('title')
                 ->title('Judul Ujian'),
+			Column::make('type')
+                ->title('Tipe Ujian'),
             Column::make('date')
                 ->title('Tanggal'),
             Column::make('class_name')

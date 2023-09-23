@@ -63,13 +63,13 @@ class ExamService extends Service
 
     public function getExamByTeacherID(int $id): Collection
     {
-        $date = Carbon::now()->format('Y-m-d');
+		$date = Carbon::now()->format('Y-m-d');
         try {
             return DB::table('exams')
                 ->join('sessions', 'exams.session_id', '=', 'sessions.id')
                 ->where('teacher_id', $id)
                 ->whereDate('date', '>=', $date)
-                ->whereTime('sessions.time_start', '>=', Carbon::now()->format('H:i'))
+                //->whereTime('sessions.time_start', '>=', Carbon::now()->format('H:i'))
                 ->where('is_active', true)
                 ->select(
                     "exams.id as id",
