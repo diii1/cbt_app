@@ -11,6 +11,8 @@ use App\Services\Exam\ExamService;
 use App\Types\Entities\QuestionEntity;
 use App\Http\Requests\QuestionRequest;
 use App\Models\Question;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class QuestionController extends Controller
 {
@@ -240,5 +242,47 @@ class QuestionController extends Controller
             'status' => 'error',
             'message' => 'Data Soal gagal dihapus.'
         ], 500);
+    }
+
+    public function getTable($id)
+    {
+        $this->authorize('create_question');
+        $data['title'] = 'Data Ujian';
+        $user = auth()->user();
+        $exams = $this->examService->getExamByTeacherID($user->id);
+        $data['exam'] = collect($exams)->where('id', '!=', $id);
+        $data['exam'] = $data['exam']->map(function ($item) {
+            $item->date = Carbon::parse($item->date)->locale('id')->settings(['formatFunction' => 'translatedFormat']);
+            $item->session_time_start = Carbon::parse($item->session_time_start)->locale('id')->settings(['formatFunction' => 'translatedFormat']);
+            $item->session_time_end = Carbon::parse($item->session_time_end)->locale('id')->settings(['formatFunction' => 'translatedFormat']);
+            return $item;
+        });
+        return view('pages.exam.question.list_exam', ['data' => $data]);
+    }
+
+    public function transfer(Request $request)
+    {
+        $questions = $this->service->getQuestionByExamID((int)$request->exam_id);
+        foreach ($questions as $value) {
+            DB::table('questions')->insert([
+                'exam_id' => $request->to_exam_id,
+                'subject_id' => $value->subject_id,
+                'exam_title' => $value->exam_title,
+                'subject_name' => $value->subject_name,
+                'question' => $value->question,
+                'option_a' => $value->option_a,
+                'option_b' => $value->option_b,
+                'option_c' => $value->option_c,
+                'option_d' => $value->option_d,
+                'option_e' => $value->option_e,
+                'answer' => $value->answer,
+                'created_by' => $value->created_by,
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data Soal berhasil ditransfer.'
+        ], 200);
     }
 }

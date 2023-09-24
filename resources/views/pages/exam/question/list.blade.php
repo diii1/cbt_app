@@ -17,7 +17,10 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-end">
                                 @can('create_question')
-                                    <a href="{{ route('exam.create_question', $data['exam']->id) }}" class="btn btn-sm btn-success mb-3"><i class="ti ti-plus"></i> {{ __($data['button_add']) }}</a>
+                                    <a href="{{ route('exam.create_question', $data['exam']->id) }}" class="btn btn-sm btn-success mb-3 me-3"><i class="ti ti-plus"></i> {{ __($data['button_add']) }}</a>
+                                @endcan
+                                @can('create_question')
+                                    <button type="button" class="btn btn-sm btn-primary mb-3" id="transfer_question"><i class="ti ti-shift-right"></i>&nbsp; Transfer Soal</button>
                                 @endcan
                             </div>
                             {{ $dataTable->table() }}
@@ -43,6 +46,54 @@
     {{ $dataTable->scripts() }}
 
     <script type="text/javascript">
+        $('#transfer_question').click(function(){
+            $.ajax({
+                method: 'GET',
+                url: '{{ route('api.question.table', $data['exam']->id) }}',
+                headers: {
+                    'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(res) {
+                    $('#modalAction .modal-dialog').html(res);
+                    $('#modalAction').modal('show');
+                    $('#exam-table').on('click', '.transfer', function(){
+                        let data = $(this).data();
+
+                        $.ajax({
+                            method: 'POST',
+                            url: '{{ route('api.question.transfer') }}',
+                            headers: {
+                                'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: {
+                                exam_id: `{{ $data['exam']->id }}`,
+                                to_exam_id: data.exam_id
+                            },
+                            success: function(res) {
+                                $('#modalAction').modal('hide');
+                                Toast.fire({
+                                    icon: res.status,
+                                    title: res.message
+                                })
+                            },
+                            error: function(res) {
+                                Toast.fire({
+                                    icon: res.status,
+                                    title: res.message
+                                })
+                            }
+                        })
+                    });
+                },
+                error: function(res) {
+                    Toast.fire({
+                        icon: res.status,
+                        title: res.message
+                    })
+                }
+            });
+        });
+
         $('#question-table').on('click', '.action', function(){
             let data = $(this).data();
             let id = data.id;

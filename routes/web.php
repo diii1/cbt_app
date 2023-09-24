@@ -57,6 +57,10 @@ Route::get('/clock', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
+    // route for api question
+    Route::post('api/questions/transfer', [QuestionController::class, 'transfer'])->name('api.question.transfer');
+    Route::get('api/questions/{exam_id}/table', [QuestionController::class, 'getTable'])->name('api.question.table');
+
     // route for api get Exam Table
     Route::get('api/exams/{teacher_id}/table', [DashboardController::class, 'examTable'])->name('api.dashboard.exam.table');
 
