@@ -6,6 +6,12 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12">
+                <div class="d-flex justify-content-center">
+                    <img src="{{ ($teacher->user && $teacher->user->profile) ? asset('storage/'.$teacher->user->profile) : asset('assets/images/avatar1.png') }}" class="rounded-circle" width="150" height="150" alt="Foto Profil">
+                </div>
+                <h6 class="text-center mt-3">{{ $teacher->user->profile ? $teacher->user->profile : 'Belum Ada Profil' }}</h6>
+            </div>
+            <div class="col-md-12">
                 <div class="mb-3">
                     <label for="teacherName" class="form-label">Nama</label>
                     <input type="text" placeholder="Tuliskan nama disini ..." value="{{ $teacher->user->name ?? '' }}" name="name" class="form-control" id="teacherName" readonly>

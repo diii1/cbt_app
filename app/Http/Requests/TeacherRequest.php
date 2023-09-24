@@ -33,6 +33,7 @@ class TeacherRequest extends FormRequest
             'address' => ['string', 'max:255'],
             'phone' => ['string', 'max:13'],
             'subject_id' => ['required', 'integer', 'exists:subjects,id'],
+            'profile' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }
 }

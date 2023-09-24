@@ -11,6 +11,7 @@ use App\Services\Master\TeacherService;
 use App\Services\Master\SubjectService;
 use App\Types\Entities\TeacherEntity;
 use App\Models\Teacher;
+use App\Models\User;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class TeacherController extends Controller
@@ -49,6 +50,7 @@ class TeacherController extends Controller
         $data['type'] = 'create';
         $data['title'] = 'Tambah Data Guru';
         $data['subjects'] = $this->subjectService->getSubjects();
+        $teacher = new Teacher();
         return view('pages.master.teacher.form', ['data' => $data, 'teacher' => new Teacher()]);
     }
 
@@ -62,8 +64,14 @@ class TeacherController extends Controller
     {
         $this->authorize('create_teacher');
         $validated = $request->validated();
+        $profile = null;
+
+        if ($request->hasFile('profile')) {
+            $profile = $this->service->storeProfile($request->profile);
+        }
+
         $teacher = new TeacherEntity();
-        $teacher->formRequest($validated);
+        $teacher->formRequest($validated, $profile->path);
 
         $this->service->insertTeacher($teacher);
         return response()->json([
@@ -111,8 +119,17 @@ class TeacherController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validated = $request->all();
+        $profile = null;
+
+        if ($request->hasFile('profile')) {
+            $user = User::findOrFail($id);
+            if($user->profile) $this->service->deleteProfile($user->profile);
+            $profile = $this->service->storeProfile($request->profile);
+        }
+
         $teacher = new TeacherEntity();
-        $teacher->updateRequest($request->all());
+        $teacher->updateRequest($validated, $profile->path);
 
         $this->service->updateTeacher($teacher, $id);
         return response()->json([

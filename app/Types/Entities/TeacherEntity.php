@@ -11,13 +11,15 @@ class TeacherEntity extends UserEntity
     public ?string $nip;
     public ?string $address;
     public ?string $phone;
+    public ?string $profile;
 
-    function formRequest(array $validatedRequest)
+    function formRequest(array $validatedRequest, string $profilePath = null)
     {
         // User
         $this->name = $validatedRequest['name'];
         $this->email = $validatedRequest['email'];
         $this->password = Hash::make($validatedRequest['password']);
+        $this->profile = $profilePath;
 
         // Teacher
         $this->subject_id = $validatedRequest['subject_id'];
@@ -26,11 +28,12 @@ class TeacherEntity extends UserEntity
         $this->phone = $validatedRequest['phone'];
     }
 
-    function updateRequest(array $validatedRequest)
+    function updateRequest(array $validatedRequest, string $profilePath = null)
     {
         // User
         $this->name = $validatedRequest['name'];
         $this->email = $validatedRequest['email'];
+        $this->profile = $profilePath;
 
         // Teacher
         $this->subject_id = $validatedRequest['subject_id'];

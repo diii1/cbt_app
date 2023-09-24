@@ -11,9 +11,21 @@ use Illuminate\Support\Str;
 use App\Services\Service;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
+use App\Types\FileMetadata;
+use App\Helpers\FileHelper;
 
 class TeacherService extends Service
 {
+    public function storeProfile(mixed $image): FileMetadata | Exception
+    {
+        return FileHelper::storeFile($image, "uploads/profiles", "public");
+    }
+
+    public function deleteProfile(mixed $image): bool | Exception
+    {
+        return FileHelper::deleteFile("public", $image);
+    }
+
     public function getTeachers(): Collection
     {
         try {
@@ -71,6 +83,7 @@ class TeacherService extends Service
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password,
+                'profile' => $request->profile,
             ]);
             $user->email_verified_at = now();
             $user->remember_token = Str::random(10);
@@ -102,6 +115,7 @@ class TeacherService extends Service
             if($teacher && $user) {
                 $user->name = $request->name;
                 $user->email = $request->email;
+                $user->profile = $request->profile;
                 $user->save();
 
                 $teacher->subject_id = $request->subject_id;
