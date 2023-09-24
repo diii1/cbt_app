@@ -10,6 +10,7 @@ use App\Http\Requests\AdminRequest;
 use App\Services\Master\AdminService;
 use App\Types\Entities\AdminEntity;
 use App\Models\Admin;
+use App\Models\User;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class AdminController extends Controller
@@ -59,9 +60,14 @@ class AdminController extends Controller
         $this->authorize('create_admin');
 
         $validated = $request->validated();
+        $profile = null;
+
+        if ($request->hasFile('profile')) {
+            $profile = $this->service->storeProfile($request->profile);
+        }
 
         $admin = new AdminEntity();
-        $admin->formRequest($validated);
+        $admin->formRequest($validated, $profile->path);
 
         $this->service->insertAdmin($admin);
         return response()->json([
@@ -108,8 +114,17 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validated = $request->all();
+        $profile = null;
+
+        if ($request->hasFile('profile')) {
+            $user = User::findOrFail($id);
+            if($user->profile) $this->service->deleteProfile($user->profile);
+            $profile = $this->service->storeProfile($request->profile);
+        }
+
         $admin = new AdminEntity();
-        $admin->updateRequest($request->all());
+        $admin->updateRequest($validated, $profile->path);
 
         $this->service->updateAdmin($admin, $id);
         return response()->json([

@@ -11,9 +11,21 @@ use Illuminate\Support\Str;
 use App\Services\Service;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
+use App\Types\FileMetadata;
+use App\Helpers\FileHelper;
 
 class AdminService extends Service
 {
+    public function storeProfile(mixed $image): FileMetadata | Exception
+    {
+        return FileHelper::storeFile($image, "uploads/profiles", "public");
+    }
+
+    public function deleteProfile(mixed $image): bool | Exception
+    {
+        return FileHelper::deleteFile("public", $image);
+    }
+
     public function getAdminByID(int $id): Admin | Collection
     {
         try {
@@ -32,6 +44,7 @@ class AdminService extends Service
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password,
+                'profile' => $request->profile,
             ]);
             $user->email_verified_at = now();
             $user->remember_token = Str::random(10);
@@ -57,6 +70,7 @@ class AdminService extends Service
         try {
             $result = false;
             $admin = DB::table('admins')->where('user_id', $id)->first();
+            $user = DB::table('users')->where('id', $id)->first();
 
             $updateAdmin = DB::table('admins')
                 ->where('user_id', $id)
@@ -71,6 +85,7 @@ class AdminService extends Service
                 ->update([
                     'name' => $request->name,
                     'email' => $request->email,
+                    'profile' => $request->profile ? $request->profile : $user->profile,
                 ]);
 
             if($updateAdmin == 1 && $updateUser == 1) $result = true;

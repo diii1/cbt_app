@@ -10,13 +10,15 @@ class AdminEntity extends UserEntity
     public ?string $nip;
     public ?string $address;
     public ?string $phone;
+    public ?string $profile;
 
-    function formRequest(array $validatedRequest)
+    function formRequest(array $validatedRequest, string $profilePath = null)
     {
         // User
         $this->name = $validatedRequest['name'];
         $this->email = $validatedRequest['email'];
         $this->password = Hash::make($validatedRequest['password']);
+        $this->profile = $profilePath;
 
         // Admin
         $this->nip = $validatedRequest['nip'];
@@ -24,11 +26,12 @@ class AdminEntity extends UserEntity
         $this->phone = $validatedRequest['phone'];
     }
 
-    function updateRequest(array $validatedRequest)
+    function updateRequest(array $validatedRequest, string $profilePath = null)
     {
         // User
         $this->name = $validatedRequest['name'];
         $this->email = $validatedRequest['email'];
+        $this->profile = $profilePath;
 
         // Admin
         $this->nip = $validatedRequest['nip'];

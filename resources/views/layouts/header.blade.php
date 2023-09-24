@@ -16,7 +16,7 @@
                         <div>{{ auth()->user()->name }}</div>
                     </div>
                     {{-- <img class="img-user" src="../assets/images/avatar1.png" alt="user"srcset=""> --}}
-                    <img class="img-user" src="{{ asset('assets/images/avatar1.png') }}" alt="user"srcset="">
+                    <img class="img-user" src="{{ auth()->user()->profile ? asset('storage/'.auth()->user()->profile) : asset('assets/images/avatar1.png') }}" alt="user"srcset="">
                 </a>
                 <ul class="dropdown-menu small">
                     <li class="menu-content ps-menu">

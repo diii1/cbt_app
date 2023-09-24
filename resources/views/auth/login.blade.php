@@ -19,14 +19,14 @@
 
     </head>
 
-    <style>
-        body {
-            background-image: url("{{ asset('storage/'.$profile->background) }}");
-            background-size: cover;
-            background-repeat: no-repeat;
-            /* Add additional CSS properties for positioning and styling as needed */
-        }
-    </style>
+        <style>
+            body {
+                background-image: url("{{ asset('storage/'.$profile->background) }}");
+                background-size: cover;
+                background-repeat: no-repeat;
+                /* Add additional CSS properties for positioning and styling as needed */
+            }
+        </style>
 
     <body style="background-color: lightgray">
         <section class="container h-100">

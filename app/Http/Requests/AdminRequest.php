@@ -32,6 +32,7 @@ class AdminRequest extends FormRequest
             'nip' => ['required', 'string', 'max:255', Rule::unique('admins', 'nip')->ignore($this->admin)],
             'address' => ['string', 'max:255'],
             'phone' => ['string', 'max:13'],
+            'profile' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ];
     }
 }

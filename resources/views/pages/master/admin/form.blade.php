@@ -11,6 +11,18 @@
         <div class="modal-body">
             <div class="row">
                 <div class="col-md-12">
+                    <div class="d-flex justify-content-center">
+                        <img src="{{ ($admin->user && $admin->user->profile) ? asset('storage/'.$admin->user->profile) : asset('assets/images/avatar1.png') }}" class="rounded-circle" width="150" height="150" alt="Foto Profil">
+                    </div>
+                    <h6 class="text-center mt-3">{{ $data['type'] == 'edit' ? ($admin->user->profile ? $admin->user->profile : 'Belum Ada Profil') : '' }}</h6>
+                </div>
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="adminProfile" class="form-label">Foto Profil</label>
+                        <input type="file" name="profile" id="profile" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-12">
                     <div class="mb-3">
                         <label for="adminName" class="form-label">Nama</label>
                         <input type="text" placeholder="Tuliskan nama disini ..." value="{{ $admin->user->name ?? '' }}" name="name" class="form-control" id="adminName">
@@ -31,7 +43,7 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label for="adminPhone" class="form-label">No. Handphone</label>
-                        <input type="text" placeholder="Tuliskan no handphone disini ..." value="{{ $admin->phone ?? '' }}" name="phone" class="form-control" id="adminPhone">
+                        <input type="number" placeholder="Tuliskan no handphone disini ..." value="{{ $admin->phone ?? '' }}" name="phone" class="form-control" id="adminPhone">
                     </div>
                 </div>
                 <div class="col-md-12">
